@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  __                  __
  * /\ \                /\ \
  * \ \ \___   __  __   \_\ \     __
@@ -247,4 +247,150 @@ a.sidebar-nav-item:focus {
 .theme-base-0f .content a,
 .theme-base-0f .related-posts li a:hover {
   color: #8f5536;
+}
+/* Archive chat log styles */
+.archive-tree {
+  margin-top: 1.5rem;
+}
+
+.archive-category {
+  border-bottom: 1px solid #eee;
+  padding: .75rem 0;
+}
+
+.archive-category summary {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-weight: bold;
+  gap: .4rem;
+  list-style: none;
+}
+
+.archive-category summary::-webkit-details-marker {
+  display: none;
+}
+
+.archive-category[open] .archive-marker {
+  transform: rotate(90deg);
+}
+
+.archive-marker {
+  display: inline-block;
+  font-size: .75rem;
+  transition: transform .15s ease;
+}
+
+.archive-count {
+  color: #9a9a9a;
+  font-size: .8rem;
+  font-weight: normal;
+  margin-left: auto;
+}
+
+.archive-chat-list {
+  list-style: none;
+  margin: .75rem 0 0 1.1rem;
+  padding: 0;
+}
+
+.archive-chat-list li {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .6rem;
+  margin-bottom: .45rem;
+}
+
+.archive-chat-list a {
+  font-weight: 600;
+}
+
+.archive-date,
+.archive-empty,
+.chatlog-category,
+.chatlog-date,
+.chat-message-date {
+  color: #9a9a9a;
+  font-size: .8rem;
+}
+
+.archive-empty {
+  margin: .75rem 0 0 1.1rem;
+}
+
+.chatlog-header {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.chatlog-category {
+  font-weight: bold;
+  letter-spacing: 0;
+  margin-bottom: .25rem;
+  text-transform: uppercase;
+}
+
+.chatlog-header h1 {
+  margin-top: 0;
+}
+
+.chatlog-body {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.chat-line {
+  display: flex;
+  width: 100%;
+}
+
+.chat-line.left {
+  justify-content: flex-start;
+}
+
+.chat-line.right {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  border-radius: 8px;
+  line-height: 1.65;
+  max-width: min(75%, 640px);
+  overflow-wrap: anywhere;
+  padding: .75rem 1rem;
+  word-break: keep-all;
+}
+
+.chat-line.left .chat-bubble {
+  background: #f1f3f5;
+  border-top-left-radius: 2px;
+}
+
+.chat-line.right .chat-bubble {
+  background: #dbeafe;
+  border-top-right-radius: 2px;
+}
+
+.chat-text p:first-child {
+  margin-top: 0;
+}
+
+.chat-text p:last-child {
+  margin-bottom: 0;
+}
+
+.chat-image {
+  border-radius: 6px;
+  display: block;
+  margin-top: .75rem;
+  max-width: 100%;
+}
+
+@media (max-width: 48em) {
+  .chat-bubble {
+    max-width: 88%;
+  }
 }
