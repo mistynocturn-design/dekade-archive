@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chat Log Converter</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    main { max-width: 1100px; margin: 0 auto; padding: 28px 18px 48px; }
+    h1 { font-size: 24px; margin: 0 0 18px; }
+    label { display: block; font-size: 13px; font-weight: 700; margin: 14px 0 6px; }
+    input, textarea, select { box-sizing: border-box; width: 100%; border: 1px solid #ccd1d8; border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; }
+    textarea { min-height: 220px; resize: vertical; white-space: pre; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .colors { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+    .panel { background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+    button { border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; background: #2457a6; color: #fff; }
+    button.secondary { background: #596273; }
+    .hint { color: #646b76; font-size: 13px; line-height: 1.55; margin: 8px 0 0; }
+    .status { font-size: 13px; color: #2457a6; min-height: 20px; }
+    @media (max-width: 760px) { .grid, .colors { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Chat Log Converter</h1>
+
+  <section class="panel">
+    <div class="grid">
+      <div>
+        <label for="title">Title</label>
+        <input id="title" value="[26.05.15] START >> 1~100">
+      </div>
+      <div>
+        <label for="category">Category</label>
+        <input id="category" value="DM">
+      </div>
+      <div>
+        <label for="date">Archive sort date</label>
+        <input id="date" value="2026-05-15" placeholder="YYYY-MM-DD">
+      </div>
+      <div>
+        <label for="fontSize">Bubble font size</label>
+        <input id="fontSize" value="0.84rem">
+      </div>
+    </div>
+
+    <div class="colors">
+      <div><label for="pageColor">Page</label><input id="pageColor" value="#ffffff"></div>
+      <div><label for="leftColor">Left bg</label><input id="leftColor" value="#f4f1ee"></div>
+      <div><label for="leftText">Left text</label><input id="leftText" value="#3a302b"></div>
+      <div><label for="rightColor">Right bg</label><input id="rightColor" value="#dbeafe"></div>
+      <div><label for="rightText">Right text</label><input id="rightText" value="#1f2f46"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <label for="input">Paste spreadsheet rows</label>
+    <textarea id="input" placeholder="Copy columns A:E from Google Sheets, then paste here."></textarea>
+    <p class="hint">Expected columns: date, title, text, image, side. You can paste original rows directly; quoted multiline cells are handled here.</p>
+    <div class="actions">
+      <button id="convertBtn" type="button">Convert</button>
+      <button class="secondary" id="copyBtn" type="button">Copy output</button>
+    </div>
+    <div class="status" id="status"></div>
+  </section>
+
+  <section class="panel">
+    <label for="output">Output for _chats/your-file.html</label>
+    <textarea id="output" spellcheck="false"></textarea>
+  </section>
+</main>
+
+<script>
+function parseTsv(text) {
+  var rows = [];
+  var row = [];
+  var cell = '';
+  var quoted = false;
+
+  for (var i = 0; i < text.length; i++) {
+    var ch = text[i];
+    var next = text[i + 1];
+
+    if (quoted) {
+      if (ch === '"' && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        quoted = false;
+      } else {
+        cell += ch;
+      }
+      continue;
+    }
+
+    if (ch === '"' && cell === '') {
+      quoted = true;
+    } else if (ch === '\t') {
+      row.push(cell);
+      cell = '';
+    } else if (ch === '\n') {
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = '';
+    } else if (ch !== '\r') {
+      cell += ch;
+    }
+  }
+
+  if (cell !== '' || row.length) {
+    row.push(cell);
+    rows.push(row);
+  }
+
+  return rows.filter(function (r) {
+    return r.some(function (c) { return String(c).trim() !== ''; });
+  });
+}
+
+function normalizeDate(value) {
+  var text = String(value || '').trim();
+  if (!text) return '';
+  var date = new Date(text);
+  if (!isNaN(date.getTime()) && /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(text)) {
+    return date.toISOString().slice(0, 10);
+  }
+  return text.replace(/\./g, '-');
+}
+
+function normalizeSide(value) {
+  var side = String(value || '').trim().toLowerCase();
+  return side === 'right' || side === 'r' || side === '우측' || side === '오른쪽' ? '>>' : '<<';
+}
+
+function cleanText(value) {
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .trim();
+}
+
+function buildOutput() {
+  var rows = parseTsv(document.getElementById('input').value);
+  var lines = [];
+  var lastDate = '';
+
+  rows.forEach(function (row) {
+    var date = normalizeDate(row[0]);
+    var text = cleanText(row[2]);
+    var image = String(row[3] || '').trim();
+    var marker = normalizeSide(row[4]);
+
+    if (!text && !image) return;
+
+    if (date && date !== lastDate) {
+      if (lines.length) lines.push('');
+      lines.push('== ' + date + ' ==');
+      lines.push('');
+      lastDate = date;
+    }
+
+    lines.push(marker + ' ' + text);
+    if (image) lines.push('![image](' + image + ')');
+    lines.push('');
+  });
+
+  var frontMatter = [
+    '---',
+    'layout: chatlog_plain',
+    'title: "' + document.getElementById('title').value.replace(/"/g, '\\\"') + '"',
+    'category: "' + document.getElementById('category').value.replace(/"/g, '\\\"') + '"',
+    'date: ' + document.getElementById('date').value,
+    'bubble_font_size: "' + document.getElementById('fontSize').value + '"',
+    'colors:',
+    '  page: "' + document.getElementById('pageColor').value + '"',
+    '  left: "' + document.getElementById('leftColor').value + '"',
+    '  left_text: "' + document.getElementById('leftText').value + '"',
+    '  right: "' + document.getElementById('rightColor').value + '"',
+    '  right_text: "' + document.getElementById('rightText').value + '"',
+    '  meta: "#8a8a8a"',
+    '---',
+    ''
+  ];
+
+  document.getElementById('output').value = frontMatter.concat(lines).join('\n').trim() + '\n';
+  document.getElementById('status').textContent = rows.length + ' rows converted.';
+}
+
+document.getElementById('convertBtn').addEventListener('click', buildOutput);
+document.getElementById('copyBtn').addEventListener('click', function () {
+  var output = document.getElementById('output');
+  output.focus();
+  output.select();
+  document.execCommand('copy');
+  document.getElementById('status').textContent = 'Copied output.';
+});
+</script>
+</body>
+</html>
