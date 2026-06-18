@@ -114,7 +114,7 @@ function normalizeDate(value) {
 
 function normalizeSide(value) {
   var side = String(value || '').trim().toLowerCase();
-  return side === 'right' || side === 'r' || side === '우측' || side === '오른쪽' ? 'right' : 'left';
+  return side === 'right' || side === 'r' ? 'right' : 'left';
 }
 
 function cleanText(value) {
@@ -122,7 +122,7 @@ function cleanText(value) {
 }
 
 function yamlQuote(value) {
-  return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\"') + '"';
+  return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
 }
 
 function buildBubble(side, text, image) {
@@ -185,7 +185,38 @@ function buildOutput() {
   document.getElementById('status').textContent = rows.length + ' rows converted.';
 }
 
-document.getElementById('convertBtn').addEventListener('click', buildOutput);
+
+var STORAGE_KEY = 'dekade-chatlog-converter-settings';
+var REMEMBERED_FIELDS = ['title', 'category', 'date', 'fontSize', 'pageColor', 'leftColor', 'leftText', 'rightColor', 'rightText'];
+
+function loadRememberedFields() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    REMEMBERED_FIELDS.forEach(function (id) {
+      var element = document.getElementById(id);
+      if (element && Object.prototype.hasOwnProperty.call(saved, id)) element.value = saved[id];
+    });
+  } catch (error) {}
+}
+
+function saveRememberedFields() {
+  var saved = {};
+  REMEMBERED_FIELDS.forEach(function (id) {
+    var element = document.getElementById(id);
+    if (element) saved[id] = element.value;
+  });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch (error) {}
+}
+
+loadRememberedFields();
+REMEMBERED_FIELDS.forEach(function (id) {
+  var element = document.getElementById(id);
+  if (element) element.addEventListener('input', saveRememberedFields);
+});
+document.getElementById('convertBtn').addEventListener('click', function () {
+  saveRememberedFields();
+  buildOutput();
+});
 document.getElementById('copyBtn').addEventListener('click', function () {
   var output = document.getElementById('output');
   output.focus();

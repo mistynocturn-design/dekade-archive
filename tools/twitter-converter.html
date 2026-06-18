@@ -292,7 +292,38 @@ function buildOutput() {
   document.getElementById('status').textContent = blocks.length + ' blocks converted.';
 }
 
-document.getElementById('convertBtn').addEventListener('click', buildOutput);
+
+var STORAGE_KEY = 'dekade-twitter-converter-settings';
+var REMEMBERED_FIELDS = ['title', 'date', 'fontSize', 'authorStyles'];
+
+function loadRememberedFields() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    REMEMBERED_FIELDS.forEach(function (id) {
+      var element = document.getElementById(id);
+      if (element && Object.prototype.hasOwnProperty.call(saved, id)) element.value = saved[id];
+    });
+  } catch (error) {}
+}
+
+function saveRememberedFields() {
+  var saved = {};
+  REMEMBERED_FIELDS.forEach(function (id) {
+    var element = document.getElementById(id);
+    if (element) saved[id] = element.value;
+  });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch (error) {}
+}
+
+loadRememberedFields();
+REMEMBERED_FIELDS.forEach(function (id) {
+  var element = document.getElementById(id);
+  if (element) element.addEventListener('input', saveRememberedFields);
+});
+document.getElementById('convertBtn').addEventListener('click', function () {
+  saveRememberedFields();
+  buildOutput();
+});
 document.getElementById('copyBtn').addEventListener('click', function () {
   var output = document.getElementById('output');
   output.focus();

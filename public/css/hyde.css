@@ -970,3 +970,32 @@ a.sidebar-nav-item:focus {
     aspect-ratio: 4 / 3;
   }
 }
+/* Twitter readability grouping */
+.twitter-note-body {
+  gap: 1.55rem;
+}
+
+.twitter-note-body > .twitter-note {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .035);
+}
+
+.twitter-thread {
+  background: color-mix(in srgb, var(--twitter-thread-bg, #d8d2c8) 12%, transparent);
+  border-left-width: 3px;
+  border-radius: 0 8px 8px 0;
+  gap: .42rem;
+  padding: .58rem .62rem .62rem .82rem;
+}
+
+.twitter-thread-label {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .04);
+  margin-bottom: .1rem;
+}
+
+.twitter-thread .twitter-note {
+  box-shadow: none;
+}
+
+.twitter-thread .twitter-note + .twitter-note {
+  margin-top: .05rem;
+}
