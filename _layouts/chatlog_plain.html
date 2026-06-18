@@ -28,10 +28,10 @@ layout: default
   if (!source || !body) return;
 
   var lines = source.textContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-  var imagePattern = /^!\[[^\]]*\]\(([^)]+)\)\s*$/;
-  var datePattern = /^\s*==\s*(.+?)\s*==\s*$/;
-  var rightPattern = /^>>[\t ]*(.*)$/;
-  var leftPattern = /^<<[\t ]*(.*)$/;
+  var imagePattern = /^\s*"?!\[[^\]]*\]\(([^)]+)\)"?\s*$/;
+  var datePattern = /^\s*"?==\s*(.+?)\s*=="?\s*$/;
+  var rightPattern = /^\s*("?)>>[\t ]*(.*)$/;
+  var leftPattern = /^\s*("?)<<[\t ]*(.*)$/;
   var current = null;
 
   function normalizeSpreadsheetText(text) {
@@ -40,17 +40,11 @@ layout: default
       .replace(/""/g, '"');
   }
 
-  function cleanFirstLine(text) {
+  function cleanFirstLine(text, markerWasQuoted) {
     var cleaned = normalizeSpreadsheetText(text);
-    var wrapped = /^"/.test(cleaned);
-    if (wrapped) cleaned = cleaned.replace(/^"/, '');
+    var wrapped = markerWasQuoted || /^"/.test(cleaned);
+    if (/^"/.test(cleaned)) cleaned = cleaned.replace(/^"/, '');
     return { text: cleaned, wrapped: wrapped };
-  }
-
-  function cleanImageLine(text) {
-    return normalizeSpreadsheetText(text)
-      .replace(/^"/, '')
-      .replace(/"$/, '');
   }
 
   function removeClosingSpreadsheetQuote(target) {
@@ -107,10 +101,11 @@ layout: default
   }
 
   lines.forEach(function (line) {
-    var dateMatch = line.match(datePattern);
-    var rightMatch = line.match(rightPattern);
-    var leftMatch = line.match(leftPattern);
-    var imageMatch = cleanImageLine(line).match(imagePattern);
+    var normalizedLine = normalizeSpreadsheetText(line);
+    var dateMatch = normalizedLine.match(datePattern);
+    var rightMatch = normalizedLine.match(rightPattern);
+    var leftMatch = normalizedLine.match(leftPattern);
+    var imageMatch = normalizedLine.match(imagePattern);
 
     if (dateMatch) {
       flush();
@@ -119,7 +114,8 @@ layout: default
     }
 
     if (rightMatch || leftMatch) {
-      var first = cleanFirstLine(rightMatch ? rightMatch[1] : leftMatch[1]);
+      var match = rightMatch || leftMatch;
+      var first = cleanFirstLine(match[2], !!match[1]);
       flush();
       current = {
         side: rightMatch ? 'right' : 'left',
