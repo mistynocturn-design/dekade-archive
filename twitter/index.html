@@ -9,18 +9,13 @@ title: Twitter
     <article class="twitter-month-card">
       <a class="twitter-month-link" href="{{ month.url | relative_url }}">
         <div class="twitter-month-profile">
-          {% if month.author.avatar %}
-            <img class="twitter-month-avatar" src="{{ month.author.avatar | relative_url }}" alt="">
-          {% else %}
-            <div class="twitter-month-avatar twitter-author-placeholder">{{ month.author.name | default: 'A' | slice: 0, 1 }}</div>
-          {% endif %}
+          <div class="twitter-month-avatar twitter-author-placeholder">{{ month.date | date: "%m" }}</div>
           <div>
             <h2>{{ month.title }}</h2>
-            <p>{{ month.author.name | default: month.author | default: site.title }}</p>
           </div>
         </div>
         {% if month.tags %}
-          <div class="twitter-tags">
+          <div class="twitter-tags twitter-index-tags">
             {% for tag in month.tags %}
               <span>#{{ tag }}</span>
             {% endfor %}

@@ -663,3 +663,60 @@ a.sidebar-nav-item:focus {
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
+/* Twitter archive refinements */
+.content .twitter-month-link {
+  padding: .58rem .68rem;
+}
+
+.twitter-month-profile {
+  gap: .55rem;
+}
+
+.twitter-month-avatar {
+  font-size: .78rem;
+  height: 2rem;
+  width: 2rem;
+}
+
+.twitter-month-profile h2 {
+  font-size: 1rem;
+}
+
+.twitter-index-tags {
+  gap: .25rem;
+  margin-top: .45rem;
+}
+
+.twitter-index-tags span {
+  font-size: .68rem;
+}
+
+.twitter-month-page {
+  font-size: var(--twitter-font-size, .82rem);
+}
+
+.twitter-month-page .twitter-tags span,
+.twitter-month-page .twitter-note-tags {
+  font-size: calc(var(--twitter-font-size, .82rem) * .9);
+}
+
+.twitter-note {
+  background: var(--twitter-note-bg, #fbfbfb);
+  color: var(--twitter-note-text, #343a40);
+  font-size: var(--twitter-font-size, .82rem);
+  padding: .78rem .86rem;
+}
+
+.twitter-note .twitter-note-author,
+.twitter-note .twitter-note-tags {
+  color: var(--twitter-note-text, #4e4a65);
+}
+
+.twitter-note .twitter-note-date {
+  color: color-mix(in srgb, var(--twitter-note-text, #343a40) 62%, transparent);
+}
+
+.twitter-note-text {
+  color: var(--twitter-note-text, #343a40);
+  font-size: var(--twitter-font-size, .82rem);
+}
