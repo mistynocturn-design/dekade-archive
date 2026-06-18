@@ -999,3 +999,84 @@ a.sidebar-nav-item:focus {
 .twitter-thread .twitter-note + .twitter-note {
   margin-top: .05rem;
 }
+/* Twitter metadata and body polish */
+.twitter-note {
+  position: relative;
+}
+
+.twitter-note-header {
+  gap: .5rem;
+  margin-bottom: .48rem;
+  min-height: 2rem;
+  padding-right: 7.6rem;
+}
+
+.twitter-note-avatar {
+  height: 2rem;
+  width: 2rem;
+}
+
+.twitter-note-author {
+  font-size: calc(var(--twitter-font-size, .82rem) * .95);
+  line-height: 1.25;
+}
+
+.twitter-note-date {
+  font-size: calc(var(--twitter-font-size, .82rem) * .76);
+  line-height: 1.25;
+  margin-top: .08rem;
+}
+
+.twitter-note .twitter-note-tags {
+  background: color-mix(in srgb, var(--twitter-note-bg, #fbfbfb) 72%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--twitter-note-text, #343a40) 13%, transparent);
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--twitter-note-text, #343a40) 72%, transparent);
+  font-size: calc(var(--twitter-font-size, .82rem) * .72);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  max-width: 7.1rem;
+  overflow: hidden;
+  padding: .22rem .46rem;
+  position: absolute;
+  right: .72rem;
+  text-overflow: ellipsis;
+  top: .7rem;
+  white-space: nowrap;
+}
+
+.twitter-note-text {
+  background: color-mix(in srgb, var(--twitter-note-bg, #fbfbfb) 82%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--twitter-note-text, #343a40) 12%, transparent);
+  border-radius: 7px;
+  line-height: 1.72;
+  padding: .62rem .68rem;
+}
+
+.twitter-note-text + .twitter-image-grid {
+  margin-top: .58rem;
+}
+
+.twitter-thread .twitter-note-header {
+  padding-right: 7rem;
+}
+
+.twitter-thread .twitter-note .twitter-note-tags {
+  right: .64rem;
+  top: .62rem;
+}
+
+@media (max-width: 520px) {
+  .twitter-note-header,
+  .twitter-thread .twitter-note-header {
+    padding-right: 0;
+  }
+
+  .twitter-note .twitter-note-tags {
+    display: inline-block;
+    margin: -.08rem 0 .5rem 2.5rem;
+    max-width: calc(100% - 2.5rem);
+    position: static;
+  }
+}
