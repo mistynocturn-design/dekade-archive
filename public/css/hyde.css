@@ -284,7 +284,7 @@ a.sidebar-nav-item:focus {
 .archive-tabs {
   --archive-accent: #4e4a65;
   --archive-indicator-height: 3px;
-  --archive-tab-muted: #e7e3d8;
+  --archive-tab-muted: #d2c7b1;
   align-items: center;
   border-bottom: 1px solid #eee;
   display: flex;
