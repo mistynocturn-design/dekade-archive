@@ -32,7 +32,7 @@
       <div><label for="fontSize">Note font size</label><input id="fontSize" value="0.70rem"></div>
     </div>
     <label for="authorStyles">Author styles</label>
-    <textarea id="authorStyles" style="min-height:80px;">&#48708;&#45768;|#ceccd9|#161732&#10;&#45433;&#54000;|#f9f5f2|#4f362a</textarea>
+    <textarea id="authorStyles" style="min-height:80px;">&#48708;&#45768;|#e6eaf3|#161732&#10;&#45433;&#54000;|#f9f5f2|#4f362a</textarea>
     <p class="hint">One author per line: author|box background|text color. Names must match the spreadsheet author column.</p>
   </section>
 
@@ -316,6 +316,11 @@ function saveRememberedFields() {
 }
 
 loadRememberedFields();
+var authorStylesElement = document.getElementById('authorStyles');
+if (authorStylesElement && authorStylesElement.value.indexOf('#ceccd9') !== -1) {
+  authorStylesElement.value = authorStylesElement.value.replace(/#ceccd9/g, '#e6eaf3');
+  saveRememberedFields();
+}
 REMEMBERED_FIELDS.forEach(function (id) {
   var element = document.getElementById(id);
   if (element) element.addEventListener('input', saveRememberedFields);

@@ -1080,3 +1080,60 @@ a.sidebar-nav-item:focus {
     position: static;
   }
 }
+/* Twitter compact header and media merge */
+.twitter-note-header {
+  gap: .42rem;
+  margin-bottom: .28rem;
+  min-height: 1.58rem;
+}
+
+.twitter-note-avatar {
+  height: 1.58rem;
+  width: 1.58rem;
+}
+
+.twitter-note-author {
+  font-size: calc(var(--twitter-font-size, .82rem) * .88);
+  line-height: 1.12;
+}
+
+.twitter-note-date {
+  font-size: calc(var(--twitter-font-size, .82rem) * .68);
+  line-height: 1.1;
+  margin-top: .02rem;
+}
+
+.twitter-note-text {
+  border-color: color-mix(in srgb, var(--twitter-note-text, #343a40) 16%, transparent);
+  border-radius: 8px;
+  padding: .82rem .9rem;
+}
+
+.twitter-note-text + .twitter-image-grid {
+  border-color: color-mix(in srgb, var(--twitter-note-text, #343a40) 16%, transparent);
+  border-radius: 0 0 8px 8px;
+  border-top: 0;
+  margin-top: 0;
+}
+
+.twitter-note-text:has(+ .twitter-image-grid) {
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  padding-bottom: .72rem;
+}
+
+.twitter-image-grid {
+  background: color-mix(in srgb, var(--twitter-note-bg, #fbfbfb) 82%, #ffffff);
+}
+
+.twitter-note:not(:has(.twitter-note-text)) .twitter-image-grid {
+  margin-top: .48rem;
+}
+
+.twitter-note .twitter-note-tags {
+  top: .58rem;
+}
+
+.twitter-thread .twitter-note .twitter-note-tags {
+  top: .5rem;
+}
