@@ -27,11 +27,16 @@ layout: default
   var body = page.querySelector('.chatlog-body');
   if (!source || !body) return;
 
-  var lines = source.textContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  var raw = source.textContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  raw = raw.replace(/\t+$/gm, '');
+  raw = raw.replace(/\t+"?((?:>>|<<)[\t ]+)/g, '\n"$1');
+  raw = raw.replace(/("(?:>>|<<)[\t ]+)/g, '\n$1');
+
+  var lines = raw.split('\n');
   var imagePattern = /^\s*"?!\[[^\]]*\]\(([^)]+)\)"?\s*$/;
   var datePattern = /^\s*"?==\s*(.+?)\s*=="?\s*$/;
-  var rightPattern = /^\s*("?)>>[\t ]*(.*)$/;
-  var leftPattern = /^\s*("?)<<[\t ]*(.*)$/;
+  var rightPattern = /^\s*("?)>>[\t ]+(.*)$/;
+  var leftPattern = /^\s*("?)<<[\t ]+(.*)$/;
   var current = null;
 
   function normalizeSpreadsheetText(text) {
