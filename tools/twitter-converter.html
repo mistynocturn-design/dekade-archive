@@ -39,7 +39,7 @@
   <section class="panel">
     <label for="input">Paste spreadsheet rows</label>
     <textarea id="input" placeholder="Copy columns A:G from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, author, profile image, tags, content, thread ID, thread start month. Thread IDs group notes; if the start month differs from this month, a continued-thread label is added.</p>
+    <p class="hint">Expected columns: date, author, profile image, tags, content, thread ID, thread start month. Threaded notes are assigned to the thread start month; standalone notes are assigned to their written month.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -162,13 +162,20 @@ function buildOutput() {
 
   var currentMonth = monthFromDate(document.getElementById('date').value);
   var indexed = rows.map(function (row, index) {
+    var threadId = String(row[5] || '').trim();
+    var startMonth = String(row[6] || '').trim();
+    var writtenMonth = monthFromDate(row[0]);
+    var ownerMonth = threadId ? (startMonth || writtenMonth) : writtenMonth;
     return {
       row: row,
       index: index,
       date: normalizeDate(row[0]),
-      threadId: String(row[5] || '').trim(),
-      startMonth: String(row[6] || '').trim()
+      threadId: threadId,
+      startMonth: startMonth,
+      ownerMonth: ownerMonth
     };
+  }).filter(function (item) {
+    return !currentMonth || item.ownerMonth === currentMonth;
   });
 
   indexed.sort(function (a, b) {
