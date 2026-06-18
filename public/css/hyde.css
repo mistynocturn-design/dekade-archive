@@ -720,3 +720,34 @@ a.sidebar-nav-item:focus {
   color: var(--twitter-note-text, #343a40);
   font-size: var(--twitter-font-size, .82rem);
 }
+.twitter-page-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin: -2.55rem 0 1.55rem;
+}
+
+.content .twitter-tool-button {
+  align-items: center;
+  background: #f7f7f7;
+  border: 1px solid #e2e2e2;
+  border-radius: 999px;
+  color: #888;
+  display: inline-flex;
+  font-size: .95rem;
+  font-weight: 700;
+  height: 1.65rem;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+  width: 1.65rem;
+}
+
+.content .twitter-tool-button:hover,
+.content .twitter-tool-button:focus {
+  background: #f7f5f1;
+  border-color: #ded8cc;
+  color: #4e4a65;
+  text-decoration: none;
+  transform: translateY(-1px);
+}

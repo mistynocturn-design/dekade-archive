@@ -3,6 +3,10 @@ layout: page
 title: Twitter
 ---
 
+<div class="twitter-page-tools">
+  <a class="twitter-tool-button" href="{{ site.baseurl }}/tools/twitter-converter.html" target="_blank" rel="noopener" aria-label="Open Twitter converter" title="Open Twitter converter">+</a>
+</div>
+
 <div class="twitter-index">
   {% assign months = site.twitter | sort: "date" | reverse %}
   {% for month in months %}
