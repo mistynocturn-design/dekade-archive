@@ -5,9 +5,9 @@ category: "DM"
 date: 2026-05-15
 bubble_font_size: "0.84rem"
 colors:
-  page: "#ffffff"
-  left: "#f4f1ee"
-  right: "#dbeafe"
+  page: "#5e5e5e"
+  left: "#d4c4d9"
+  right: "#fefcf1"
   text: "#212529"
   meta: "#8a8a8a"
 messages:
