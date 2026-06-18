@@ -284,6 +284,7 @@ a.sidebar-nav-item:focus {
 .archive-tabs {
   --archive-accent: #4e4a65;
   --archive-indicator-height: 3px;
+  --archive-tab-muted: #e7e3d8;
   align-items: center;
   border-bottom: 1px solid #eee;
   display: flex;
@@ -297,7 +298,7 @@ a.sidebar-nav-item:focus {
 .archive-tab {
   background: transparent;
   border: 0;
-  color: #777;
+  color: var(--archive-tab-muted);
   cursor: pointer;
   font: inherit;
   font-size: .94rem;
