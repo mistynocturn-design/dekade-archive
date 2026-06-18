@@ -30,17 +30,47 @@ layout: default
   var lines = source.textContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
   var imagePattern = /^!\[[^\]]*\]\(([^)]+)\)\s*$/;
   var datePattern = /^\s*==\s*(.+?)\s*==\s*$/;
-  var rightPattern = /^>>\s?(.*)$/;
-  var leftPattern = /^<<\s?(.*)$/;
+  var rightPattern = /^>>[\t ]*(.*)$/;
+  var leftPattern = /^<<[\t ]*(.*)$/;
   var current = null;
 
+  function normalizeSpreadsheetText(text) {
+    return text
+      .replace(/[\t ]+$/g, '')
+      .replace(/""/g, '"');
+  }
+
+  function cleanFirstLine(text) {
+    var cleaned = normalizeSpreadsheetText(text);
+    var wrapped = /^"/.test(cleaned);
+    if (wrapped) cleaned = cleaned.replace(/^"/, '');
+    return { text: cleaned, wrapped: wrapped };
+  }
+
+  function cleanImageLine(text) {
+    return normalizeSpreadsheetText(text)
+      .replace(/^"/, '')
+      .replace(/"$/, '');
+  }
+
+  function removeClosingSpreadsheetQuote(target) {
+    if (!target || !target.wrapped) return;
+    for (var i = target.text.length - 1; i >= 0; i--) {
+      if (target.text[i].trim() === '') continue;
+      target.text[i] = target.text[i].replace(/"$/, '');
+      break;
+    }
+  }
+
   function appendText(target, text) {
-    if (!text && target.text.length === 0) return;
-    target.text.push(text);
+    var cleaned = normalizeSpreadsheetText(text);
+    if (!cleaned && target.text.length === 0) return;
+    target.text.push(cleaned);
   }
 
   function flush() {
     if (!current) return;
+    removeClosingSpreadsheetQuote(current);
 
     var line = document.createElement('div');
     line.className = 'chat-line ' + current.side;
@@ -80,7 +110,7 @@ layout: default
     var dateMatch = line.match(datePattern);
     var rightMatch = line.match(rightPattern);
     var leftMatch = line.match(leftPattern);
-    var imageMatch = line.match(imagePattern);
+    var imageMatch = cleanImageLine(line).match(imagePattern);
 
     if (dateMatch) {
       flush();
@@ -89,13 +119,15 @@ layout: default
     }
 
     if (rightMatch || leftMatch) {
+      var first = cleanFirstLine(rightMatch ? rightMatch[1] : leftMatch[1]);
       flush();
       current = {
         side: rightMatch ? 'right' : 'left',
         text: [],
-        images: []
+        images: [],
+        wrapped: first.wrapped
       };
-      appendText(current, rightMatch ? rightMatch[1] : leftMatch[1]);
+      appendText(current, first.text);
       return;
     }
 
