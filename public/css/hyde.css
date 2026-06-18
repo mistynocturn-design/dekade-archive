@@ -282,6 +282,8 @@ a.sidebar-nav-item:focus {
 }
 
 .archive-tabs {
+  --archive-accent: #2f5f95;
+  --archive-indicator-height: 3px;
   align-items: center;
   border-bottom: 1px solid #eee;
   display: flex;
@@ -289,6 +291,7 @@ a.sidebar-nav-item:focus {
   gap: .28rem .52rem;
   margin: .2rem 0 1.25rem;
   padding-bottom: .72rem;
+  position: relative;
 }
 
 .archive-tab {
@@ -306,12 +309,19 @@ a.sidebar-nav-item:focus {
 .archive-tab:hover,
 .archive-tab:focus,
 .archive-tab.active {
-  color: #2f5f95;
+  color: var(--archive-accent);
 }
 
-.archive-tab.active {
-  text-decoration: underline;
-  text-underline-offset: .28rem;
+.archive-tab-indicator {
+  background: var(--archive-accent);
+  border-radius: 999px;
+  bottom: -2px;
+  height: var(--archive-indicator-height);
+  left: 0;
+  position: absolute;
+  transform: translateX(0);
+  transition: transform .24s ease, width .24s ease, background-color .15s ease;
+  width: 0;
 }
 
 .archive-tab-divider {

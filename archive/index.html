@@ -12,6 +12,7 @@ title: Archive
     <button class="archive-tab{% if forloop.first %} active{% endif %}" type="button" data-archive-tab="{{ category | slugify }}">{{ category }}</button>
     {% unless forloop.last %}<span class="archive-tab-divider" aria-hidden="true">|</span>{% endunless %}
   {% endfor %}
+  <span class="archive-tab-indicator" aria-hidden="true"></span>
 </nav>
 
 <div class="archive-tree">
@@ -40,22 +41,43 @@ title: Archive
 
 <script>
 (function () {
+  var tabBar = document.querySelector('.archive-tabs');
+  var indicator = document.querySelector('.archive-tab-indicator');
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.archive-tab'));
   var panels = Array.prototype.slice.call(document.querySelectorAll('.archive-category-panel'));
-  if (!tabs.length || !panels.length) return;
+  if (!tabBar || !indicator || !tabs.length || !panels.length) return;
+
+  function moveIndicator(tab) {
+    if (!tab) return;
+    var tabRect = tab.getBoundingClientRect();
+    var barRect = tabBar.getBoundingClientRect();
+    indicator.style.width = tabRect.width + 'px';
+    indicator.style.transform = 'translateX(' + (tabRect.left - barRect.left + tabBar.scrollLeft) + 'px)';
+  }
 
   function activate(id) {
+    var activeTab = null;
     tabs.forEach(function (tab) {
-      tab.classList.toggle('active', tab.getAttribute('data-archive-tab') === id);
+      var active = tab.getAttribute('data-archive-tab') === id;
+      tab.classList.toggle('active', active);
+      if (active) activeTab = tab;
     });
     panels.forEach(function (panel) {
       panel.classList.toggle('active', panel.getAttribute('data-archive-panel') === id);
     });
+    moveIndicator(activeTab);
   }
 
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       activate(tab.getAttribute('data-archive-tab'));
+    });
+  });
+
+  moveIndicator(document.querySelector('.archive-tab.active'));
+  window.addEventListener('resize', function () {
+    window.requestAnimationFrame(function () {
+      moveIndicator(document.querySelector('.archive-tab.active'));
     });
   });
 })();
