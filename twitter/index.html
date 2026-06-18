@@ -6,7 +6,18 @@ title: Twitter
 <div class="twitter-page-tools">
   <a class="twitter-tool-button" href="{{ site.baseurl }}/tools/twitter-converter.html" target="_blank" rel="noopener" aria-label="Open Twitter converter" title="Open Twitter converter">+</a>
 </div>
-
+<details class="backup-guide">
+  <summary>Twitter backup guide</summary>
+  <ol>
+    <li>Copy spreadsheet columns A:F: date, author, profile image, tags, content, thread ID.</li>
+    <li>Open Twitter Archive Converter with the + button.</li>
+    <li>Check Month title, Archive sort date, Note font size, and Author styles.</li>
+    <li>Paste the rows and convert.</li>
+    <li>Paste the full output into _twitter/YYYY-MM.md.</li>
+    <li>Put profile images in assets/twitter/YYYY-MM/ and match the spreadsheet paths.</li>
+    <li>Commit and push with GitHub Desktop.</li>
+  </ol>
+</details>
 <div class="twitter-index">
   {% assign months = site.twitter | sort: "date" | reverse %}
   {% for month in months %}

@@ -6,7 +6,17 @@ title: Archive
 <div class="archive-page-tools">
   <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener" aria-label="Open converter" title="Open converter">+</a>
 </div>
-
+<details class="backup-guide">
+  <summary>Archive backup guide</summary>
+  <ol>
+    <li>Copy the original chat log range from the spreadsheet.</li>
+    <li>Open Chat Log Converter with the + button.</li>
+    <li>Paste the rows, check title, category, date, and colors, then convert.</li>
+    <li>Paste the full output into _chats/your-file.html.</li>
+    <li>Put images in assets/archive/log-folder/ and use matching image paths.</li>
+    <li>Commit and push with GitHub Desktop.</li>
+  </ol>
+</details>
 <nav class="archive-tabs" aria-label="Archive categories">
   {% for category in site.data.archive_categories %}
     <button class="archive-tab{% if forloop.first %} active{% endif %}" type="button" data-archive-tab="{{ category | slugify }}">{{ category }}</button>

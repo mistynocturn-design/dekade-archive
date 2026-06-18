@@ -794,3 +794,44 @@ a.sidebar-nav-item:focus {
 .twitter-thread .twitter-note + .twitter-note {
   margin-top: .18rem;
 }
+/* Backup guide disclosure */
+.backup-guide {
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  color: #4d4d4d;
+  font-size: .78rem;
+  margin: .2rem 0 1.1rem;
+  padding: .55rem .7rem;
+}
+
+.backup-guide summary {
+  color: #4e4a65;
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.backup-guide summary::-webkit-details-marker {
+  display: none;
+}
+
+.backup-guide summary::before {
+  content: "+";
+  display: inline-block;
+  margin-right: .4rem;
+  transition: transform .15s ease;
+}
+
+.backup-guide[open] summary::before {
+  transform: rotate(45deg);
+}
+
+.backup-guide ol {
+  margin: .6rem 0 .1rem 1.1rem;
+  padding: 0;
+}
+
+.backup-guide li {
+  margin-bottom: .28rem;
+}
