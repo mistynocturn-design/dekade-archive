@@ -16,7 +16,7 @@ title: Archive
 
 <div class="archive-tree">
   {% for category in site.data.archive_categories %}
-    {% assign chats = site.chats | where: "category", category | sort: "date" | reverse %}
+    {% assign chats = site.archive | where: "category", category | sort: "date" | reverse %}
     <section class="archive-category-panel{% if forloop.first %} active{% endif %}" data-archive-panel="{{ category | slugify }}">
       {% if chats.size > 0 %}
         <ul class="archive-chat-list">
@@ -45,7 +45,7 @@ title: Archive
     <li>'+'버튼을 눌러 컨버터를 엽니다.</li>
     <li>세부 내용을 커스터마이징합니다.</li>
     <li>복사한 스프레드시트를 붙여넣고 변환합니다.</li>
-    <li>결과물을 _chats/파일명(제목).html에 붙여넣고 발행합니다.</li>
+    <li>결과물을 _archive/파일명(제목).html에 붙여넣고 발행합니다.</li>
     <li>첨부할 이미지가 있다면 in assets/archive/log-folder/ 에 이미지를 넣고 스프레드시트에 적어둔 경로와 일치시킵니다.</li>
   </ol>
 </details>

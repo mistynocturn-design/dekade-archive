@@ -25,7 +25,7 @@ collections:
   twitter:
     output: true
     permalink: /twitter/:name/
-  chats:
+  archive:
     output: true
     permalink: /archive/:name/
 
