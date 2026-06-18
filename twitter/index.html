@@ -19,9 +19,6 @@ title: Twitter
             <p>{{ month.author.name | default: month.author | default: site.title }}</p>
           </div>
         </div>
-        {% if month.summary %}
-          <p class="twitter-month-summary">{{ month.summary }}</p>
-        {% endif %}
         {% if month.tags %}
           <div class="twitter-tags">
             {% for tag in month.tags %}

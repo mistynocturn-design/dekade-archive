@@ -30,14 +30,12 @@
       <div><label for="title">Month title</label><input id="title" value="2026-06"></div>
       <div><label for="date">Archive sort date</label><input id="date" value="2026-06-01" placeholder="YYYY-MM-01"></div>
     </div>
-    <label for="summary">Summary</label>
-    <input id="summary" value="Twitter notes, fragments, and short settings.">
   </section>
 
   <section class="panel">
     <label for="input">Paste spreadsheet rows</label>
     <textarea id="input" placeholder="Copy columns A:E from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: 작성일, 작성자, 프로필이미지, 태그, 내용. Multiline cells and spreadsheet quotes are handled here.</p>
+    <p class="hint">Expected columns: date, author, profile image, tags, content. Multiline cells and spreadsheet quotes are handled here.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -169,7 +167,6 @@ function buildOutput() {
     'layout: twitter_month',
     'title: ' + yamlQuote(document.getElementById('title').value),
     'date: ' + document.getElementById('date').value,
-    'summary: ' + yamlQuote(document.getElementById('summary').value),
     'tags:'
   ];
 
