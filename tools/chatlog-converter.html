@@ -9,7 +9,7 @@
     main { max-width: 1100px; margin: 0 auto; padding: 28px 18px 48px; }
     h1 { font-size: 24px; margin: 0 0 18px; }
     label { display: block; font-size: 13px; font-weight: 700; margin: 14px 0 6px; }
-    input, textarea, select { box-sizing: border-box; width: 100%; border: 1px solid #ccd1d8; border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; }
+    input, textarea { box-sizing: border-box; width: 100%; border: 1px solid #ccd1d8; border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; }
     textarea { min-height: 220px; resize: vertical; white-space: pre; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .colors { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
@@ -28,24 +28,11 @@
 
   <section class="panel">
     <div class="grid">
-      <div>
-        <label for="title">Title</label>
-        <input id="title" value="[26.05.15] START >> 1~100">
-      </div>
-      <div>
-        <label for="category">Category</label>
-        <input id="category" value="DM">
-      </div>
-      <div>
-        <label for="date">Archive sort date</label>
-        <input id="date" value="2026-05-15" placeholder="YYYY-MM-DD">
-      </div>
-      <div>
-        <label for="fontSize">Bubble font size</label>
-        <input id="fontSize" value="0.84rem">
-      </div>
+      <div><label for="title">Title</label><input id="title" value="[26.05.15] START >> 1~100"></div>
+      <div><label for="category">Category</label><input id="category" value="DM"></div>
+      <div><label for="date">Archive sort date</label><input id="date" value="2026-05-15" placeholder="YYYY-MM-DD"></div>
+      <div><label for="fontSize">Bubble font size</label><input id="fontSize" value="0.84rem"></div>
     </div>
-
     <div class="colors">
       <div><label for="pageColor">Page</label><input id="pageColor" value="#ffffff"></div>
       <div><label for="leftColor">Left bg</label><input id="leftColor" value="#f4f1ee"></div>
@@ -58,7 +45,7 @@
   <section class="panel">
     <label for="input">Paste spreadsheet rows</label>
     <textarea id="input" placeholder="Copy columns A:E from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, title, text, image, side. You can paste original rows directly; quoted multiline cells are handled here.</p>
+    <p class="hint">Expected columns: date, title, text, image, side. This converter outputs finished bubble HTML, so multiline text and spreadsheet quotes do not need to be parsed by the site.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -95,51 +82,62 @@ function parseTsv(text) {
       continue;
     }
 
-    if (ch === '"' && cell === '') {
-      quoted = true;
-    } else if (ch === '\t') {
-      row.push(cell);
-      cell = '';
-    } else if (ch === '\n') {
-      row.push(cell);
-      rows.push(row);
-      row = [];
-      cell = '';
-    } else if (ch !== '\r') {
-      cell += ch;
-    }
+    if (ch === '"' && cell === '') quoted = true;
+    else if (ch === '\t') { row.push(cell); cell = ''; }
+    else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+    else if (ch !== '\r') cell += ch;
   }
 
-  if (cell !== '' || row.length) {
-    row.push(cell);
-    rows.push(row);
-  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); });
+}
 
-  return rows.filter(function (r) {
-    return r.some(function (c) { return String(c).trim() !== ''; });
-  });
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/'/g, '&#39;');
 }
 
 function normalizeDate(value) {
   var text = String(value || '').trim();
   if (!text) return '';
   var date = new Date(text);
-  if (!isNaN(date.getTime()) && /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(text)) {
-    return date.toISOString().slice(0, 10);
-  }
+  if (!isNaN(date.getTime()) && /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(text)) return date.toISOString().slice(0, 10);
   return text.replace(/\./g, '-');
 }
 
 function normalizeSide(value) {
   var side = String(value || '').trim().toLowerCase();
-  return side === 'right' || side === 'r' || side === '우측' || side === '오른쪽' ? '>>' : '<<';
+  return side === 'right' || side === 'r' || side === '우측' || side === '오른쪽' ? 'right' : 'left';
 }
 
 function cleanText(value) {
-  return String(value || '')
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .trim();
+  return String(value || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+}
+
+function yamlQuote(value) {
+  return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\"') + '"';
+}
+
+function buildBubble(side, text, image) {
+  var html = [];
+  html.push('<div class="chat-line ' + side + '">');
+  html.push('  <div class="chat-bubble">');
+  if (text) {
+    html.push('    <div class="chat-text">' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>');
+  }
+  if (image) {
+    html.push('    <img class="chat-image" src="' + escapeAttr(image) + '" alt="">');
+  }
+  html.push('  </div>');
+  html.push('</div>');
+  return html.join('\n');
 }
 
 function buildOutput() {
@@ -151,35 +149,33 @@ function buildOutput() {
     var date = normalizeDate(row[0]);
     var text = cleanText(row[2]);
     var image = String(row[3] || '').trim();
-    var marker = normalizeSide(row[4]);
-
+    var side = normalizeSide(row[4]);
     if (!text && !image) return;
 
     if (date && date !== lastDate) {
       if (lines.length) lines.push('');
-      lines.push('== ' + date + ' ==');
+      lines.push('<div class="chat-date-divider">' + escapeHtml(date) + '</div>');
       lines.push('');
       lastDate = date;
     }
 
-    lines.push(marker + ' ' + text);
-    if (image) lines.push('![image](' + image + ')');
+    lines.push(buildBubble(side, text, image));
     lines.push('');
   });
 
   var frontMatter = [
     '---',
-    'layout: chatlog_plain',
-    'title: "' + document.getElementById('title').value.replace(/"/g, '\\\"') + '"',
-    'category: "' + document.getElementById('category').value.replace(/"/g, '\\\"') + '"',
+    'layout: chatlog_direct',
+    'title: ' + yamlQuote(document.getElementById('title').value),
+    'category: ' + yamlQuote(document.getElementById('category').value),
     'date: ' + document.getElementById('date').value,
-    'bubble_font_size: "' + document.getElementById('fontSize').value + '"',
+    'bubble_font_size: ' + yamlQuote(document.getElementById('fontSize').value),
     'colors:',
-    '  page: "' + document.getElementById('pageColor').value + '"',
-    '  left: "' + document.getElementById('leftColor').value + '"',
-    '  left_text: "' + document.getElementById('leftText').value + '"',
-    '  right: "' + document.getElementById('rightColor').value + '"',
-    '  right_text: "' + document.getElementById('rightText').value + '"',
+    '  page: ' + yamlQuote(document.getElementById('pageColor').value),
+    '  left: ' + yamlQuote(document.getElementById('leftColor').value),
+    '  left_text: ' + yamlQuote(document.getElementById('leftText').value),
+    '  right: ' + yamlQuote(document.getElementById('rightColor').value),
+    '  right_text: ' + yamlQuote(document.getElementById('rightText').value),
     '  meta: "#8a8a8a"',
     '---',
     ''
