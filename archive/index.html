@@ -3,23 +3,21 @@ layout: page
 title: Archive
 ---
 
-<div class="archive-toolbar">
-  <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener">
-    <span class="archive-tool-icon" aria-hidden="true">+</span>
-    <span>Open Converter</span>
-  </a>
+<div class="archive-page-tools">
+  <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener" aria-label="Open converter" title="Open converter">+</a>
 </div>
+
+<nav class="archive-tabs" aria-label="Archive categories">
+  {% for category in site.data.archive_categories %}
+    <button class="archive-tab{% if forloop.first %} active{% endif %}" type="button" data-archive-tab="{{ category | slugify }}">{{ category }}</button>
+    {% unless forloop.last %}<span class="archive-tab-divider" aria-hidden="true">|</span>{% endunless %}
+  {% endfor %}
+</nav>
 
 <div class="archive-tree">
   {% for category in site.data.archive_categories %}
     {% assign chats = site.chats | where: "category", category | sort: "date" | reverse %}
-    <details class="archive-category" open>
-      <summary>
-        <span class="archive-marker" aria-hidden="true">&#9654;</span>
-        <span>{{ category }}</span>
-        <span class="archive-count">{{ chats.size }}</span>
-      </summary>
-
+    <section class="archive-category-panel{% if forloop.first %} active{% endif %}" data-archive-panel="{{ category | slugify }}">
       {% if chats.size > 0 %}
         <ul class="archive-chat-list">
           {% for chat in chats %}
@@ -36,6 +34,29 @@ title: Archive
       {% else %}
         <p class="archive-empty">No logs yet.</p>
       {% endif %}
-    </details>
+    </section>
   {% endfor %}
 </div>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.archive-tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.archive-category-panel'));
+  if (!tabs.length || !panels.length) return;
+
+  function activate(id) {
+    tabs.forEach(function (tab) {
+      tab.classList.toggle('active', tab.getAttribute('data-archive-tab') === id);
+    });
+    panels.forEach(function (panel) {
+      panel.classList.toggle('active', panel.getAttribute('data-archive-panel') === id);
+    });
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      activate(tab.getAttribute('data-archive-tab'));
+    });
+  });
+})();
+</script>
