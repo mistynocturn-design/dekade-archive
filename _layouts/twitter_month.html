@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<article class="twitter-month-page">
+  <header class="twitter-month-header">
+    <div class="twitter-author-card">
+      {% if page.author.avatar %}
+        <img class="twitter-author-avatar" src="{{ page.author.avatar | relative_url }}" alt="">
+      {% else %}
+        <div class="twitter-author-avatar twitter-author-placeholder">{{ page.author.name | default: 'A' | slice: 0, 1 }}</div>
+      {% endif %}
+      <div>
+        <p class="twitter-kicker">Twitter Archive</p>
+        <h1>{{ page.title }}</h1>
+        <p class="twitter-author-name">{{ page.author.name | default: page.author | default: site.title }}</p>
+      </div>
+    </div>
+
+    {% if page.tags %}
+      <div class="twitter-tags">
+        {% for tag in page.tags %}
+          <span>#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="twitter-note-body">
+    {{ content }}
+  </div>
+</article>

@@ -21,7 +21,10 @@ github:
   repo:           https://github.com/poole/hyde
 
 # Archive chat logs
-collections:
+collections:
+  twitter:
+    output: true
+    permalink: /twitter/:name/
   chats:
     output: true
     permalink: /archive/:name/

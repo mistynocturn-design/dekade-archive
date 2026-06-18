@@ -509,3 +509,128 @@ a.sidebar-nav-item:focus {
 .chat-source {
   display: none;
 }
+/* Twitter archive styles */
+.twitter-index {
+  display: grid;
+  gap: .75rem;
+  margin-top: 1.25rem;
+}
+
+.twitter-month-card {
+  margin: 0;
+}
+
+.content .twitter-month-link {
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  color: #343a40;
+  display: block;
+  padding: .85rem .95rem;
+  text-decoration: none;
+  transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.content .twitter-month-link:hover,
+.content .twitter-month-link:focus {
+  background: #f7f5f1;
+  border-color: #ded8cc;
+  color: #222;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.twitter-month-profile,
+.twitter-author-card {
+  align-items: center;
+  display: flex;
+  gap: .8rem;
+}
+
+.twitter-month-avatar,
+.twitter-author-avatar {
+  background: #4e4a65;
+  border-radius: 999px;
+  color: #e7e3d8;
+  flex: 0 0 auto;
+  height: 2.8rem;
+  object-fit: cover;
+  width: 2.8rem;
+}
+
+.twitter-author-avatar {
+  height: 3.25rem;
+  width: 3.25rem;
+}
+
+.twitter-author-placeholder {
+  align-items: center;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+}
+
+.twitter-month-profile h2,
+.twitter-author-card h1 {
+  margin: 0;
+}
+
+.twitter-month-profile p,
+.twitter-author-name,
+.twitter-kicker,
+.twitter-month-summary,
+.twitter-note-date,
+.twitter-note-tags {
+  color: #8a8a8a;
+  font-size: .78rem;
+}
+
+.twitter-month-profile p,
+.twitter-author-name,
+.twitter-kicker {
+  margin: .15rem 0 0;
+}
+
+.twitter-month-summary {
+  margin: .75rem 0 0;
+}
+
+.twitter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .75rem;
+}
+
+.twitter-tags span,
+.twitter-note-tags {
+  color: #4e4a65;
+  font-weight: 700;
+}
+
+.twitter-month-header {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+}
+
+.twitter-note-body {
+  display: grid;
+  gap: .9rem;
+}
+
+.twitter-note {
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: .95rem 1rem;
+}
+
+.twitter-note-date,
+.twitter-note-tags {
+  margin: 0 0 .35rem;
+}
+
+.twitter-note p:last-child {
+  margin-bottom: 0;
+}

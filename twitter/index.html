@@ -1,0 +1,35 @@
+---
+layout: page
+title: Twitter
+---
+
+<div class="twitter-index">
+  {% assign months = site.twitter | sort: "date" | reverse %}
+  {% for month in months %}
+    <article class="twitter-month-card">
+      <a class="twitter-month-link" href="{{ month.url | relative_url }}">
+        <div class="twitter-month-profile">
+          {% if month.author.avatar %}
+            <img class="twitter-month-avatar" src="{{ month.author.avatar | relative_url }}" alt="">
+          {% else %}
+            <div class="twitter-month-avatar twitter-author-placeholder">{{ month.author.name | default: 'A' | slice: 0, 1 }}</div>
+          {% endif %}
+          <div>
+            <h2>{{ month.title }}</h2>
+            <p>{{ month.author.name | default: month.author | default: site.title }}</p>
+          </div>
+        </div>
+        {% if month.summary %}
+          <p class="twitter-month-summary">{{ month.summary }}</p>
+        {% endif %}
+        {% if month.tags %}
+          <div class="twitter-tags">
+            {% for tag in month.tags %}
+              <span>#{{ tag }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </a>
+    </article>
+  {% endfor %}
+</div>
