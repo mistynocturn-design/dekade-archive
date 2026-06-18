@@ -3,6 +3,13 @@ layout: page
 title: Archive
 ---
 
+<div class="archive-toolbar">
+  <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener">
+    <span class="archive-tool-icon" aria-hidden="true">+</span>
+    <span>Open Converter</span>
+  </a>
+</div>
+
 <div class="archive-tree">
   {% for category in site.data.archive_categories %}
     {% assign chats = site.chats | where: "category", category | sort: "date" | reverse %}

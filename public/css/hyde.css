@@ -249,6 +249,49 @@ a.sidebar-nav-item:focus {
   color: #8f5536;
 }
 /* Archive chat log styles */
+.archive-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: .25rem 0 1.1rem;
+}
+
+.content .archive-tool-button {
+  align-items: center;
+  background: #2f5f95;
+  border: 1px solid #284f7b;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(31, 47, 70, .12);
+  color: #fff;
+  display: inline-flex;
+  font-size: .84rem;
+  font-weight: 700;
+  gap: .45rem;
+  line-height: 1;
+  padding: .58rem .75rem;
+  text-decoration: none;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.content .archive-tool-button:hover,
+.content .archive-tool-button:focus {
+  background: #244d7d;
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 9px rgba(31, 47, 70, .16);
+}
+
+.archive-tool-icon {
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: .86rem;
+  height: 1.05rem;
+  justify-content: center;
+  line-height: 1;
+  width: 1.05rem;
+}
 .archive-tree {
   margin-top: 1.5rem;
 }
