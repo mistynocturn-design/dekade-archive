@@ -38,8 +38,8 @@
 
   <section class="panel">
     <label for="input">Paste spreadsheet rows</label>
-    <textarea id="input" placeholder="Copy columns A:F from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, author, profile image, tags, content, thread ID. Threaded notes are assigned to the month of the first note in that thread; standalone notes are assigned to their written month.</p>
+    <textarea id="input" placeholder="Copy columns A:G from Google Sheets, then paste here."></textarea>
+    <p class="hint">Expected columns: date, author, profile image, tags, content, image URLs, thread ID. Put 1 to 4 image URLs in the image cell, one URL per line. Threaded notes are assigned to the month of the first note in that thread.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -87,7 +87,7 @@ function escapeHtml(value) {
 }
 function escapeAttr(value) { return escapeHtml(value).replace(/'/g, '&#39;'); }
 function cleanText(value) { return String(value || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim(); }
-function yamlQuote(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\"') + '"'; }
+function yamlQuote(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
 
 function normalizeDate(value) {
   var text = String(value || '').trim();
@@ -104,9 +104,19 @@ function monthFromDate(value) {
 
 function splitTags(value) {
   return String(value || '')
-    .split(/[,;，、]+/)
+    .split(/[,;\n]+/)
     .map(function (tag) { return tag.trim().replace(/^#/, ''); })
     .filter(Boolean);
+}
+
+function splitImages(value) {
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split(/[\n,;]+/)
+    .map(function (url) { return url.trim(); })
+    .filter(Boolean)
+    .slice(0, 4);
 }
 
 function parseAuthorStyles() {
@@ -118,13 +128,27 @@ function parseAuthorStyles() {
   return map;
 }
 
+function imageGridHtml(images) {
+  if (!images.length) return '';
+  var html = [];
+  html.push('  <div class="twitter-image-grid twitter-image-count-' + images.length + '">');
+  images.forEach(function (url, index) {
+    html.push('    <button class="twitter-image-button" type="button" data-twitter-image="' + escapeAttr(url) + '" aria-label="Open image ' + (index + 1) + '">');
+    html.push('      <img src="' + escapeAttr(url) + '" alt="" loading="lazy">');
+    html.push('    </button>');
+  });
+  html.push('  </div>');
+  return html.join('\n');
+}
+
 function noteHtml(row, styles) {
   var date = normalizeDate(row[0]);
   var author = String(row[1] || '').trim();
   var avatar = String(row[2] || '').trim();
   var tags = splitTags(row[3]);
   var text = cleanText(row[4]);
-  if (!date && !author && !text) return '';
+  var images = splitImages(row.length >= 7 ? row[5] : '');
+  if (!date && !author && !text && !images.length) return '';
 
   var style = styles[author] || {};
   var styleAttr = '';
@@ -144,6 +168,7 @@ function noteHtml(row, styles) {
   html.push('  </div>');
   if (tags.length) html.push('  <p class="twitter-note-tags">' + tags.map(function (tag) { return '#' + escapeHtml(tag); }).join(' ') + '</p>');
   if (text) html.push('  <div class="twitter-note-text">' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>');
+  if (images.length) html.push(imageGridHtml(images));
   html.push('</section>');
   return html.join('\n');
 }
@@ -151,9 +176,9 @@ function noteHtml(row, styles) {
 function threadLabel(threadId, startMonth, currentMonth) {
   if (!threadId) return '';
   if (startMonth && currentMonth && startMonth !== currentMonth) {
-    return '<div class="twitter-thread-label">' + escapeHtml(startMonth) + '에서 이어진 타래 · ' + escapeHtml(threadId) + '</div>';
+    return '<div class="twitter-thread-label">Continued from ' + escapeHtml(startMonth) + ' &middot; ' + escapeHtml(threadId) + '</div>';
   }
-  return '<div class="twitter-thread-label">타래 · ' + escapeHtml(threadId) + '</div>';
+  return '<div class="twitter-thread-label">Thread &middot; ' + escapeHtml(threadId) + '</div>';
 }
 
 function buildOutput() {
@@ -162,7 +187,7 @@ function buildOutput() {
 
   var currentMonth = monthFromDate(document.getElementById('date').value);
   var indexed = rows.map(function (row, index) {
-    var threadId = String(row[5] || '').trim();
+    var threadId = String((row.length >= 7 ? row[6] : row[5]) || '').trim();
     return {
       row: row,
       index: index,
@@ -193,7 +218,6 @@ function buildOutput() {
 
   var allTags = [];
   var styles = parseAuthorStyles();
-  var blocks = [];
   var blockItems = [];
   var usedThreadIds = {};
 
@@ -250,8 +274,8 @@ function buildOutput() {
     if (a.date > b.date) return -1;
     return b.index - a.index;
   });
-  blocks = blockItems.map(function (item) { return item.html; }).filter(Boolean);
 
+  var blocks = blockItems.map(function (item) { return item.html; }).filter(Boolean);
   var frontMatter = [
     '---',
     'layout: twitter_month',

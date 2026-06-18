@@ -20,3 +20,44 @@ layout: default
     {{ content }}
   </div>
 </article>
+
+<div class="twitter-image-modal" hidden aria-hidden="true">
+  <button class="twitter-image-modal-close" type="button" aria-label="Close image">&times;</button>
+  <img src="" alt="">
+</div>
+
+<script>
+(function () {
+  var modal = document.querySelector('.twitter-image-modal');
+  if (!modal) return;
+  var modalImage = modal.querySelector('img');
+  var closeButton = modal.querySelector('.twitter-image-modal-close');
+
+  function openImage(src) {
+    modalImage.src = src;
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('twitter-modal-open');
+  }
+
+  function closeImage() {
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    modalImage.src = '';
+    document.documentElement.classList.remove('twitter-modal-open');
+  }
+
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-twitter-image]');
+    if (trigger) {
+      openImage(trigger.getAttribute('data-twitter-image'));
+      return;
+    }
+    if (event.target === modal || event.target === closeButton) closeImage();
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !modal.hidden) closeImage();
+  });
+})();
+</script>
