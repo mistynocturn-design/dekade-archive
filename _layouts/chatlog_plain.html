@@ -1,0 +1,114 @@
+---
+layout: default
+---
+
+<article class="chatlog-page" style="--chat-page-bg: {{ page.colors.page | default: '#ffffff' }}; --chat-left-bg: {{ page.colors.left | default: '#f1f3f5' }}; --chat-right-bg: {{ page.colors.right | default: '#dbeafe' }}; --chat-text-color: {{ page.colors.text | default: '#212529' }}; --chat-meta-color: {{ page.colors.meta | default: '#8a8a8a' }}; --chat-font-size: {{ page.bubble_font_size | default: '0.86rem' }};">
+  <header class="chatlog-header">
+    <p class="chatlog-category">{{ page.category }}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.date %}
+      <p class="chatlog-date">{{ page.date | date: "%Y-%m-%d" }}</p>
+    {% endif %}
+  </header>
+
+  <script type="text/plain" class="chat-source">{{ content }}</script>
+  <section class="chatlog-body" aria-label="{{ page.title }} chat log"></section>
+</article>
+
+<script>
+(function () {
+  var page = document.currentScript.previousElementSibling;
+  while (page && !page.classList.contains('chatlog-page')) {
+    page = page.previousElementSibling;
+  }
+  if (!page) return;
+
+  var source = page.querySelector('.chat-source');
+  var body = page.querySelector('.chatlog-body');
+  if (!source || !body) return;
+
+  var lines = source.textContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  var imagePattern = /^!\[[^\]]*\]\(([^)]+)\)\s*$/;
+  var datePattern = /^\s*==\s*(.+?)\s*==\s*$/;
+  var rightPattern = /^>>\s?(.*)$/;
+  var leftPattern = /^<<\s?(.*)$/;
+  var current = null;
+
+  function appendText(target, text) {
+    if (!text && target.text.length === 0) return;
+    target.text.push(text);
+  }
+
+  function flush() {
+    if (!current) return;
+
+    var line = document.createElement('div');
+    line.className = 'chat-line ' + current.side;
+
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+
+    var text = current.text.join('\n').trim();
+    if (text) {
+      var textEl = document.createElement('div');
+      textEl.className = 'chat-text';
+      textEl.innerHTML = text.replace(/\n/g, '<br>');
+      bubble.appendChild(textEl);
+    }
+
+    current.images.forEach(function (src) {
+      var img = document.createElement('img');
+      img.className = 'chat-image';
+      img.src = src;
+      img.alt = '';
+      bubble.appendChild(img);
+    });
+
+    line.appendChild(bubble);
+    body.appendChild(line);
+    current = null;
+  }
+
+  function addDate(label) {
+    var divider = document.createElement('div');
+    divider.className = 'chat-date-divider';
+    divider.textContent = label;
+    body.appendChild(divider);
+  }
+
+  lines.forEach(function (line) {
+    var dateMatch = line.match(datePattern);
+    var rightMatch = line.match(rightPattern);
+    var leftMatch = line.match(leftPattern);
+    var imageMatch = line.match(imagePattern);
+
+    if (dateMatch) {
+      flush();
+      addDate(dateMatch[1]);
+      return;
+    }
+
+    if (rightMatch || leftMatch) {
+      flush();
+      current = {
+        side: rightMatch ? 'right' : 'left',
+        text: [],
+        images: []
+      };
+      appendText(current, rightMatch ? rightMatch[1] : leftMatch[1]);
+      return;
+    }
+
+    if (imageMatch && current) {
+      current.images.push(imageMatch[1]);
+      return;
+    }
+
+    if (current) {
+      appendText(current, line);
+    }
+  });
+
+  flush();
+})();
+</script>

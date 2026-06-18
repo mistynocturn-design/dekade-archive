@@ -439,3 +439,24 @@ a.sidebar-nav-item:focus {
     padding: .58rem .68rem;
   }
 }
+.chat-date-divider {
+  align-items: center;
+  color: var(--chat-meta-color, #8a8a8a);
+  display: flex;
+  font-size: .76rem;
+  gap: .75rem;
+  justify-content: center;
+  margin: .85rem 0 .35rem;
+}
+
+.chat-date-divider::before,
+.chat-date-divider::after {
+  background: #e8e8e8;
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+
+.chat-source {
+  display: none;
+}
