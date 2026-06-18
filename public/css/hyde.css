@@ -634,3 +634,32 @@ a.sidebar-nav-item:focus {
 .twitter-note p:last-child {
   margin-bottom: 0;
 }
+.twitter-note-header {
+  align-items: center;
+  display: flex;
+  gap: .7rem;
+  margin-bottom: .55rem;
+}
+
+.twitter-note-avatar {
+  background: #4e4a65;
+  border-radius: 999px;
+  color: #e7e3d8;
+  flex: 0 0 auto;
+  height: 2.45rem;
+  object-fit: cover;
+  width: 2.45rem;
+}
+
+.twitter-note-author {
+  color: #4e4a65;
+  font-size: .86rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.twitter-note-text {
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
