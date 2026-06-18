@@ -774,3 +774,23 @@ a.sidebar-nav-item:focus {
 .twitter-thread .twitter-note {
   margin: 0;
 }
+/* Twitter thread visual grouping */
+.twitter-note-body {
+  gap: 1.15rem;
+}
+
+.twitter-thread {
+  border-left-color: var(--twitter-thread-bg, #d8d2c8);
+  gap: .38rem;
+}
+
+.twitter-thread-label {
+  background: var(--twitter-thread-bg, #f7f5f1);
+  border-color: var(--twitter-thread-bg, #ded8cc);
+  color: var(--twitter-thread-color, #6f645d);
+  margin-bottom: .05rem;
+}
+
+.twitter-thread .twitter-note + .twitter-note {
+  margin-top: .18rem;
+}

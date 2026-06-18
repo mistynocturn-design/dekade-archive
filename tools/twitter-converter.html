@@ -228,10 +228,20 @@ function buildOutput() {
     var threadNotes = threadItems.map(function (threadItem) { return noteHtml(threadItem.row, styles); }).filter(Boolean);
     if (!threadNotes.length) return;
 
+    var originAuthor = String(threadItems[0].row[1] || '').trim();
+    var originStyle = styles[originAuthor] || {};
+    var threadStyleAttr = '';
+    if (originStyle.bg || originStyle.text) {
+      threadStyleAttr = ' style="' +
+        (originStyle.bg ? '--twitter-thread-bg:' + escapeAttr(originStyle.bg) + ';' : '') +
+        (originStyle.text ? '--twitter-thread-color:' + escapeAttr(originStyle.text) + ';' : '') +
+        '"';
+    }
+
     blockItems.push({
       date: meta.originDate,
       index: meta.originIndex,
-      html: '<section class="twitter-thread" data-thread-id="' + escapeAttr(item.threadId) + '">\n' + threadLabel(item.threadId, meta.ownerMonth, currentMonth) + '\n' + threadNotes.join('\n\n') + '\n</section>'
+      html: '<section class="twitter-thread" data-thread-id="' + escapeAttr(item.threadId) + '"' + threadStyleAttr + '>\n' + threadLabel(item.threadId, meta.ownerMonth, currentMonth) + '\n' + threadNotes.join('\n\n') + '\n</section>'
     });
   });
 
