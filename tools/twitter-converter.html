@@ -29,17 +29,17 @@
     <div class="grid">
       <div><label for="title">Month title</label><input id="title" value="2026-06"></div>
       <div><label for="date">Archive sort date</label><input id="date" value="2026-06-01" placeholder="YYYY-MM-01"></div>
-      <div><label for="fontSize">Note font size</label><input id="fontSize" value="0.82rem"></div>
+      <div><label for="fontSize">Note font size</label><input id="fontSize" value="0.70rem"></div>
     </div>
     <label for="authorStyles">Author styles</label>
-    <textarea id="authorStyles" style="min-height:80px;">&#48708;&#45768;|#e7e3d8|#4e4a65&#10;&#45433;&#54000;|#4e4a65|#e7e3d8</textarea>
+    <textarea id="authorStyles" style="min-height:80px;">&#48708;&#45768;|#ceccd9|#161732&#10;&#45433;&#54000;|#f9f5f2|#4f362a</textarea>
     <p class="hint">One author per line: author|box background|text color. Names must match the spreadsheet author column.</p>
   </section>
 
   <section class="panel">
     <label for="input">Paste spreadsheet rows</label>
-    <textarea id="input" placeholder="Copy columns A:E from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, author, profile image, tags, content. Rows are sorted by date descending, and later rows on the same date appear first.</p>
+    <textarea id="input" placeholder="Copy columns A:G from Google Sheets, then paste here."></textarea>
+    <p class="hint">Expected columns: date, author, profile image, tags, content, thread ID, thread start month. Thread IDs group notes; if the start month differs from this month, a continued-thread label is added.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -63,20 +63,17 @@ function parseTsv(text) {
   for (var i = 0; i < text.length; i++) {
     var ch = text[i];
     var next = text[i + 1];
-
     if (quoted) {
       if (ch === '"' && next === '"') { cell += '"'; i++; }
       else if (ch === '"') quoted = false;
       else cell += ch;
       continue;
     }
-
     if (ch === '"' && cell === '') quoted = true;
     else if (ch === '\t') { row.push(cell); cell = ''; }
     else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
     else if (ch !== '\r') cell += ch;
   }
-
   if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
   return rows.filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); });
 }
@@ -88,8 +85,9 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
-
 function escapeAttr(value) { return escapeHtml(value).replace(/'/g, '&#39;'); }
+function cleanText(value) { return String(value || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim(); }
+function yamlQuote(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\"') + '"'; }
 
 function normalizeDate(value) {
   var text = String(value || '').trim();
@@ -99,7 +97,10 @@ function normalizeDate(value) {
   return text.replace(/\./g, '-');
 }
 
-function cleanText(value) { return String(value || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim(); }
+function monthFromDate(value) {
+  var date = normalizeDate(value);
+  return date ? date.slice(0, 7) : '';
+}
 
 function splitTags(value) {
   return String(value || '')
@@ -107,8 +108,6 @@ function splitTags(value) {
     .map(function (tag) { return tag.trim().replace(/^#/, ''); })
     .filter(Boolean);
 }
-
-function yamlQuote(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\"') + '"'; }
 
 function parseAuthorStyles() {
   var map = {};
@@ -149,24 +148,58 @@ function noteHtml(row, styles) {
   return html.join('\n');
 }
 
+function threadLabel(threadId, startMonth, currentMonth) {
+  if (!threadId) return '';
+  if (startMonth && currentMonth && startMonth !== currentMonth) {
+    return '<div class="twitter-thread-label">' + escapeHtml(startMonth) + '에서 이어진 타래 · ' + escapeHtml(threadId) + '</div>';
+  }
+  return '<div class="twitter-thread-label">타래 · ' + escapeHtml(threadId) + '</div>';
+}
+
 function buildOutput() {
   var rows = parseTsv(document.getElementById('input').value);
   if (rows.length && !/^\d{4}/.test(String(rows[0][0] || '').trim())) rows.shift();
 
-  rows = rows.map(function (row, index) { return { row: row, index: index, date: normalizeDate(row[0]) }; });
-  rows.sort(function (a, b) {
+  var currentMonth = monthFromDate(document.getElementById('date').value);
+  var indexed = rows.map(function (row, index) {
+    return {
+      row: row,
+      index: index,
+      date: normalizeDate(row[0]),
+      threadId: String(row[5] || '').trim(),
+      startMonth: String(row[6] || '').trim()
+    };
+  });
+
+  indexed.sort(function (a, b) {
     if (a.date < b.date) return 1;
     if (a.date > b.date) return -1;
     return b.index - a.index;
   });
 
   var allTags = [];
-  var notes = [];
   var styles = parseAuthorStyles();
-  rows.forEach(function (item) {
+  var blocks = [];
+  var usedThreadIds = {};
+
+  indexed.forEach(function (item) {
     splitTags(item.row[3]).forEach(function (tag) { if (allTags.indexOf(tag) === -1) allTags.push(tag); });
-    var html = noteHtml(item.row, styles);
-    if (html) notes.push(html);
+  });
+
+  indexed.forEach(function (item) {
+    if (!item.threadId) {
+      var single = noteHtml(item.row, styles);
+      if (single) blocks.push(single);
+      return;
+    }
+    if (usedThreadIds[item.threadId]) return;
+    usedThreadIds[item.threadId] = true;
+
+    var threadItems = indexed.filter(function (other) { return other.threadId === item.threadId; });
+    var threadNotes = threadItems.map(function (threadItem) { return noteHtml(threadItem.row, styles); }).filter(Boolean);
+    if (!threadNotes.length) return;
+
+    blocks.push('<section class="twitter-thread" data-thread-id="' + escapeAttr(item.threadId) + '">\n' + threadLabel(item.threadId, item.startMonth, currentMonth) + '\n' + threadNotes.join('\n\n') + '\n</section>');
   });
 
   var frontMatter = [
@@ -177,13 +210,12 @@ function buildOutput() {
     'twitter_font_size: ' + yamlQuote(document.getElementById('fontSize').value),
     'tags:'
   ];
-
   if (allTags.length) allTags.forEach(function (tag) { frontMatter.push('  - ' + yamlQuote(tag)); });
   else frontMatter.push('  - memo');
   frontMatter.push('---', '');
 
-  document.getElementById('output').value = frontMatter.concat(notes).join('\n\n').trim() + '\n';
-  document.getElementById('status').textContent = notes.length + ' notes converted.';
+  document.getElementById('output').value = frontMatter.concat(blocks).join('\n\n').trim() + '\n';
+  document.getElementById('status').textContent = blocks.length + ' blocks converted.';
 }
 
 document.getElementById('convertBtn').addEventListener('click', buildOutput);

@@ -751,3 +751,26 @@ a.sidebar-nav-item:focus {
   text-decoration: none;
   transform: translateY(-1px);
 }
+.twitter-thread {
+  border-left: 2px solid #d8d2c8;
+  display: grid;
+  gap: .62rem;
+  padding-left: .72rem;
+}
+
+.twitter-thread-label {
+  align-self: start;
+  background: #f7f5f1;
+  border: 1px solid #ded8cc;
+  border-radius: 999px;
+  color: #6f645d;
+  font-size: calc(var(--twitter-font-size, .82rem) * .86);
+  font-weight: 700;
+  justify-self: start;
+  line-height: 1;
+  padding: .35rem .55rem;
+}
+
+.twitter-thread .twitter-note {
+  margin: 0;
+}
