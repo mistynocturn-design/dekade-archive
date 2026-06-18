@@ -800,7 +800,7 @@ a.sidebar-nav-item:focus {
   border: 0;
   color: #9a9a9a;
   font-size: .68rem;
-  margin: -.95rem 0 .9rem;
+  margin: 1.15rem 0 0;
   padding: 0;
   text-align: right;
 }
@@ -809,7 +809,7 @@ a.sidebar-nav-item:focus {
   background: #fbfbfb;
   border: 1px solid #eeeeee;
   border-radius: 6px;
-  margin-top: -.65rem;
+  margin-top: 1.15rem;
   padding: .5rem .62rem;
   text-align: left;
 }
