@@ -8,7 +8,7 @@ title: Archive
     {% assign chats = site.chats | where: "category", category | sort: "date" | reverse %}
     <details class="archive-category" open>
       <summary>
-        <span class="archive-marker" aria-hidden="true">▶</span>
+        <span class="archive-marker" aria-hidden="true">&#9654;</span>
         <span>{{ category }}</span>
         <span class="archive-count">{{ chats.size }}</span>
       </summary>
@@ -17,17 +17,18 @@ title: Archive
         <ul class="archive-chat-list">
           {% for chat in chats %}
             <li>
-              <a href="{{ chat.url | relative_url }}">{{ chat.title }}</a>
-              {% if chat.date %}
-                <span class="archive-date">{{ chat.date | date: "%Y-%m-%d" }}</span>
-              {% endif %}
+              <a class="archive-chat-link" href="{{ chat.url | relative_url }}">
+                <span class="archive-chat-title">{{ chat.title }}</span>
+                {% if chat.date %}
+                  <span class="archive-date">{{ chat.date | date: "%Y-%m-%d" }}</span>
+                {% endif %}
+              </a>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="archive-empty">아직 백업된 로그가 없습니다.</p>
+        <p class="archive-empty">No logs yet.</p>
       {% endif %}
     </details>
   {% endfor %}
 </div>
-
