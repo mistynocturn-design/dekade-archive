@@ -1456,14 +1456,17 @@ a.sidebar-nav-item:focus {
 .character-quick-facts div,
 .character-info-list div {
   display: grid;
-  gap: .35rem;
-  grid-template-columns: 4.6rem 1fr;
+  column-gap: .62rem;
+  row-gap: .12rem;
+  grid-template-columns: max-content minmax(0, 1fr);
 }
 
 .character-card-facts dt,
 .character-quick-facts dt,
 .character-info-list dt {
   color: #8a8a8a;
+  max-width: 5.8rem;
+  overflow-wrap: anywhere;
   font-size: .68rem;
   font-weight: 800;
   text-transform: uppercase;
