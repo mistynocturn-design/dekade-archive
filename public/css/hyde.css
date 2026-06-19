@@ -1,3 +1,35 @@
+/* Paperlogy local font */
+@font-face {
+  font-family: "Paperlogy";
+  src: url("../fonts/paperlogy/Paperlogy-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperlogy";
+  src: url("../fonts/paperlogy/Paperlogy-Medium.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperlogy";
+  src: url("../fonts/paperlogy/Paperlogy-SemiBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperlogy";
+  src: url("../fonts/paperlogy/Paperlogy-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 /*
  *  __                  __
  * /\ \                /\ \
@@ -2044,7 +2076,7 @@ a.sidebar-nav-item:focus {
 /* Character typography polish */
 .character-index,
 .character-page {
-  font-family: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+  font-family: "Paperlogy", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
   letter-spacing: 0;
   word-break: keep-all;
 }
@@ -2065,7 +2097,7 @@ a.sidebar-nav-item:focus {
   color: var(--character-ink, #161732);
   font-family: inherit;
   font-size: 2.05rem;
-  font-weight: 800;
+  font-weight: 400;
   line-height: 1.15;
   margin: .22rem 0 .28rem;
 }
@@ -2073,7 +2105,7 @@ a.sidebar-nav-item:focus {
 .character-kicker {
   color: color-mix(in srgb, var(--character-ink, #161732) 38%, transparent);
   font-size: .62rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0;
   margin: 0;
   text-transform: uppercase;
@@ -2094,7 +2126,7 @@ a.sidebar-nav-item:focus {
 .character-mini-tab {
   color: color-mix(in srgb, var(--character-ink, #161732) 58%, transparent);
   font-size: .72rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0;
 }
 
@@ -2121,7 +2153,7 @@ a.sidebar-nav-item:focus {
 .character-info-list dt {
   color: color-mix(in srgb, var(--character-ink, #161732) 54%, transparent);
   font-size: .64rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0;
   line-height: 1.35;
 }
@@ -2131,7 +2163,7 @@ a.sidebar-nav-item:focus {
 .character-info-list dd {
   color: var(--character-ink, #161732);
   font-size: .8rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.5;
 }
 
@@ -2139,7 +2171,7 @@ a.sidebar-nav-item:focus {
 .character-detail-section-title {
   border-radius: 2px;
   font-size: .68rem;
-  font-weight: 800;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1.15;
   padding: .2rem .48rem;
@@ -2151,7 +2183,7 @@ a.sidebar-nav-item:focus {
 
 .character-keywords span {
   font-size: .64rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
   padding: .14rem .34rem;
 }
@@ -2168,7 +2200,7 @@ a.sidebar-nav-item:focus {
 
 .character-profile-detail summary {
   font-size: .76rem;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.35;
 }
 
@@ -2179,7 +2211,7 @@ a.sidebar-nav-item:focus {
 .character-memo-title {
   color: var(--character-ink, #161732);
   font-family: inherit;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0;
 }
 
@@ -2217,4 +2249,38 @@ a.sidebar-nav-item:focus {
 .character-quick-facts dd {
   line-height: 1.38;
   min-width: 0;
+}
+/* Character Paperlogy weight correction */
+.character-header h1 {
+  font-weight: 700;
+}
+
+.character-kicker,
+.character-mini-tab,
+.character-section-title,
+.character-detail-section-title,
+.character-profile-detail summary,
+.character-stat-box h2,
+.character-status-card h2,
+.character-au-detail-title,
+.character-story-title,
+.character-memo-title {
+  font-weight: 600;
+}
+
+.character-card-facts dt,
+.character-quick-facts dt,
+.character-info-list dt,
+.character-keywords span {
+  font-weight: 500;
+}
+
+.character-card-facts dd,
+.character-quick-facts dd,
+.character-info-list dd,
+.character-markdown,
+.character-detail-text,
+.character-story-body,
+.character-memo-body {
+  font-weight: 400;
 }
