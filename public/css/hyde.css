@@ -1942,3 +1942,52 @@ a.sidebar-nav-item:focus {
   font-size: .82rem;
   margin: 0;
 }
+/* Character image zoom */
+.character-page .character-portrait,
+.character-page .character-status-image,
+.character-page .character-detail-images img {
+  cursor: zoom-in;
+}
+
+.character-image-modal[hidden] {
+  display: none;
+}
+
+.character-image-modal {
+  align-items: center;
+  background: rgba(20, 20, 24, .88);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1.2rem;
+  position: fixed;
+  z-index: 9999;
+}
+
+.character-image-modal img {
+  border-radius: 8px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .38);
+  max-height: 90vh;
+  max-width: 94vw;
+  object-fit: contain;
+}
+
+.character-image-modal-close {
+  align-items: center;
+  background: rgba(255, 255, 255, .92);
+  border: 0;
+  border-radius: 999px;
+  color: #222;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.35rem;
+  font-weight: 700;
+  height: 2.35rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  width: 2.35rem;
+}
