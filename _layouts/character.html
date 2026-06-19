@@ -80,21 +80,25 @@ layout: default
     {% if page.profile_details %}
       <div class="character-detail-box">
         {% for detail in page.profile_details %}
-          <details class="character-profile-detail"{% if detail.open %} open{% endif %}>
-            <summary>{{ detail.title }}</summary>
-            <div class="character-detail-content">
-              {% if detail.text %}
-                <div class="character-detail-text">{{ detail.text | newline_to_br }}</div>
-              {% endif %}
-              {% if detail.images %}
-                <div class="character-detail-images character-detail-images-{{ detail.images | size }}">
-                  {% for image in detail.images %}
-                    <img src="{{ image | relative_url }}" alt="">
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
-          </details>
+          {% if detail.type == "section" %}
+            <div class="character-detail-section-title">{{ detail.title }}</div>
+          {% else %}
+            <details class="character-profile-detail"{% if detail.open %} open{% endif %}>
+              <summary>{{ detail.title }}</summary>
+              <div class="character-detail-content">
+                {% if detail.text %}
+                  <div class="character-detail-text">{{ detail.text | newline_to_br }}</div>
+                {% endif %}
+                {% if detail.images %}
+                  <div class="character-detail-images character-detail-images-{{ detail.images | size }}">
+                    {% for image in detail.images %}
+                      <img src="{{ image | relative_url }}" alt="">
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </details>
+          {% endif %}
         {% endfor %}
       </div>
     {% endif %}

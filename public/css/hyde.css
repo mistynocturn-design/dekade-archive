@@ -1826,3 +1826,19 @@ a.sidebar-nav-item:focus {
     grid-template-columns: 1fr;
   }
 }
+.character-detail-section-title {
+  align-self: start;
+  background: var(--character-accent, #4e4a65);
+  color: var(--character-soft, #e7e3d8);
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: .35rem 0 .05rem;
+  padding: .18rem .5rem;
+  text-transform: uppercase;
+}
+
+.character-detail-section-title:first-child {
+  margin-top: 0;
+}

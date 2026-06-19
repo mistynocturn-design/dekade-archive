@@ -148,12 +148,13 @@
 
         <div class="builder-panel" data-panel="details">
           <div class="grid two">
-            <div><label for="detailTitle">Toggle title</label><input id="detailTitle" placeholder="Emotions, Outfit, Character..."></div>
+            <div><label for="detailSectionTitle">Section title</label><input id="detailSectionTitle" placeholder="EMOTIONS, OUTFIT, CHARACTER..."></div>
+            <div><label for="detailTitle">Toggle title</label><input id="detailTitle" placeholder="Expression, OOTD, Appearance..."></div>
             <div><label for="detailOpen">Default state</label><select id="detailOpen"><option value="false">Closed</option><option value="true">Open</option></select></div>
           </div>
           <label for="detailText">Text</label><textarea id="detailText" placeholder="Long profile detail text"></textarea>
           <label for="detailImages">Images</label><textarea id="detailImages" placeholder="One image path per line&#10;/dekade-archive/assets/characters/name/image-01.jpg"></textarea>
-          <div class="actions"><button id="addDetailBtn" type="button">Add detail toggle</button></div>
+          <div class="actions"><button id="addDetailSectionBtn" class="soft" type="button">Add section title</button><button id="addDetailBtn" type="button">Add detail toggle</button></div>
           <p class="small">Images are arranged in a tidy grid under the text. Keep one image path per line.</p>
         </div>
 
@@ -274,6 +275,12 @@ function addKeyword() {
   setVal('keywordValue', '');
   updateAll('Added keyword.');
 }
+function addDetailSection() {
+  var title = val('detailSectionTitle') || 'SECTION';
+  data.details.push({ type: 'section', title: title });
+  setVal('detailSectionTitle', '');
+  updateAll('Added detail section title.');
+}
 function addDetail() {
   var title = val('detailTitle') || 'Detail';
   var text = val('detailText');
@@ -338,7 +345,7 @@ function renderItems() {
       html += renderItem(group.title, body, 'groupItem', groupIndex, itemIndex);
     });
   });
-  data.details.forEach(function (item, index) { html += renderItem('Detail', item.title + (item.images && item.images.length ? ' | images: ' + item.images.length : ''), 'detail', index); });
+  data.details.forEach(function (item, index) { html += renderItem(item.type === 'section' ? 'Detail section' : 'Detail', item.title + (item.images && item.images.length ? ' | images: ' + item.images.length : ''), 'detail', index); });
   data.stats.forEach(function (item, index) { html += renderItem('Status', item.label + ' | ' + item.value, 'stat', index); });
   data.story.forEach(function (item, index) { html += renderItem('Story', (item.date ? item.date + ' | ' : '') + item.title, 'story', index); });
   data.memo.forEach(function (item, index) { html += renderItem('Memo', (item.date ? item.date + ' | ' : '') + item.text, 'memo', index); });
@@ -380,6 +387,7 @@ function renderPreview() {
   }).join('');
   var details = data.details.length ? '<div class="wiki-preview"><div class="section-title">Details</div>' + data.details.map(function (detail) {
     var images = (detail.images || []).map(function (src) { return '<div class="portrait">' + imageHtml(src, '') + '</div>'; }).join('');
+    if (detail.type === 'section') return '<div class="section-title">' + escapeHtml(detail.title) + '</div>';
     return '<details ' + (detail.open ? 'open' : '') + '><summary class="item-title">' + escapeHtml(detail.title) + '</summary><div class="small" style="margin:.5rem 0; white-space:pre-wrap">' + escapeHtml(detail.text || '') + '</div>' + (images ? '<div class="wiki-grid" style="grid-template-columns:repeat(auto-fit,minmax(90px,1fr))">' + images + '</div>' : '') + '</details>';
   }).join('') + '</div>' : '';
   var stats = data.stats.length ? '<div class="wiki-preview"><div class="section-title">Status</div><div class="bars">' + data.stats.map(function (stat) { return '<div class="bar"><span>' + escapeHtml(stat.label) + '</span><div class="track"><i style="width:' + stat.value + '%"></i></div><strong>' + stat.value + '</strong></div>'; }).join('') + '</div></div>' : '';
@@ -425,6 +433,10 @@ function buildMarkdown() {
     lines.push('profile_details:');
     data.details.forEach(function (detail) {
       lines.push('  - title: ' + quoteYaml(detail.title));
+      if (detail.type === 'section') {
+        lines.push('    type: "section"');
+        return;
+      }
       if (detail.open) lines.push('    open: true');
       lines.push('    text: ' + quoteYaml(detail.text));
       if (detail.images && detail.images.length) {
@@ -520,7 +532,8 @@ document.querySelectorAll('.tab').forEach(function (tab) {
 el('addFactBtn').addEventListener('click', addFact);
 el('addProfileBtn').addEventListener('click', addProfile);
 el('addKeywordBtn').addEventListener('click', addKeyword);
- el('addDetailBtn').addEventListener('click', addDetail);
+el('addDetailSectionBtn').addEventListener('click', addDetailSection);
+el('addDetailBtn').addEventListener('click', addDetail);
 el('addStatBtn').addEventListener('click', addStat);
 el('addStoryBtn').addEventListener('click', addStory);
 el('addMemoBtn').addEventListener('click', addMemo);
