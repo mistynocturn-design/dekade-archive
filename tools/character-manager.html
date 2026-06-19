@@ -61,7 +61,8 @@
     .info-list div { display: grid; grid-template-columns: 72px 1fr; gap: 8px; }
     .info-list dt { color: #777; font-size: 11px; font-weight: 900; text-transform: uppercase; }
     .info-list dd { margin: 0; font-size: 12px; }
-    .note { color: #888; margin-left: 4px; }
+    .note { background: color-mix(in srgb, var(--keyword-bg) 42%, transparent); border-radius: 5px; color: color-mix(in srgb, var(--ink) 56%, transparent); font-size: 10px; font-weight: 500; line-height: 1.35; margin-left: 4px; padding: 1px 5px; }
+    .note.block { display: block; margin: 4px 0 0; width: fit-content; }
     .keywords { display: flex; flex-wrap: wrap; gap: 4px; }
     .keywords span { background: var(--keyword-bg); border-radius: 5px; color: var(--ink); font-size: 10px; font-weight: 800; line-height: 1.15; padding: 3px 6px; }
     .bars { display: grid; gap: 8px; }
@@ -136,6 +137,7 @@
             <div><label for="profileLabel">Small label</label><input id="profileLabel" placeholder="Age"></div>
             <div><label for="profileValue">Text</label><input id="profileValue" placeholder="25"></div>
             <div><label for="profileNote">Small note</label><input id="profileNote" placeholder="Optional grey note"></div>
+            <div><label for="profileNoteBreak">Note placement</label><select id="profileNoteBreak"><option value="false">Inline</option><option value="true">New line</option></select></div>
           </div>
           <div class="actions"><button id="addProfileBtn" type="button">Add profile item</button></div>
           <p class="small">Use any section name: NAME, PROFILE, KEYWORD, RELATIONSHIP, etc. The manager groups items with the same section name together.</p>
@@ -335,7 +337,7 @@ function addFact() {
   var value = val('profileValue');
   var note = val('profileNote');
   if (!label && !value && !note) return;
-  var item = { label: label || 'Item', value: value, note: note };
+  var item = { label: label || 'Item', value: value, note: note, note_break: val('profileNoteBreak') === 'true' };
   if (editing && editing.kind === 'groupItem') {
     var oldGroup = data.groups[editing.a];
     if (oldGroup && oldGroup.title === groupTitle && (oldGroup.style || '') === '') {
@@ -347,12 +349,12 @@ function addFact() {
       }
       group.items.push(item);
     }
-    setVal('profileLabel', ''); setVal('profileValue', ''); setVal('profileNote', '');
+    setVal('profileLabel', ''); setVal('profileValue', ''); setVal('profileNote', ''); el('profileNoteBreak').value = 'false';
     finishEdit('Updated profile item.');
     return;
   }
   group.items.push(item);
-  setVal('profileLabel', ''); setVal('profileValue', ''); setVal('profileNote', '');
+  setVal('profileLabel', ''); setVal('profileValue', ''); setVal('profileNote', ''); el('profileNoteBreak').value = 'false';
   updateAll('Added profile item.');
 }function addKeyword() {
   var value = val('keywordValue');
@@ -446,7 +448,7 @@ function addFact() {
     if (!line) return;
     var parts = line.split('|').map(function (part) { return part.trim(); });
     if (parts.length === 2) getGroup(fallbackSection || 'PROFILE', '').items.push({ label: parts[0], value: parts[1] });
-    else getGroup(parts[0] || fallbackSection || 'PROFILE', '').items.push({ label: parts[1] || 'Item', value: parts[2] || '', note: parts[3] || '' });
+    else getGroup(parts[0] || fallbackSection || 'PROFILE', '').items.push({ label: parts[1] || 'Item', value: parts[2] || '', note: parts[3] || '', note_break: (parts[4] || '').toLowerCase() === 'break' });
   });
   return groups;
 }
@@ -565,7 +567,7 @@ function startEdit(type, a, b) {
     var item = group.items[b]; if (!item) return;
     beginEdit('groupItem', a, b);
     if (group.style === 'keywords') { setActiveTab('keyword'); setVal('keywordGroup', group.title); setVal('keywordValue', item.value); el('addKeywordBtn').textContent = 'Update keyword'; }
-    else { setActiveTab('profile'); setVal('profileGroup', group.title); setVal('profileLabel', item.label); setVal('profileValue', item.value); setVal('profileNote', item.note); el('addProfileBtn').textContent = 'Update profile item'; }
+    else { setActiveTab('profile'); setVal('profileGroup', group.title); setVal('profileLabel', item.label); setVal('profileValue', item.value); setVal('profileNote', item.note); el('profileNoteBreak').value = item.note_break ? 'true' : 'false'; el('addProfileBtn').textContent = 'Update profile item'; }
   }
   if (type === 'detail') {
     var detail = data.details[a]; if (!detail) return;
@@ -587,7 +589,7 @@ function startEdit(type, a, b) {
     setVal('auFacts', splitRows(au.facts, function (fact) { return fact.label + '|' + fact.value; }));
     var normalGroups = (au.groups || []).filter(function (group) { return group.style !== 'keywords'; });
     var keywordGroups = (au.groups || []).filter(function (group) { return group.style === 'keywords'; });
-    setVal('auProfile', normalGroups.map(function (group) { return group.items.map(function (item) { return group.title + '|' + item.label + '|' + item.value + (item.note ? '|' + item.note : ''); }).join('\n'); }).filter(Boolean).join('\n'));
+    setVal('auProfile', normalGroups.map(function (group) { return group.items.map(function (item) { return group.title + '|' + item.label + '|' + item.value + (item.note ? '|' + item.note : '') + (item.note_break ? '|break' : ''); }).join('\n'); }).filter(Boolean).join('\n'));
     setVal('auKeywords', keywordGroups.map(function (group) { return group.items.map(function (item) { return group.title + '|' + item.value; }).join('\n'); }).filter(Boolean).join('\n'));
     setVal('auDetails', detailsToText(au.details)); el('addAuBtn').textContent = 'Update AU card';
   }
@@ -664,7 +666,7 @@ function renderGroupsHtml(groups) {
     if (group.style === 'keywords') {
       return '<div class="section-title">' + escapeHtml(group.title) + '</div><div class="keywords">' + group.items.map(function (item) { return '<span>' + escapeHtml(item.value) + '</span>'; }).join('') + '</div>';
     }
-    return '<div class="section-title">' + escapeHtml(group.title) + '</div><dl class="info-list">' + group.items.map(function (item) { return '<div><dt>' + escapeHtml(item.label) + '</dt><dd>' + escapeHtml(item.value) + (item.note ? '<span class="note">' + escapeHtml(item.note) + '</span>' : '') + '</dd></div>'; }).join('') + '</dl>';
+    return '<div class="section-title">' + escapeHtml(group.title) + '</div><dl class="info-list">' + group.items.map(function (item) { return '<div><dt>' + escapeHtml(item.label) + '</dt><dd>' + escapeHtml(item.value) + (item.note ? '<span class="note' + (item.note_break ? ' block' : '') + '">' + escapeHtml(item.note) + '</span>' : '') + '</dd></div>'; }).join('') + '</dl>';
   }).join('');
 }
 function renderDetailsHtml(details, title) {
@@ -756,7 +758,7 @@ function renderPreview() {
         } else {
           lines.push('      - label: ' + quoteYaml(item.label));
           lines.push('        value: ' + quoteYaml(item.value));
-          if (item.note) lines.push('        note: ' + quoteYaml(item.note));
+          if (item.note) lines.push('        note: ' + quoteYaml(item.note)); if (item.note_break) lines.push('        note_break: true');
         }
       });
     });
@@ -804,7 +806,7 @@ function renderPreview() {
           lines.push('        items:');
           group.items.forEach(function (item) {
             if (group.style === 'keywords') lines.push('          - value: ' + quoteYaml(item.value));
-            else { lines.push('          - label: ' + quoteYaml(item.label)); lines.push('            value: ' + quoteYaml(item.value)); if (item.note) lines.push('            note: ' + quoteYaml(item.note)); }
+            else { lines.push('          - label: ' + quoteYaml(item.label)); lines.push('            value: ' + quoteYaml(item.value)); if (item.note) lines.push('            note: ' + quoteYaml(item.note)); if (item.note_break) lines.push('            note_break: true'); }
           });
         });
       }

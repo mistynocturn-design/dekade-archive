@@ -50,7 +50,7 @@ layout: default
                 {% for item in group.items %}
                   <div>
                     <dt>{{ item.label }}</dt>
-                    <dd>{{ item.value }}{% if item.note %}<span class="character-info-note">{{ item.note }}</span>{% endif %}</dd>
+                    <dd>{{ item.value }}{% if item.note %}<span class="character-info-note{% if item.note_break %} block{% endif %}">{{ item.note }}</span>{% endif %}</dd>
                   </div>
                 {% endfor %}
               </dl>
@@ -195,7 +195,7 @@ layout: default
                   </div>
                 {% else %}
                   <dl class="character-info-list">
-                    {% for item in group.items %}<div><dt>{{ item.label }}</dt><dd>{{ item.value }}{% if item.note %}<span class="character-info-note">{{ item.note }}</span>{% endif %}</dd></div>{% endfor %}
+                    {% for item in group.items %}<div><dt>{{ item.label }}</dt><dd>{{ item.value }}{% if item.note %}<span class="character-info-note{% if item.note_break %} block{% endif %}">{{ item.note }}</span>{% endif %}</dd></div>{% endfor %}
                   </dl>
                 {% endif %}
               {% endfor %}

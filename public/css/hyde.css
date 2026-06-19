@@ -1727,8 +1727,20 @@ a.sidebar-nav-item:focus {
 }
 
 .character-info-note {
-  color: #888;
-  margin-left: .25rem;
+  background: color-mix(in srgb, var(--character-keyword-bg, var(--character-soft, #e7e3d8)) 42%, transparent);
+  border-radius: 5px;
+  color: color-mix(in srgb, var(--character-ink, #161732) 56%, transparent);
+  font-size: .68rem;
+  font-weight: 500;
+  line-height: 1.35;
+  margin-left: .28rem;
+  padding: .08rem .3rem;
+}
+
+.character-info-note.block {
+  display: block;
+  margin: .22rem 0 0;
+  width: fit-content;
 }
 /* Character detail tool placement */
 .character-detail-tools {
