@@ -16,6 +16,7 @@ layout: default
     <button class="character-mini-tab active" type="button" data-character-tab="profile">Profile</button>
     {% if page.stats %}<button class="character-mini-tab" type="button" data-character-tab="status">Status</button>{% endif %}
     {% if page.story %}<button class="character-mini-tab" type="button" data-character-tab="story">Story</button>{% endif %}
+    {% if page.aus %}<button class="character-mini-tab" type="button" data-character-tab="au">AU</button>{% endif %}
     {% if page.memo %}<button class="character-mini-tab" type="button" data-character-tab="memo">Memo</button>{% endif %}
   </nav>
 
@@ -142,6 +143,90 @@ layout: default
   </section>
   {% endif %}
 
+  {% if page.aus %}
+  <section class="character-panel" data-character-panel="au">
+    <div class="character-au-list active" data-au-list>
+      <div class="character-au-grid">
+        {% for au in page.aus %}
+          <button class="character-au-card" type="button" data-au-target="au-{{ forloop.index }}" style="--character-accent: {{ au.accent | default: page.accent | default: '#4e4a65' }}; --character-soft: {{ au.soft | default: page.soft | default: '#e7e3d8' }}; --character-ink: {{ au.ink | default: page.ink | default: '#161732' }};">
+            {% if au.image %}
+              <img class="character-card-image" src="{{ au.image | relative_url }}" alt="">
+            {% else %}
+              <div class="character-card-image character-card-placeholder">{{ au.title | slice: 0 }}</div>
+            {% endif %}
+            <span class="character-card-body">
+              {% if au.subtitle %}<span class="character-card-role">{{ au.subtitle }}</span>{% endif %}
+              <strong>{{ au.title }}</strong>
+              {% if au.summary %}<small>{{ au.summary }}</small>{% endif %}
+            </span>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% for au in page.aus %}
+      <div class="character-au-detail" data-au-detail="au-{{ forloop.index }}" style="--character-accent: {{ au.accent | default: page.accent | default: '#4e4a65' }}; --character-soft: {{ au.soft | default: page.soft | default: '#e7e3d8' }}; --character-ink: {{ au.ink | default: page.ink | default: '#161732' }};">
+        <button class="character-au-back" type="button" data-au-back>Back to AU list</button>
+        <header class="character-au-header">
+          <p class="character-kicker">Alternate Universe</p>
+          <h2>{{ au.title }}</h2>
+          {% if au.subtitle %}<p>{{ au.subtitle }}</p>{% endif %}
+        </header>
+        <div class="character-profile-grid">
+          <aside class="character-portrait-card">
+            {% if au.image %}
+              <img class="character-portrait" src="{{ au.image | relative_url }}" alt="">
+            {% elsif page.profile_image %}
+              <img class="character-portrait" src="{{ page.profile_image | relative_url }}" alt="">
+            {% endif %}
+            {% if au.facts %}
+              <dl class="character-quick-facts">
+                {% for fact in au.facts %}<div><dt>{{ fact.label }}</dt><dd>{{ fact.value }}</dd></div>{% endfor %}
+              </dl>
+            {% endif %}
+          </aside>
+          <div class="character-wiki-box">
+            {% if au.groups %}
+              {% for group in au.groups %}
+                <div class="character-section-title">{{ group.title }}</div>
+                {% if group.style == "keywords" %}
+                  <div class="character-keywords">
+                    {% for item in group.items %}<span>{{ item.value }}</span>{% endfor %}
+                  </div>
+                {% else %}
+                  <dl class="character-info-list">
+                    {% for item in group.items %}<div><dt>{{ item.label }}</dt><dd>{{ item.value }}{% if item.note %}<span class="character-info-note">{{ item.note }}</span>{% endif %}</dd></div>{% endfor %}
+                  </dl>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        {% if au.details %}
+          <div class="character-detail-box">
+            {% for detail in au.details %}
+              {% if detail.type == "section" %}
+                <div class="character-detail-section-title">{{ detail.title }}</div>
+              {% else %}
+                <details class="character-profile-detail"{% if detail.open %} open{% endif %}>
+                  <summary>{{ detail.title }}</summary>
+                  <div class="character-detail-content">
+                    {% if detail.text %}<div class="character-detail-text">{{ detail.text | newline_to_br }}</div>{% endif %}
+                    {% if detail.images %}
+                      <div class="character-detail-images character-detail-images-{{ detail.images | size }}">
+                        {% for image in detail.images %}<img src="{{ image | relative_url }}" alt="">{% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </details>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
   {% if page.memo %}
   <section class="character-panel" data-character-panel="memo">
     <div class="character-memo-list">
@@ -167,6 +252,21 @@ layout: default
       var id = tab.getAttribute('data-character-tab');
       tabs.forEach(function (item) { item.classList.toggle('active', item === tab); });
       panels.forEach(function (panel) { panel.classList.toggle('active', panel.getAttribute('data-character-panel') === id); });
+    });
+  });
+  var auList = root.querySelector('[data-au-list]');
+  var auDetails = Array.prototype.slice.call(root.querySelectorAll('[data-au-detail]'));
+  root.querySelectorAll('[data-au-target]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var target = button.getAttribute('data-au-target');
+      if (auList) auList.classList.remove('active');
+      auDetails.forEach(function (detail) { detail.classList.toggle('active', detail.getAttribute('data-au-detail') === target); });
+    });
+  });
+  root.querySelectorAll('[data-au-back]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      auDetails.forEach(function (detail) { detail.classList.remove('active'); });
+      if (auList) auList.classList.add('active');
     });
   });
 })();

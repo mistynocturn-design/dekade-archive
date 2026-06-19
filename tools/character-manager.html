@@ -115,6 +115,7 @@
           <button class="tab" data-tab="details" type="button">Details</button>
           <button class="tab" data-tab="status" type="button">Status</button>
           <button class="tab" data-tab="story" type="button">Story</button>
+          <button class="tab" data-tab="au" type="button">AU</button>
           <button class="tab" data-tab="memo" type="button">Memo</button>
         </div>
 
@@ -175,6 +176,25 @@
           <div class="actions"><button id="addStoryBtn" type="button">Add story item</button></div>
         </div>
 
+        <div class="builder-panel" data-panel="au">
+          <div class="grid two">
+            <div><label for="auTitle">AU title</label><input id="auTitle" placeholder="Modern AU, Fantasy AU..."></div>
+            <div><label for="auSubtitle">AU subtitle</label><input id="auSubtitle" placeholder="Optional small label"></div>
+            <div><label for="auImage">AU image</label><input id="auImage" placeholder="/dekade-archive/assets/characters/name/au.jpg"></div>
+            <div><label for="auSummary">Card summary</label><input id="auSummary" placeholder="Short card description"></div>
+          </div>
+          <label for="auFacts">AU card facts</label>
+          <textarea id="auFacts" placeholder="Gender|Female&#10;Age|34&#10;Job|Researcher"></textarea>
+          <label for="auProfile">AU profile rows</label>
+          <textarea id="auProfile" placeholder="PROFILE|Name|Katia Feltroof|optional note&#10;PROFILE|Job|Researcher&#10;RELATIONSHIP|Partner|..."></textarea>
+          <label for="auKeywords">AU keywords</label>
+          <textarea id="auKeywords" placeholder="KEYWORD|quiet&#10;KEYWORD|researcher"></textarea>
+          <label for="auDetails">AU details</label>
+          <textarea id="auDetails" placeholder="section|OUTFIT&#10;toggle|OOTD|open&#10;text|Long detail text here&#10;image|/dekade-archive/assets/characters/name/ootd.jpg&#10;---&#10;toggle|Expression&#10;text|Another detail"></textarea>
+          <p class="small">AU details format: section|TITLE, toggle|TITLE|open, text|TEXT, image|PATH. Use --- to start another toggle block.</p>
+          <div class="actions"><button id="addAuBtn" type="button">Add AU card</button></div>
+        </div>
+
         <div class="builder-panel" data-panel="memo">
           <div class="grid two">
             <div><label for="memoDate">Date</label><input id="memoDate" placeholder="2026.06.19"></div>
@@ -213,7 +233,7 @@
 
 <script>
 var STORAGE_KEY = 'dekade-character-manager-drafts-v2';
-var data = { facts: [], groups: [], details: [], stats: [], story: [], memo: [] };
+var data = { facts: [], groups: [], details: [], stats: [], story: [], memo: [], aus: [] };
 var fields = ['title','fileName','order','subtitle','role','cardImage','profileImage','accent','soft','ink','tabColor'];
 function el(id) { return document.getElementById(id); }
 function val(id) { return el(id).value.trim(); }
@@ -306,6 +326,75 @@ function addStory() {
   setVal('storyDate', ''); setVal('storyTitle', ''); setVal('storyText', '');
   updateAll('Added story item.');
 }
+function parsePipeRows(raw, fallbackSection) {
+  var groups = [];
+  function getGroup(title, style) {
+    title = title || fallbackSection || 'PROFILE';
+    var group = groups.find(function (item) { return item.title === title && (item.style || '') === (style || ''); });
+    if (!group) { group = { title: title, style: style || '', items: [] }; groups.push(group); }
+    return group;
+  }
+  String(raw || '').split(/\r?\n/).forEach(function (line) {
+    line = line.trim();
+    if (!line) return;
+    var parts = line.split('|').map(function (part) { return part.trim(); });
+    if (parts.length === 2) getGroup(fallbackSection || 'PROFILE', '').items.push({ label: parts[0], value: parts[1] });
+    else getGroup(parts[0] || fallbackSection || 'PROFILE', '').items.push({ label: parts[1] || 'Item', value: parts[2] || '', note: parts[3] || '' });
+  });
+  return groups;
+}
+function parseFacts(raw) {
+  return String(raw || '').split(/\r?\n/).map(function (line) {
+    var parts = line.split('|');
+    return { label: (parts[0] || '').trim(), value: parts.slice(1).join('|').trim() };
+  }).filter(function (item) { return item.label || item.value; });
+}
+function parseKeywords(raw) {
+  var groups = [];
+  String(raw || '').split(/\r?\n/).forEach(function (line) {
+    line = line.trim();
+    if (!line) return;
+    var parts = line.split('|').map(function (part) { return part.trim(); });
+    var title = parts.length > 1 ? parts[0] : 'KEYWORD';
+    var value = parts.length > 1 ? parts.slice(1).join('|') : parts[0];
+    var group = groups.find(function (item) { return item.title === title && item.style === 'keywords'; });
+    if (!group) { group = { title: title, style: 'keywords', items: [] }; groups.push(group); }
+    group.items.push({ value: value });
+  });
+  return groups;
+}
+function parseDetailBlocks(raw) {
+  var details = [];
+  var current = null;
+  String(raw || '').split(/\r?\n/).forEach(function (line) {
+    var trimmed = line.trim();
+    if (!trimmed) return;
+    if (trimmed === '---') { current = null; return; }
+    var parts = trimmed.split('|');
+    var kind = (parts.shift() || '').trim().toLowerCase();
+    if (kind === 'section') { details.push({ type: 'section', title: parts.join('|').trim() || 'SECTION' }); current = null; return; }
+    if (kind === 'toggle') { current = { title: (parts[0] || 'Detail').trim(), open: (parts[1] || '').trim().toLowerCase() === 'open', text: '', images: [] }; details.push(current); return; }
+    if (!current) { current = { title: 'Detail', text: '', images: [] }; details.push(current); }
+    if (kind === 'text') current.text += (current.text ? '\n' : '') + parts.join('|').trim();
+    if (kind === 'image') current.images.push(parts.join('|').trim());
+  });
+  return details;
+}
+function addAu() {
+  var title = val('auTitle') || 'New AU';
+  var groups = parsePipeRows(el('auProfile').value, 'PROFILE').concat(parseKeywords(el('auKeywords').value));
+  data.aus.push({
+    title: title,
+    subtitle: val('auSubtitle'),
+    image: val('auImage'),
+    summary: val('auSummary'),
+    facts: parseFacts(el('auFacts').value),
+    groups: groups,
+    details: parseDetailBlocks(el('auDetails').value)
+  });
+  ['auTitle','auSubtitle','auImage','auSummary','auFacts','auProfile','auKeywords','auDetails'].forEach(function (id) { setVal(id, ''); });
+  updateAll('Added AU card.');
+}
 function addMemo() {
   var text = val('memoText') || val('memoTextShort');
   if (!text) return;
@@ -319,6 +408,7 @@ function removeItem(type, groupIndex, itemIndex) {
   if (type === 'stat') data.stats.splice(groupIndex, 1);
   if (type === 'story') data.story.splice(groupIndex, 1);
   if (type === 'memo') data.memo.splice(groupIndex, 1);
+  if (type === 'au') data.aus.splice(groupIndex, 1);
   if (type === 'groupItem') {
     data.groups[groupIndex].items.splice(itemIndex, 1);
     if (!data.groups[groupIndex].items.length) data.groups.splice(groupIndex, 1);
@@ -348,6 +438,7 @@ function renderItems() {
   data.details.forEach(function (item, index) { html += renderItem(item.type === 'section' ? 'Detail section' : 'Detail', item.title + (item.images && item.images.length ? ' | images: ' + item.images.length : ''), 'detail', index); });
   data.stats.forEach(function (item, index) { html += renderItem('Status', item.label + ' | ' + item.value, 'stat', index); });
   data.story.forEach(function (item, index) { html += renderItem('Story', (item.date ? item.date + ' | ' : '') + item.title, 'story', index); });
+  data.aus.forEach(function (item, index) { html += renderItem('AU', item.title + (item.subtitle ? ' | ' + item.subtitle : ''), 'au', index); });
   data.memo.forEach(function (item, index) { html += renderItem('Memo', (item.date ? item.date + ' | ' : '') + item.text, 'memo', index); });
   list.innerHTML = html || '<p class="small">No items yet.</p>';
 }
@@ -453,6 +544,41 @@ function buildMarkdown() {
     lines.push('story:');
     data.story.forEach(function (item) { lines.push('  - date: ' + quoteYaml(item.date)); lines.push('    title: ' + quoteYaml(item.title)); lines.push('    text: ' + quoteYaml(item.text)); });
   }
+  if (data.aus.length) {
+    lines.push('aus:');
+    data.aus.forEach(function (au) {
+      lines.push('  - title: ' + quoteYaml(au.title));
+      if (au.subtitle) lines.push('    subtitle: ' + quoteYaml(au.subtitle));
+      if (au.image) lines.push('    image: ' + quoteYaml(au.image));
+      if (au.summary) lines.push('    summary: ' + quoteYaml(au.summary));
+      if (au.facts && au.facts.length) {
+        lines.push('    facts:');
+        au.facts.forEach(function (fact) { lines.push('      - label: ' + quoteYaml(fact.label)); lines.push('        value: ' + quoteYaml(fact.value)); });
+      }
+      if (au.groups && au.groups.length) {
+        lines.push('    groups:');
+        au.groups.forEach(function (group) {
+          lines.push('      - title: ' + quoteYaml(group.title));
+          if (group.style) lines.push('        style: ' + quoteYaml(group.style));
+          lines.push('        items:');
+          group.items.forEach(function (item) {
+            if (group.style === 'keywords') lines.push('          - value: ' + quoteYaml(item.value));
+            else { lines.push('          - label: ' + quoteYaml(item.label)); lines.push('            value: ' + quoteYaml(item.value)); if (item.note) lines.push('            note: ' + quoteYaml(item.note)); }
+          });
+        });
+      }
+      if (au.details && au.details.length) {
+        lines.push('    details:');
+        au.details.forEach(function (detail) {
+          lines.push('      - title: ' + quoteYaml(detail.title));
+          if (detail.type === 'section') { lines.push('        type: "section"'); return; }
+          if (detail.open) lines.push('        open: true');
+          lines.push('        text: ' + quoteYaml(detail.text));
+          if (detail.images && detail.images.length) { lines.push('        images:'); detail.images.forEach(function (image) { lines.push('          - ' + quoteYaml(image)); }); }
+        });
+      }
+    });
+  }
   if (data.memo.length) {
     lines.push('memo:');
     data.memo.forEach(function (item) { lines.push('  - date: ' + quoteYaml(item.date)); lines.push('    text: ' + quoteYaml(item.text)); });
@@ -503,7 +629,7 @@ function loadDraft() {
   if (!name || !draft) { el('draftStatus').textContent = 'No selected draft.'; return; }
   fields.forEach(function (id) { if (draft.meta && draft.meta[id] != null) el(id).value = draft.meta[id]; });
   setVal('draftName', name);
-  data = Object.assign({ facts: [], groups: [], details: [], stats: [], story: [], memo: [] }, draft.data || {});
+  data = Object.assign({ facts: [], groups: [], details: [], stats: [], story: [], memo: [], aus: [] }, draft.data || {});
   updateAll('Draft loaded: ' + name);
 }
 function clearDraft() {
@@ -536,6 +662,7 @@ el('addDetailSectionBtn').addEventListener('click', addDetailSection);
 el('addDetailBtn').addEventListener('click', addDetail);
 el('addStatBtn').addEventListener('click', addStat);
 el('addStoryBtn').addEventListener('click', addStory);
+el('addAuBtn').addEventListener('click', addAu);
 el('addMemoBtn').addEventListener('click', addMemo);
 el('saveDraftBtn').addEventListener('click', saveDraft);
 el('loadDraftBtn').addEventListener('click', loadDraft);
