@@ -129,9 +129,9 @@ function parseAuthorStyles() {
 }
 
 function indexColorsForAuthor(author) {
-  if (author === '\uBE44\uB2C8') return { accent: '#4e4a65', text: '#e7e3d8' };
-  if (author === '\uB179\uD2F0') return { accent: '#e7e3d8', text: '#4e4a65' };
-  return { accent: '#4e4a65', text: '#e7e3d8' };
+  if (author === '\uBE44\uB2C8') return { accent: '#4e4a65', accentText: '#e7e3d8', indexText: '#161732', hover: '#ebeaef' };
+  if (author === '\uB179\uD2F0') return { accent: '#e7e3d8', accentText: '#4e4a65', indexText: '#4f362a', hover: '#f9f5f2' };
+  return { accent: '#4e4a65', accentText: '#e7e3d8', indexText: '#161732', hover: '#ebeaef' };
 }
 
 function dominantAuthorForRows(items, threadMeta, currentMonth) {
@@ -319,7 +319,9 @@ function buildOutput() {
     'twitter_font_size: ' + yamlQuote(document.getElementById('fontSize').value),
     'twitter_dominant_author: ' + yamlQuote(dominantAuthor),
     'twitter_accent: ' + yamlQuote(indexColors.accent),
-    'twitter_accent_text: ' + yamlQuote(indexColors.text),
+    'twitter_accent_text: ' + yamlQuote(indexColors.accentText),
+    'twitter_index_text: ' + yamlQuote(indexColors.indexText),
+    'twitter_index_hover: ' + yamlQuote(indexColors.hover),
     'tags:'
   ];
   if (allTags.length) allTags.forEach(function (tag) { frontMatter.push('  - ' + yamlQuote(tag)); });

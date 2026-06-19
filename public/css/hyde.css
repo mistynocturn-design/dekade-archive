@@ -1146,3 +1146,17 @@ a.sidebar-nav-item:focus {
 .twitter-month-card .twitter-index-tags span {
   color: var(--twitter-index-accent, #4e4a65);
 }
+/* Twitter index detailed dominant colors */
+.twitter-month-card .twitter-month-link h2 {
+  color: var(--twitter-index-text, #161732);
+}
+
+.twitter-month-card .twitter-index-tags span {
+  color: var(--twitter-index-text, #161732);
+}
+
+.content .twitter-month-card .twitter-month-link:hover,
+.content .twitter-month-card .twitter-month-link:focus {
+  background: var(--twitter-index-hover, #ebeaef);
+  border-color: color-mix(in srgb, var(--twitter-index-text, #161732) 18%, transparent);
+}
