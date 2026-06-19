@@ -2371,3 +2371,11 @@ a.sidebar-nav-item:focus {
   font-size: .56rem;
   line-height: 1.45;
 }
+/* Character profile label alignment */
+.character-info-list div {
+  grid-template-columns: 5.8rem minmax(0, 1fr);
+}
+
+.character-info-list dt {
+  max-width: none;
+}
