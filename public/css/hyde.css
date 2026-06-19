@@ -1160,3 +1160,121 @@ a.sidebar-nav-item:focus {
   background: var(--twitter-index-hover, #ebeaef);
   border-color: color-mix(in srgb, var(--twitter-index-text, #161732) 18%, transparent);
 }
+/* Inline archive search */
+.archive-inline-search {
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  margin: .85rem 0 1rem;
+  padding: .72rem;
+}
+
+.archive-search-grid {
+  display: grid;
+  gap: .55rem;
+  grid-template-columns: minmax(10rem, 1.7fr) minmax(7rem, 1fr) minmax(7rem, 1fr) minmax(7rem, 1fr);
+}
+
+.archive-search-grid label {
+  color: #777;
+  font-size: .68rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.archive-search-grid input,
+.archive-search-grid select {
+  background: #fff;
+  border: 1px solid #dedede;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #333;
+  display: block;
+  font: inherit;
+  font-size: .78rem;
+  margin-top: .2rem;
+  padding: .35rem .42rem;
+  width: 100%;
+}
+
+.archive-search-actions {
+  display: flex;
+  gap: .4rem;
+  margin-top: .55rem;
+}
+
+.archive-search-actions button {
+  background: #4e4a65;
+  border: 0;
+  border-radius: 6px;
+  color: #e7e3d8;
+  cursor: pointer;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .34rem .62rem;
+}
+
+.archive-search-actions button + button {
+  background: #e7e3d8;
+  color: #4e4a65;
+}
+
+.archive-search-summary {
+  color: #888;
+  font-size: .72rem;
+  margin-top: .45rem;
+}
+
+.archive-search-results {
+  display: grid;
+  gap: .42rem;
+  margin-top: .5rem;
+}
+
+.archive-search-result {
+  border: 1px solid #eeeeee;
+  border-radius: 7px;
+  color: inherit;
+  display: block;
+  padding: .52rem .58rem;
+  text-decoration: none;
+}
+
+.archive-search-result:hover,
+.archive-search-result:focus {
+  background: #fbfbfb;
+  text-decoration: none;
+}
+
+.search-result-label {
+  color: #8a8a8a;
+  display: block;
+  font-size: .68rem;
+  font-weight: 700;
+  margin-bottom: .1rem;
+}
+
+.archive-search-result strong {
+  color: #4e4a65;
+  display: block;
+  font-size: .76rem;
+  margin-bottom: .12rem;
+}
+
+.archive-search-result p {
+  color: #444;
+  font-size: .76rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .archive-search-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .archive-search-grid {
+    grid-template-columns: 1fr;
+  }
+}

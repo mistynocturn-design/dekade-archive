@@ -13,6 +13,20 @@ title: Archive
   {% endfor %}
   <span class="archive-tab-indicator" aria-hidden="true"></span>
 </nav>
+<section class="archive-search-panel archive-inline-search" aria-label="Archive search">
+  <div class="archive-search-grid">
+    <label>Keyword<input id="archiveSearchKeyword" type="search" placeholder="Search text"></label>
+    <label>Side<select id="archiveSearchSide"><option value="">All</option><option value="right">Right</option><option value="left">Left</option></select></label>
+    <label>From<input id="archiveSearchFrom" type="date"></label>
+    <label>To<input id="archiveSearchTo" type="date"></label>
+  </div>
+  <div class="archive-search-actions">
+    <button id="archiveSearchButton" type="button">Search</button>
+    <button id="archiveSearchReset" type="button">Reset</button>
+  </div>
+  <div class="archive-search-summary" id="archiveSearchSummary"></div>
+  <div class="archive-search-results" id="archiveSearchResults" hidden></div>
+</section>
 
 <div class="archive-tree">
   {% for category in site.data.archive_categories %}
@@ -50,6 +64,98 @@ title: Archive
   </ol>
 </details>
 
+<script type="application/json" id="archiveSearchData">
+[
+{% assign archive_items = site.archive | sort: "date" | reverse %}
+{% for chat in archive_items %}
+  {
+    "title": {{ chat.title | jsonify }},
+    "category": {{ chat.category | jsonify }},
+    "date": {{ chat.date | date: "%Y-%m-%d" | jsonify }},
+    "url": {{ chat.url | relative_url | jsonify }},
+    "content": {{ chat.content | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]
+
+(function () {
+  var dataElement = document.getElementById('archiveSearchData');
+  var keywordInput = document.getElementById('archiveSearchKeyword');
+  var sideInput = document.getElementById('archiveSearchSide');
+  var fromInput = document.getElementById('archiveSearchFrom');
+  var toInput = document.getElementById('archiveSearchTo');
+  var searchButton = document.getElementById('archiveSearchButton');
+  var resetButton = document.getElementById('archiveSearchReset');
+  var summary = document.getElementById('archiveSearchSummary');
+  var resultsBox = document.getElementById('archiveSearchResults');
+  if (!dataElement || !keywordInput || !resultsBox) return;
+
+  function textOf(node) { return (node ? node.textContent : '').replace(/\s+/g, ' ').trim(); }
+  function parseItems() {
+    var source = JSON.parse(dataElement.textContent || '[]');
+    var items = [];
+    source.forEach(function (chat) {
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = chat.content || '';
+      var currentDate = chat.date || '';
+      Array.prototype.slice.call(wrapper.children).forEach(function (node) {
+        if (node.classList && node.classList.contains('chat-date-divider')) currentDate = textOf(node) || currentDate;
+        if (!node.classList || !node.classList.contains('chat-line')) return;
+        var side = node.classList.contains('right') ? 'right' : 'left';
+        var body = textOf(node.querySelector('.chat-text'));
+        var image = node.querySelector('.chat-image');
+        if (!body && image) body = '[image]';
+        if (!body) return;
+        items.push({ title: chat.title || '', category: chat.category || '', label: chat.title || '', date: currentDate, side: side, url: chat.url || '', text: body });
+      });
+    });
+    return items;
+  }
+
+  var items = parseItems();
+  function inDateRange(date, from, to) {
+    if (from && (!date || date < from)) return false;
+    if (to && (!date || date > to)) return false;
+    return true;
+  }
+  function excerpt(text, keyword) {
+    var clean = text || '';
+    var lower = clean.toLowerCase();
+    var needle = (keyword || '').toLowerCase();
+    var index = needle ? lower.indexOf(needle) : 0;
+    var start = Math.max(0, index - 45);
+    return (start > 0 ? '...' : '') + clean.slice(start, start + 150) + (clean.length > start + 150 ? '...' : '');
+  }
+  function render(matches, keyword) {
+    resultsBox.innerHTML = '';
+    resultsBox.hidden = matches.length === 0;
+    summary.textContent = matches.length ? matches.length + ' results' : 'No results';
+    matches.slice(0, 80).forEach(function (item) {
+      var link = document.createElement('a');
+      link.className = 'archive-search-result';
+      link.href = item.url;
+      link.innerHTML = '<span class="search-result-label">' + item.category + ' · ' + item.label + ' · ' + item.side + '</span><strong>' + item.date + '</strong><p></p>';
+      link.querySelector('p').textContent = excerpt(item.text, keyword);
+      resultsBox.appendChild(link);
+    });
+  }
+  function runSearch() {
+    var keyword = keywordInput.value.trim().toLowerCase();
+    var side = sideInput.value;
+    var from = fromInput.value;
+    var to = toInput.value;
+    var matches = items.filter(function (item) {
+      if (keyword && item.text.toLowerCase().indexOf(keyword) === -1) return false;
+      if (side && item.side !== side) return false;
+      return inDateRange(item.date, from, to);
+    });
+    render(matches, keyword);
+  }
+  searchButton.addEventListener('click', runSearch);
+  [keywordInput, sideInput, fromInput, toInput].forEach(function (input) { input.addEventListener('keydown', function (event) { if (event.key === 'Enter') runSearch(); }); });
+  resetButton.addEventListener('click', function () { keywordInput.value = ''; sideInput.value = ''; fromInput.value = ''; toInput.value = ''; summary.textContent = ''; resultsBox.innerHTML = ''; resultsBox.hidden = true; });
+})();
+</script>
 <script>
 (function () {
   var tabBar = document.querySelector('.archive-tabs');
@@ -92,4 +198,6 @@ title: Archive
     });
   });
 })();
+
+
 </script>
