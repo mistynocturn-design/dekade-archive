@@ -2041,3 +2041,154 @@ a.sidebar-nav-item:focus {
     right: calc(50% - 3.4rem);
   }
 }
+/* Character typography polish */
+.character-index,
+.character-page {
+  font-family: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  word-break: keep-all;
+}
+
+.character-page {
+  color: var(--character-ink, #161732);
+  font-size: .88rem;
+  line-height: 1.65;
+}
+
+.character-header {
+  border-bottom: 1px solid color-mix(in srgb, var(--character-accent, #4e4a65) 14%, transparent);
+  margin-bottom: 1.25rem;
+  padding-bottom: .9rem;
+}
+
+.character-header h1 {
+  color: var(--character-ink, #161732);
+  font-family: inherit;
+  font-size: 2.05rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: .22rem 0 .28rem;
+}
+
+.character-kicker {
+  color: color-mix(in srgb, var(--character-ink, #161732) 38%, transparent);
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.character-subtitle {
+  color: color-mix(in srgb, var(--character-ink, #161732) 62%, transparent);
+  font-size: .82rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.character-mini-tabs {
+  gap: 1.15rem;
+  margin-bottom: 1.2rem;
+}
+
+.character-mini-tab {
+  color: color-mix(in srgb, var(--character-ink, #161732) 58%, transparent);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.character-mini-tab.active {
+  color: var(--character-tab-color, var(--character-accent, #4e4a65));
+}
+
+.character-portrait-card,
+.character-wiki-box,
+.character-status-card,
+.character-stat-box,
+.character-detail-box {
+  color: var(--character-ink, #161732);
+}
+
+.character-card-facts,
+.character-quick-facts,
+.character-info-list {
+  gap: .34rem;
+}
+
+.character-card-facts dt,
+.character-quick-facts dt,
+.character-info-list dt {
+  color: color-mix(in srgb, var(--character-ink, #161732) 54%, transparent);
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+.character-card-facts dd,
+.character-quick-facts dd,
+.character-info-list dd {
+  color: var(--character-ink, #161732);
+  font-size: .8rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.character-section-title,
+.character-detail-section-title {
+  border-radius: 2px;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.15;
+  padding: .2rem .48rem;
+}
+
+.character-keywords {
+  gap: .26rem;
+}
+
+.character-keywords span {
+  font-size: .64rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: .14rem .34rem;
+}
+
+.character-markdown,
+.character-detail-text,
+.character-story-body,
+.character-memo-body {
+  color: color-mix(in srgb, var(--character-ink, #161732) 88%, transparent);
+  font-size: .83rem;
+  font-weight: 400;
+  line-height: 1.78;
+}
+
+.character-profile-detail summary {
+  font-size: .76rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.character-stat-box h2,
+.character-status-card h2,
+.character-au-detail-title,
+.character-story-title,
+.character-memo-title {
+  color: var(--character-ink, #161732);
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+@media (max-width: 48em) {
+  .character-header h1 {
+    font-size: 1.7rem;
+  }
+
+  .character-page {
+    font-size: .84rem;
+  }
+}
