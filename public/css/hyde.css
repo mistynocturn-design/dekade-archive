@@ -2383,3 +2383,9 @@ a.sidebar-nav-item:focus {
 .character-info-list dt {
   font-weight: 600;
 }
+/* Character markdown divider cleanup */
+.character-markdown {
+  border-top: 0;
+  margin-top: .45rem;
+  padding-top: 0;
+}
