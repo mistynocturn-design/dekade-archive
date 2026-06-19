@@ -112,6 +112,7 @@
           <button class="tab active" data-tab="facts" type="button">Card facts</button>
           <button class="tab" data-tab="profile" type="button">Profile</button>
           <button class="tab" data-tab="keyword" type="button">Keywords</button>
+          <button class="tab" data-tab="details" type="button">Details</button>
           <button class="tab" data-tab="status" type="button">Status</button>
           <button class="tab" data-tab="story" type="button">Story</button>
           <button class="tab" data-tab="memo" type="button">Memo</button>
@@ -143,6 +144,17 @@
             <div><label for="keywordValue">Keyword</label><input id="keywordValue" placeholder="calm"></div>
           </div>
           <div class="actions"><button id="addKeywordBtn" type="button">Add keyword</button></div>
+        </div>
+
+        <div class="builder-panel" data-panel="details">
+          <div class="grid two">
+            <div><label for="detailTitle">Toggle title</label><input id="detailTitle" placeholder="Emotions, Outfit, Character..."></div>
+            <div><label for="detailOpen">Default state</label><select id="detailOpen"><option value="false">Closed</option><option value="true">Open</option></select></div>
+          </div>
+          <label for="detailText">Text</label><textarea id="detailText" placeholder="Long profile detail text"></textarea>
+          <label for="detailImages">Images</label><textarea id="detailImages" placeholder="One image path per line&#10;/dekade-archive/assets/characters/name/image-01.jpg"></textarea>
+          <div class="actions"><button id="addDetailBtn" type="button">Add detail toggle</button></div>
+          <p class="small">Images are arranged in a tidy grid under the text. Keep one image path per line.</p>
         </div>
 
         <div class="builder-panel" data-panel="status">
@@ -200,7 +212,7 @@
 
 <script>
 var STORAGE_KEY = 'dekade-character-manager-drafts-v2';
-var data = { facts: [], groups: [], stats: [], story: [], memo: [] };
+var data = { facts: [], groups: [], details: [], stats: [], story: [], memo: [] };
 var fields = ['title','fileName','order','subtitle','role','cardImage','profileImage','accent','soft','ink','tabColor'];
 function el(id) { return document.getElementById(id); }
 function val(id) { return el(id).value.trim(); }
@@ -208,7 +220,7 @@ function setVal(id, value) { el(id).value = value || ''; }
 function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, function (ch) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]); }); }
 function quoteYaml(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\r?\n/g, '\\n') + '"'; }
 function slugify(value) {
-  return String(value || 'character').trim().toLowerCase().replace(/[^a-z0-9가-힣]+/g, '-').replace(/^-+|-+$/g, '') || 'character';
+  return String(value || 'character').trim().toLowerCase().replace(/[^a-z0-9\uAC00-\uD7A3]+/g, '-').replace(/^-+|-+$/g, '') || 'character';
 }
 function getMeta() {
   var title = val('title') || 'New Character';
@@ -262,6 +274,15 @@ function addKeyword() {
   setVal('keywordValue', '');
   updateAll('Added keyword.');
 }
+function addDetail() {
+  var title = val('detailTitle') || 'Detail';
+  var text = val('detailText');
+  var images = el('detailImages').value.split(/\r?\n/).map(function (line) { return line.trim(); }).filter(Boolean);
+  if (!title && !text && !images.length) return;
+  data.details.push({ title: title, text: text, images: images, open: val('detailOpen') === 'true' });
+  setVal('detailTitle', ''); setVal('detailText', ''); setVal('detailImages', ''); el('detailOpen').value = 'false';
+  updateAll('Added detail toggle.');
+}
 function addStat() {
   var label = val('statLabel');
   var value = parseInt(val('statValue'), 10);
@@ -287,6 +308,7 @@ function addMemo() {
 }
 function removeItem(type, groupIndex, itemIndex) {
   if (type === 'fact') data.facts.splice(groupIndex, 1);
+  if (type === 'detail') data.details.splice(groupIndex, 1);
   if (type === 'stat') data.stats.splice(groupIndex, 1);
   if (type === 'story') data.story.splice(groupIndex, 1);
   if (type === 'memo') data.memo.splice(groupIndex, 1);
@@ -316,6 +338,7 @@ function renderItems() {
       html += renderItem(group.title, body, 'groupItem', groupIndex, itemIndex);
     });
   });
+  data.details.forEach(function (item, index) { html += renderItem('Detail', item.title + (item.images && item.images.length ? ' | images: ' + item.images.length : ''), 'detail', index); });
   data.stats.forEach(function (item, index) { html += renderItem('Status', item.label + ' | ' + item.value, 'stat', index); });
   data.story.forEach(function (item, index) { html += renderItem('Story', (item.date ? item.date + ' | ' : '') + item.title, 'story', index); });
   data.memo.forEach(function (item, index) { html += renderItem('Memo', (item.date ? item.date + ' | ' : '') + item.text, 'memo', index); });
@@ -355,8 +378,12 @@ function renderPreview() {
     }
     return '<div class="section-title">' + escapeHtml(group.title) + '</div><dl class="info-list">' + group.items.map(function (item) { return '<div><dt>' + escapeHtml(item.label) + '</dt><dd>' + escapeHtml(item.value) + (item.note ? '<span class="note">' + escapeHtml(item.note) + '</span>' : '') + '</dd></div>'; }).join('') + '</dl>';
   }).join('');
+  var details = data.details.length ? '<div class="wiki-preview"><div class="section-title">Details</div>' + data.details.map(function (detail) {
+    var images = (detail.images || []).map(function (src) { return '<div class="portrait">' + imageHtml(src, '') + '</div>'; }).join('');
+    return '<details ' + (detail.open ? 'open' : '') + '><summary class="item-title">' + escapeHtml(detail.title) + '</summary><div class="small" style="margin:.5rem 0; white-space:pre-wrap">' + escapeHtml(detail.text || '') + '</div>' + (images ? '<div class="wiki-grid" style="grid-template-columns:repeat(auto-fit,minmax(90px,1fr))">' + images + '</div>' : '') + '</details>';
+  }).join('') + '</div>' : '';
   var stats = data.stats.length ? '<div class="wiki-preview"><div class="section-title">Status</div><div class="bars">' + data.stats.map(function (stat) { return '<div class="bar"><span>' + escapeHtml(stat.label) + '</span><div class="track"><i style="width:' + stat.value + '%"></i></div><strong>' + stat.value + '</strong></div>'; }).join('') + '</div></div>' : '';
-  el('preview').innerHTML = '<div class="preview-card"><div class="preview-card-img">' + imageHtml(meta.cardImage, meta.title) + '</div><div class="preview-card-body"><p class="preview-role">' + escapeHtml(meta.role || 'Role') + '</p><h3>' + escapeHtml(meta.title) + '</h3><dl class="preview-facts">' + cardFacts + '</dl></div></div><div class="wiki-preview"><div class="wiki-grid"><div><div class="portrait">' + imageHtml(meta.profileImage || meta.cardImage, meta.title) + '</div><dl class="preview-facts" style="margin-top:10px">' + quickFacts + '</dl></div><div>' + (groups || '<p class="small">Add profile items to preview the wiki box.</p>') + '</div></div></div>' + stats;
+  el('preview').innerHTML = '<div class="preview-card"><div class="preview-card-img">' + imageHtml(meta.cardImage, meta.title) + '</div><div class="preview-card-body"><p class="preview-role">' + escapeHtml(meta.role || 'Role') + '</p><h3>' + escapeHtml(meta.title) + '</h3><dl class="preview-facts">' + cardFacts + '</dl></div></div><div class="wiki-preview"><div class="wiki-grid"><div><div class="portrait">' + imageHtml(meta.profileImage || meta.cardImage, meta.title) + '</div><dl class="preview-facts" style="margin-top:10px">' + quickFacts + '</dl></div><div>' + (groups || '<p class="small">Add profile items to preview the wiki box.</p>') + '</div></div></div>' + details + stats;
 }
 function buildMarkdown() {
   var meta = getMeta();
@@ -392,6 +419,18 @@ function buildMarkdown() {
           if (item.note) lines.push('        note: ' + quoteYaml(item.note));
         }
       });
+    });
+  }
+  if (data.details.length) {
+    lines.push('profile_details:');
+    data.details.forEach(function (detail) {
+      lines.push('  - title: ' + quoteYaml(detail.title));
+      if (detail.open) lines.push('    open: true');
+      lines.push('    text: ' + quoteYaml(detail.text));
+      if (detail.images && detail.images.length) {
+        lines.push('    images:');
+        detail.images.forEach(function (image) { lines.push('      - ' + quoteYaml(image)); });
+      }
     });
   }
   if (data.stats.length) {
@@ -452,7 +491,7 @@ function loadDraft() {
   if (!name || !draft) { el('draftStatus').textContent = 'No selected draft.'; return; }
   fields.forEach(function (id) { if (draft.meta && draft.meta[id] != null) el(id).value = draft.meta[id]; });
   setVal('draftName', name);
-  data = Object.assign({ facts: [], groups: [], stats: [], story: [], memo: [] }, draft.data || {});
+  data = Object.assign({ facts: [], groups: [], details: [], stats: [], story: [], memo: [] }, draft.data || {});
   updateAll('Draft loaded: ' + name);
 }
 function clearDraft() {
@@ -481,6 +520,7 @@ document.querySelectorAll('.tab').forEach(function (tab) {
 el('addFactBtn').addEventListener('click', addFact);
 el('addProfileBtn').addEventListener('click', addProfile);
 el('addKeywordBtn').addEventListener('click', addKeyword);
+ el('addDetailBtn').addEventListener('click', addDetail);
 el('addStatBtn').addEventListener('click', addStat);
 el('addStoryBtn').addEventListener('click', addStory);
 el('addMemoBtn').addEventListener('click', addMemo);

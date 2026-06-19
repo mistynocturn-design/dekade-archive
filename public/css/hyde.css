@@ -1732,3 +1732,97 @@ a.sidebar-nav-item:focus {
   justify-content: flex-end;
   margin: -1.2rem 0 .6rem;
 }
+
+/* Character profile detail box */
+.character-detail-box {
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  display: grid;
+  gap: .58rem;
+  margin-top: 1.1rem;
+  padding: .85rem;
+}
+
+.character-profile-detail {
+  background: color-mix(in srgb, var(--character-soft, #e7e3d8) 24%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--character-accent, #4e4a65) 14%, transparent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.character-profile-detail summary {
+  color: var(--character-ink, #161732);
+  cursor: pointer;
+  font-size: .78rem;
+  font-weight: 800;
+  list-style: none;
+  padding: .58rem .72rem;
+}
+
+.character-profile-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+.character-profile-detail summary::before {
+  color: var(--character-accent, #4e4a65);
+  content: "+";
+  display: inline-block;
+  font-weight: 900;
+  margin-right: .42rem;
+}
+
+.character-profile-detail[open] summary::before {
+  content: "-";
+}
+
+.character-detail-content {
+  border-top: 1px solid color-mix(in srgb, var(--character-accent, #4e4a65) 12%, transparent);
+  display: grid;
+  gap: .72rem;
+  padding: .72rem;
+}
+
+.character-detail-text {
+  font-size: .82rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.character-detail-images {
+  display: grid;
+  gap: .45rem;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+}
+
+.character-detail-images img {
+  background: #f0f1f4;
+  border-radius: 7px;
+  display: block;
+  max-height: 18rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.character-detail-images-1 {
+  grid-template-columns: minmax(0, min(22rem, 100%));
+}
+
+.character-detail-images-1 img {
+  max-height: 24rem;
+  object-fit: contain;
+}
+
+.character-detail-images-2,
+.character-detail-images-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 520px) {
+  .character-detail-images,
+  .character-detail-images-2,
+  .character-detail-images-4 {
+    grid-template-columns: 1fr;
+  }
+}
