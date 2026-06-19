@@ -34,19 +34,39 @@ layout: default
       </aside>
 
       <div class="character-wiki-box">
-        {% if page.profile %}
-          <div class="character-section-title">Name</div>
-          <dl class="character-info-list">
-            {% for item in page.profile %}
-              <div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>
-            {% endfor %}
-          </dl>
-        {% endif %}
-        {% if page.keywords %}
-          <div class="character-section-title">Keyword</div>
-          <div class="character-keywords">
-            {% for keyword in page.keywords %}<span>{{ keyword }}</span>{% endfor %}
-          </div>
+        {% if page.profile_groups %}
+          {% for group in page.profile_groups %}
+            <div class="character-section-title">{{ group.title }}</div>
+            {% if group.style == "keywords" %}
+              <div class="character-keywords">
+                {% for item in group.items %}<span>{{ item.value | default: item }}</span>{% endfor %}
+              </div>
+            {% else %}
+              <dl class="character-info-list">
+                {% for item in group.items %}
+                  <div>
+                    <dt>{{ item.label }}</dt>
+                    <dd>{{ item.value }}{% if item.note %}<span class="character-info-note">{{ item.note }}</span>{% endif %}</dd>
+                  </div>
+                {% endfor %}
+              </dl>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% if page.profile %}
+            <div class="character-section-title">Name</div>
+            <dl class="character-info-list">
+              {% for item in page.profile %}
+                <div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>
+              {% endfor %}
+            </dl>
+          {% endif %}
+          {% if page.keywords %}
+            <div class="character-section-title">Keyword</div>
+            <div class="character-keywords">
+              {% for keyword in page.keywords %}<span>{{ keyword }}</span>{% endfor %}
+            </div>
+          {% endif %}
         {% endif %}
         {% if content != blank %}
           <div class="character-markdown">{{ content }}</div>

@@ -1689,3 +1689,40 @@ a.sidebar-nav-item:focus {
     grid-template-columns: 1fr;
   }
 }
+/* Character builder additions */
+.character-page-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin: -2.55rem 0 1.55rem;
+}
+
+.content .character-tool-button {
+  align-items: center;
+  background: #e6eaf3;
+  border: 1px solid #d8deeb;
+  border-radius: 999px;
+  color: #161732;
+  display: inline-flex;
+  font-size: .78rem;
+  font-weight: 700;
+  height: 1.7rem;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+  width: 1.7rem;
+}
+
+.content .character-tool-button:hover,
+.content .character-tool-button:focus {
+  background: #161732;
+  border-color: #161732;
+  color: #e6eaf3;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.character-info-note {
+  color: #888;
+  margin-left: .25rem;
+}
