@@ -1558,7 +1558,7 @@ a.sidebar-nav-item:focus {
 
 .character-section-title {
   background: var(--character-accent, #4e4a65);
-  color: var(--character-soft, #e7e3d8);
+  color: var(--character-section-text, var(--character-soft, #e7e3d8));
   display: inline-block;
   font-size: .72rem;
   font-weight: 800;
@@ -1574,16 +1574,17 @@ a.sidebar-nav-item:focus {
 .character-keywords {
   display: flex;
   flex-wrap: wrap;
-  gap: .36rem;
+  gap: .24rem;
 }
 
 .character-keywords span {
-  background: var(--character-soft, #e7e3d8);
-  border-radius: 999px;
+  background: var(--character-keyword-bg, var(--character-soft, #e7e3d8));
+  border-radius: 5px;
   color: var(--character-ink, #161732);
-  font-size: .74rem;
+  font-size: .66rem;
   font-weight: 700;
-  padding: .22rem .52rem;
+  line-height: 1.15;
+  padding: .16rem .36rem;
 }
 
 .character-markdown {
@@ -1829,7 +1830,7 @@ a.sidebar-nav-item:focus {
 .character-detail-section-title {
   align-self: start;
   background: var(--character-accent, #4e4a65);
-  color: var(--character-soft, #e7e3d8);
+  color: var(--character-section-text, var(--character-soft, #e7e3d8));
   display: inline-block;
   font-size: .72rem;
   font-weight: 800;

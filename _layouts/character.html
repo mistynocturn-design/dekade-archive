@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<article class="character-page" style="--character-accent: {{ page.accent | default: '#4e4a65' }}; --character-soft: {{ page.soft | default: '#e7e3d8' }}; --character-ink: {{ page.ink | default: '#161732' }}; --character-tab-color: {{ page.tab_color | default: page.accent | default: '#4e4a65' }};">
+<article class="character-page" style="--character-accent: {{ page.accent | default: '#4e4a65' }}; --character-soft: {{ page.soft | default: '#e7e3d8' }}; --character-ink: {{ page.ink | default: '#161732' }}; --character-tab-color: {{ page.tab_color | default: page.accent | default: '#4e4a65' }}; --character-section-text: {{ page.section_text | default: page.soft | default: '#e7e3d8' }}; --character-keyword-bg: {{ page.keyword_bg | default: page.soft | default: '#e7e3d8' }};">
   <div class="character-detail-tools">
     <a class="character-tool-button" href="{{ site.baseurl }}/tools/character-manager.html" target="_blank" rel="noopener" aria-label="Open character manager" title="Open character manager">+</a>
   </div>
@@ -148,7 +148,7 @@ layout: default
     <div class="character-au-list active" data-au-list>
       <div class="character-au-grid">
         {% for au in page.aus %}
-          <button class="character-au-card" type="button" data-au-target="au-{{ forloop.index }}" style="--character-accent: {{ au.accent | default: page.accent | default: '#4e4a65' }}; --character-soft: {{ au.soft | default: page.soft | default: '#e7e3d8' }}; --character-ink: {{ au.ink | default: page.ink | default: '#161732' }};">
+          <button class="character-au-card" type="button" data-au-target="au-{{ forloop.index }}" style="--character-accent: {{ au.accent | default: page.accent | default: '#4e4a65' }}; --character-soft: {{ au.soft | default: page.soft | default: '#e7e3d8' }}; --character-ink: {{ au.ink | default: page.ink | default: '#161732' }}; --character-section-text: {{ au.section_text | default: page.section_text | default: page.soft | default: '#e7e3d8' }}; --character-keyword-bg: {{ au.keyword_bg | default: page.keyword_bg | default: page.soft | default: '#e7e3d8' }};">
             {% if au.image %}
               <img class="character-card-image" src="{{ au.image | relative_url }}" alt="">
             {% else %}
@@ -165,7 +165,7 @@ layout: default
     </div>
 
     {% for au in page.aus %}
-      <div class="character-au-detail" data-au-detail="au-{{ forloop.index }}" style="--character-accent: {{ au.accent | default: page.accent | default: '#4e4a65' }}; --character-soft: {{ au.soft | default: page.soft | default: '#e7e3d8' }}; --character-ink: {{ au.ink | default: page.ink | default: '#161732' }};">
+      <div class="character-au-detail" data-au-detail="au-{{ forloop.index }}" style="--character-accent: {{ au.accent | default: page.accent | default: '#4e4a65' }}; --character-soft: {{ au.soft | default: page.soft | default: '#e7e3d8' }}; --character-ink: {{ au.ink | default: page.ink | default: '#161732' }}; --character-section-text: {{ au.section_text | default: page.section_text | default: page.soft | default: '#e7e3d8' }}; --character-keyword-bg: {{ au.keyword_bg | default: page.keyword_bg | default: page.soft | default: '#e7e3d8' }};">
         <button class="character-au-back" type="button" data-au-back>Back to AU list</button>
         <header class="character-au-header">
           <p class="character-kicker">Alternate Universe</p>
