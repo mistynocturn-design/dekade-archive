@@ -8,7 +8,7 @@ title: Twitter
   <a class="twitter-tool-button twitter-writer-button" href="{{ site.baseurl }}/tools/twitter-quick-writer.html" target="_blank" rel="noopener" aria-label="Open quick writer" title="Open quick writer">w</a>
 </div>
 
-<section class="twitter-search-panel archive-inline-search" aria-label="Twitter search">
+<details class="twitter-search-panel archive-inline-search"><summary>Search</summary>
   <div class="archive-search-grid">
     <label>Keyword<input id="twitterSearchKeyword" type="search" placeholder="Search text"></label>
     <label>Author<input id="twitterSearchAuthor" type="search" placeholder="Author"></label>
@@ -21,7 +21,7 @@ title: Twitter
   </div>
   <div class="archive-search-summary" id="twitterSearchSummary"></div>
   <div class="archive-search-results" id="twitterSearchResults" hidden></div>
-</section>
+</details>
 <div class="twitter-index">
   {% assign months = site.twitter | sort: "date" | reverse %}
   {% for month in months %}

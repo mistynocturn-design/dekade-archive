@@ -14,7 +14,7 @@ title: Archive
   {% endfor %}
   <span class="archive-tab-indicator" aria-hidden="true"></span>
 </nav>
-<section class="archive-search-panel archive-inline-search" aria-label="Archive search">
+<details class="archive-search-panel archive-inline-search"><summary>Search</summary>
   <div class="archive-search-grid">
     <label>Keyword<input id="archiveSearchKeyword" type="search" placeholder="Search text"></label>
     <label>Side<select id="archiveSearchSide"><option value="">All</option><option value="right">Right</option><option value="left">Left</option></select></label>
@@ -27,7 +27,7 @@ title: Archive
   </div>
   <div class="archive-search-summary" id="archiveSearchSummary"></div>
   <div class="archive-search-results" id="archiveSearchResults" hidden></div>
-</section>
+</details>
 
 <div class="archive-tree">
   {% for category in site.data.archive_categories %}

@@ -1290,3 +1290,56 @@ a.sidebar-nav-item:focus {
   font-weight: 800;
   text-transform: uppercase;
 }
+/* Collapsible search and writer shortcut colors */
+.content .archive-writer-button {
+  background: #e7e3d8;
+  border-color: #ddd7ca;
+  color: #4e4a65;
+}
+
+.content .archive-writer-button:hover,
+.content .archive-writer-button:focus {
+  background: #4e4a65;
+  border-color: #4e4a65;
+  color: #e7e3d8;
+}
+
+.content .twitter-writer-button {
+  background: #e6eaf3;
+  border-color: #d8deeb;
+  color: #161732;
+}
+
+.content .twitter-writer-button:hover,
+.content .twitter-writer-button:focus {
+  background: #161732;
+  border-color: #161732;
+  color: #e6eaf3;
+}
+
+.archive-inline-search summary {
+  color: #777;
+  cursor: pointer;
+  font-size: .74rem;
+  font-weight: 700;
+  list-style: none;
+}
+
+.archive-inline-search summary::-webkit-details-marker {
+  display: none;
+}
+
+.archive-inline-search summary::before {
+  content: "+";
+  display: inline-block;
+  margin-right: .35rem;
+}
+
+.archive-inline-search[open] summary {
+  color: #4e4a65;
+  margin-bottom: .62rem;
+}
+
+.archive-inline-search[open] summary::before {
+  content: "-";
+}
