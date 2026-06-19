@@ -2379,3 +2379,7 @@ a.sidebar-nav-item:focus {
 .character-info-list dt {
   max-width: none;
 }
+/* Character profile small label emphasis */
+.character-info-list dt {
+  font-weight: 600;
+}
