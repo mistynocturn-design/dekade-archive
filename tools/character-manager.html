@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Character Manager</title>
   <style>
-    :root { --accent:#4e4a65; --soft:#e7e3d8; --ink:#161732; --line:#e1e4ea; --bg:#f6f7f9; }
+    :root { --accent:#4e4a65; --soft:#e7e3d8; --ink:#161732; --tab-color:#4e4a65; --line:#e1e4ea; --bg:#f6f7f9; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: #222; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     main { max-width: 1240px; margin: 0 auto; padding: 26px 18px 46px; }
@@ -92,6 +92,7 @@
           <div><label for="accent">Accent</label><input id="accent" value="#4e4a65"></div>
           <div><label for="soft">Soft</label><input id="soft" value="#e7e3d8"></div>
           <div><label for="ink">Ink</label><input id="ink" value="#161732"></div>
+          <div><label for="tabColor">Tab color</label><input id="tabColor" value="#4e4a65"></div>
         </div>
         <div class="grid two">
           <div><label for="draftName">Draft name</label><input id="draftName" placeholder="Dietrich, Katia..."></div>
@@ -200,7 +201,7 @@
 <script>
 var STORAGE_KEY = 'dekade-character-manager-drafts-v2';
 var data = { facts: [], groups: [], stats: [], story: [], memo: [] };
-var fields = ['title','fileName','order','subtitle','role','cardImage','profileImage','accent','soft','ink'];
+var fields = ['title','fileName','order','subtitle','role','cardImage','profileImage','accent','soft','ink','tabColor'];
 function el(id) { return document.getElementById(id); }
 function val(id) { return el(id).value.trim(); }
 function setVal(id, value) { el(id).value = value || ''; }
@@ -223,7 +224,8 @@ function getMeta() {
     profileImage: val('profileImage'),
     accent: val('accent') || '#4e4a65',
     soft: val('soft') || '#e7e3d8',
-    ink: val('ink') || '#161732'
+    ink: val('ink') || '#161732',
+    tabColor: val('tabColor') || val('accent') || '#4e4a65'
   };
 }
 function findGroup(title, style) {
@@ -343,6 +345,7 @@ function renderPreview() {
   document.documentElement.style.setProperty('--accent', meta.accent);
   document.documentElement.style.setProperty('--soft', meta.soft);
   document.documentElement.style.setProperty('--ink', meta.ink);
+  document.documentElement.style.setProperty('--tab-color', meta.tabColor);
   var facts = data.facts.length ? data.facts : [{label:'Gender',value:''},{label:'Age',value:''},{label:'Height',value:''}];
   var cardFacts = facts.slice(0, 3).map(function (fact) { return '<div><dt>' + escapeHtml(fact.label) + '</dt><dd>' + escapeHtml(fact.value) + '</dd></div>'; }).join('');
   var quickFacts = facts.map(function (fact) { return '<div><dt>' + escapeHtml(fact.label) + '</dt><dd>' + escapeHtml(fact.value) + '</dd></div>'; }).join('');
@@ -366,6 +369,7 @@ function buildMarkdown() {
   lines.push('accent: ' + quoteYaml(meta.accent));
   lines.push('soft: ' + quoteYaml(meta.soft));
   lines.push('ink: ' + quoteYaml(meta.ink));
+  lines.push('tab_color: ' + quoteYaml(meta.tabColor));
   lines.push('card_image: ' + quoteYaml(meta.cardImage));
   lines.push('profile_image: ' + quoteYaml(meta.profileImage));
   lines.push('card_facts:');

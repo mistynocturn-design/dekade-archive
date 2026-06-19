@@ -1515,8 +1515,8 @@ a.sidebar-nav-item:focus {
 }
 
 .character-mini-tab.active {
-  border-bottom-color: var(--character-accent, #4e4a65);
-  color: var(--character-ink, #161732);
+  border-bottom-color: var(--character-tab-color, var(--character-accent, #4e4a65));
+  color: var(--character-tab-color, var(--character-ink, #161732));
 }
 
 .character-panel {
