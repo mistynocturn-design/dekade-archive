@@ -2389,3 +2389,22 @@ a.sidebar-nav-item:focus {
   margin-top: .45rem;
   padding-top: 0;
 }
+/* Character image modal icon-only controls */
+.character-image-modal-close,
+.character-image-modal-nav,
+.character-image-modal-nav:hover,
+.character-image-modal-close:hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+.character-image-modal-close,
+.character-image-modal-nav {
+  color: rgba(255, 255, 255, .88);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .55);
+}
+
+.character-image-modal-close:hover,
+.character-image-modal-nav:hover {
+  color: #fff;
+}
