@@ -11,6 +11,8 @@
     label { display: block; font-size: 13px; font-weight: 700; margin: 12px 0 6px; }
     input, textarea, select { box-sizing: border-box; width: 100%; border: 1px solid #ccd1d8; border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; }
     textarea { min-height: 160px; resize: vertical; }
+    details { border: 1px solid #edf0f4; border-radius: 8px; margin-top: 14px; padding: 10px 12px; }
+    summary { color: #596273; cursor: pointer; font-size: 13px; font-weight: 700; }
     .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .panel { background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
     .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
@@ -25,16 +27,21 @@
   <h1>Archive Quick Writer</h1>
   <section class="panel">
     <div class="grid">
-      <div><label for="title">Log title</label><input id="title" value="201~300"></div>
-      <div><label for="category">Category</label><input id="category" value="DM"></div>
       <div><label for="date">Date</label><input id="date" type="date"></div>
-      <div><label for="side">Side</label><select id="side"><option value="right">right</option><option value="left">left</option></select></div>
+      <div><label for="authorSide">Author</label><select id="authorSide"><option value="right">&#45433;&#54000; (right)</option><option value="left">&#48708;&#45768; (left)</option></select></div>
       <div><label for="image">Image path</label><input id="image" placeholder="/dekade-archive/assets/archive/...jpg"></div>
-      <div><label for="fileName">File name</label><input id="fileName" value="dm-201-300.html"></div>
     </div>
     <label for="text">Message text</label>
     <textarea id="text" placeholder="Write one bubble here."></textarea>
-    <p class="hint">Use this for one new bubble. Copy the bubble snippet into the matching file in _archive. If the date changed, copy the date divider too.</p>
+    <details>
+      <summary>New-file options</summary>
+      <div class="grid">
+        <div><label for="title">Log title</label><input id="title" value="201~300"></div>
+        <div><label for="category">Category</label><input id="category" value="DM"></div>
+        <div><label for="fileName">File name</label><input id="fileName" value="dm-201-300.html"></div>
+      </div>
+    </details>
+    <p class="hint">For a normal update, use Copy bubble and paste it into the existing _archive file. Open New-file options only when making a new subpage.</p>
     <div class="actions">
       <button id="buildBtn" type="button">Build bubble</button>
       <button class="secondary" id="copyBubbleBtn" type="button">Copy bubble</button>
@@ -58,13 +65,13 @@ function escapeAttr(value) { return escapeHtml(value).replace(/'/g, '&#39;'); }
 function yamlQuote(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
 function field(id) { return document.getElementById(id); }
 var STORAGE_KEY = 'dekade-archive-quick-writer';
-var REMEMBERED = ['title', 'category', 'side', 'image', 'fileName'];
+var REMEMBERED = ['title', 'category', 'authorSide', 'image', 'fileName'];
 function loadRemembered() { try { var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); REMEMBERED.forEach(function (id) { if (saved[id] && field(id)) field(id).value = saved[id]; }); } catch (error) {} }
 function saveRemembered() { var saved = {}; REMEMBERED.forEach(function (id) { if (field(id)) saved[id] = field(id).value; }); try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch (error) {} }
 function buildBubble() {
   saveRemembered();
   var date = field('date').value || today();
-  var side = field('side').value;
+  var side = field('authorSide').value;
   var text = field('text').value.trim();
   var image = field('image').value.trim();
   var lines = [];

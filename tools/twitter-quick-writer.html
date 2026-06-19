@@ -11,6 +11,8 @@
     label { display: block; font-size: 13px; font-weight: 700; margin: 12px 0 6px; }
     input, textarea, select { box-sizing: border-box; width: 100%; border: 1px solid #ccd1d8; border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; }
     textarea { min-height: 150px; resize: vertical; }
+    details { border: 1px solid #edf0f4; border-radius: 8px; margin-top: 14px; padding: 10px 12px; }
+    summary { color: #596273; cursor: pointer; font-size: 13px; font-weight: 700; }
     .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .panel { background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
     .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
@@ -25,9 +27,8 @@
   <h1>Twitter Quick Writer</h1>
   <section class="panel">
     <div class="grid">
-      <div><label for="month">Month file</label><input id="month" value="2026-06"></div>
       <div><label for="date">Post date</label><input id="date" type="date"></div>
-      <div><label for="author">Author</label><select id="author"><option value="비니">비니</option><option value="녹티">녹티</option></select></div>
+      <div><label for="author">Author</label><select id="author"><option value="bini">&#48708;&#45768;</option><option value="noctea">&#45433;&#54000;</option></select></div>
       <div><label for="avatar">Profile image</label><input id="avatar" placeholder="/dekade-archive/assets/twitter/2026-06/profile.jpg"></div>
       <div><label for="tags">Tags</label><input id="tags" placeholder="tag1, tag2"></div>
       <div><label for="threadId">Thread ID</label><input id="threadId" placeholder="optional"></div>
@@ -36,7 +37,13 @@
     <textarea id="text" placeholder="Write one tweet here."></textarea>
     <label for="images">Images</label>
     <textarea id="images" placeholder="One image path per line. Up to 4 images." style="min-height:90px;"></textarea>
-    <p class="hint">Use this for one tweet. Copy the snippet into _twitter/YYYY-MM.md. If this starts a new month, use the new-file skeleton.</p>
+    <details>
+      <summary>New-file options</summary>
+      <div class="grid">
+        <div><label for="month">Month file</label><input id="month" value="2026-06"></div>
+      </div>
+    </details>
+    <p class="hint">For a normal update, use Copy snippet and paste it into the existing _twitter month file. Profile image follows the author and remembers the latest path used for each author.</p>
     <div class="actions">
       <button id="buildBtn" type="button">Build tweet</button>
       <button class="secondary" id="copySnippetBtn" type="button">Copy snippet</button>
@@ -55,18 +62,27 @@
 </main>
 <script>
 function today() { return new Date().toISOString().slice(0, 10); }
-function currentMonth() { return today().slice(0, 7); }
+function monthFromDate(value) { return String(value || today()).slice(0, 7); }
 function escapeHtml(value) { return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function escapeAttr(value) { return escapeHtml(value).replace(/'/g, '&#39;'); }
 function yamlQuote(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'; }
 function field(id) { return document.getElementById(id); }
 function splitList(value) { return String(value || '').split(/[\n,;]+/).map(function (v) { return v.trim(); }).filter(Boolean); }
-function authorStyle(author) {
-  if (author === '비니') return { bg: '#e6eaf3', text: '#161732', avatar: '/dekade-archive/assets/twitter/' + field('month').value + '/bini-profile.jpg', indexAccent: '#4e4a65', indexAccentText: '#e7e3d8', indexText: '#161732', indexHover: '#ebeaef' };
-  return { bg: '#f9f5f2', text: '#4f362a', avatar: '/dekade-archive/assets/twitter/' + field('month').value + '/noctea-profile.png', indexAccent: '#e7e3d8', indexAccentText: '#4e4a65', indexText: '#4f362a', indexHover: '#f9f5f2' };
-}
+var AUTHORS = {
+  bini: { name: '\uBE44\uB2C8', bg: '#e6eaf3', text: '#161732', file: 'bini-profile.jpg', indexAccent: '#4e4a65', indexAccentText: '#e7e3d8', indexText: '#161732', indexHover: '#ebeaef' },
+  noctea: { name: '\uB179\uD2F0', bg: '#f9f5f2', text: '#4f362a', file: 'noctea-profile.png', indexAccent: '#e7e3d8', indexAccentText: '#4e4a65', indexText: '#4f362a', indexHover: '#f9f5f2' }
+};
 var STORAGE_KEY = 'dekade-twitter-quick-writer';
-var REMEMBERED = ['month', 'author', 'avatar', 'tags', 'threadId'];
+var PROFILE_KEY = 'dekade-twitter-profile-by-author';
+var REMEMBERED = ['month', 'author', 'tags', 'threadId'];
+var monthTouched = false;
+function authorStyle(code) { return AUTHORS[code] || AUTHORS.bini; }
+function defaultProfile(code) { return '/dekade-archive/assets/twitter/' + field('month').value + '/' + authorStyle(code).file; }
+function loadProfiles() { try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}'); } catch (error) { return {}; } }
+function saveProfiles(profiles) { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profiles)); } catch (error) {} }
+function profileForAuthor(code) { var profiles = loadProfiles(); return profiles[code] || defaultProfile(code); }
+function setAvatarForAuthor() { field('avatar').value = profileForAuthor(field('author').value); }
+function rememberCurrentAvatar() { var avatar = field('avatar').value.trim(); if (!avatar) return; var profiles = loadProfiles(); profiles[field('author').value] = avatar; saveProfiles(profiles); }
 function loadRemembered() { try { var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); REMEMBERED.forEach(function (id) { if (saved[id] && field(id)) field(id).value = saved[id]; }); } catch (error) {} }
 function saveRemembered() { var saved = {}; REMEMBERED.forEach(function (id) { if (field(id)) saved[id] = field(id).value; }); try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch (error) {} }
 function imageGridHtml(images) {
@@ -82,11 +98,13 @@ function imageGridHtml(images) {
 }
 function buildSnippet() {
   saveRemembered();
+  rememberCurrentAvatar();
   var date = field('date').value || today();
-  var month = field('month').value || date.slice(0, 7);
-  var author = field('author').value;
-  var style = authorStyle(author);
-  var avatar = field('avatar').value.trim() || style.avatar;
+  var month = field('month').value || monthFromDate(date);
+  var code = field('author').value;
+  var style = authorStyle(code);
+  var author = style.name;
+  var avatar = field('avatar').value.trim() || profileForAuthor(code);
   var tags = splitList(field('tags').value);
   var text = field('text').value.trim();
   var images = splitList(field('images').value).slice(0, 4);
@@ -115,14 +133,18 @@ function buildSnippet() {
 }
 function copyFrom(id) { field(id).focus(); field(id).select(); document.execCommand('copy'); field('status').textContent = 'Copied.'; }
 field('date').value = today();
-field('month').value = currentMonth();
+field('month').value = monthFromDate(field('date').value);
 loadRemembered();
-field('author').addEventListener('change', function () { var style = authorStyle(field('author').value); if (!field('avatar').value.trim()) field('avatar').value = style.avatar; saveRemembered(); });
-REMEMBERED.forEach(function (id) { if (field(id)) field(id).addEventListener('input', saveRemembered); });
+if (!field('month').value) field('month').value = monthFromDate(field('date').value);
+setAvatarForAuthor();
+field('date').addEventListener('input', function () { if (!monthTouched) { field('month').value = monthFromDate(field('date').value); setAvatarForAuthor(); } buildSnippet(); });
+field('month').addEventListener('input', function () { monthTouched = true; setAvatarForAuthor(); saveRemembered(); buildSnippet(); });
+field('author').addEventListener('change', function () { setAvatarForAuthor(); saveRemembered(); buildSnippet(); });
+field('avatar').addEventListener('input', function () { rememberCurrentAvatar(); buildSnippet(); });
+['tags', 'threadId', 'text', 'images'].forEach(function (id) { if (field(id)) field(id).addEventListener('input', buildSnippet); });
 field('buildBtn').addEventListener('click', buildSnippet);
 field('copySnippetBtn').addEventListener('click', function () { copyFrom('snippetOutput'); });
 field('copyFileBtn').addEventListener('click', function () { copyFrom('fileOutput'); });
-if (!field('avatar').value.trim()) field('avatar').value = authorStyle(field('author').value).avatar;
 buildSnippet();
 </script>
 </body>
