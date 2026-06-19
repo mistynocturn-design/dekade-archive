@@ -2337,7 +2337,7 @@ a.sidebar-nav-item:focus {
 }
 
 .character-info-list div {
-  column-gap: .52rem;
+  column-gap: .38rem;
   row-gap: .08rem;
 }
 
@@ -2373,7 +2373,7 @@ a.sidebar-nav-item:focus {
 }
 /* Character profile label alignment */
 .character-info-list div {
-  grid-template-columns: 5.8rem minmax(0, 1fr);
+  grid-template-columns: 3.6rem minmax(0, 1fr);
 }
 
 .character-info-list dt {
