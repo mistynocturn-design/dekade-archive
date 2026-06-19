@@ -1726,3 +1726,9 @@ a.sidebar-nav-item:focus {
   color: #888;
   margin-left: .25rem;
 }
+/* Character detail tool placement */
+.character-detail-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin: -1.2rem 0 .6rem;
+}

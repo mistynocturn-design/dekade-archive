@@ -3,6 +3,9 @@ layout: default
 ---
 
 <article class="character-page" style="--character-accent: {{ page.accent | default: '#4e4a65' }}; --character-soft: {{ page.soft | default: '#e7e3d8' }}; --character-ink: {{ page.ink | default: '#161732' }};">
+  <div class="character-detail-tools">
+    <a class="character-tool-button" href="{{ site.baseurl }}/tools/character-wiki-builder.html" target="_blank" rel="noopener" aria-label="Open character wiki builder" title="Open character wiki builder">+</a>
+  </div>
   <header class="character-header">
     <p class="character-kicker">Character Wiki</p>
     <h1>{{ page.title }}</h1>
