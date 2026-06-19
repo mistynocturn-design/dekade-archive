@@ -38,6 +38,7 @@ profile_groups:
       - label: "생일"
         value: "11월 7일"
         note: "(메리골드 / 피트 앰버 / 호두나무 / 전갈자리)"
+        note_break: true
       - label: "MBTI"
         value: "ESTJ-T"
       - label: "직업"
