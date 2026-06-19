@@ -1375,3 +1375,317 @@ a.sidebar-nav-item:focus {
   border-color: #161732;
   color: #e6eaf3;
 }
+/* Character wiki */
+.character-index {
+  display: grid;
+  gap: 1.05rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin-top: 1.25rem;
+}
+
+.character-card {
+  margin: 0;
+}
+
+.content .character-card-link {
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  color: inherit;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.content .character-card-link:hover,
+.content .character-card-link:focus {
+  background: var(--character-soft, #e7e3d8);
+  border-color: color-mix(in srgb, var(--character-accent, #4e4a65) 24%, transparent);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.character-card-image {
+  aspect-ratio: 1 / 1;
+  background: #e9edf0;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.character-card-placeholder,
+.character-portrait-placeholder {
+  align-items: center;
+  color: var(--character-accent, #4e4a65);
+  display: flex;
+  font-size: 2rem;
+  font-weight: 800;
+  justify-content: center;
+}
+
+.character-card-body {
+  padding: .75rem .82rem .86rem;
+}
+
+.character-card-role,
+.character-kicker {
+  color: color-mix(in srgb, var(--character-accent, #4e4a65) 72%, transparent);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 .24rem;
+  text-transform: uppercase;
+}
+
+.character-card h2 {
+  color: var(--character-ink, #161732);
+  font-size: 1.05rem;
+  margin: 0 0 .48rem;
+}
+
+.character-card-facts,
+.character-quick-facts,
+.character-info-list {
+  display: grid;
+  gap: .28rem;
+  margin: 0;
+}
+
+.character-card-facts div,
+.character-quick-facts div,
+.character-info-list div {
+  display: grid;
+  gap: .35rem;
+  grid-template-columns: 4.6rem 1fr;
+}
+
+.character-card-facts dt,
+.character-quick-facts dt,
+.character-info-list dt {
+  color: #8a8a8a;
+  font-size: .68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.character-card-facts dd,
+.character-quick-facts dd,
+.character-info-list dd {
+  font-size: .76rem;
+  margin: 0;
+}
+
+.character-header {
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 1rem;
+  padding-bottom: .85rem;
+}
+
+.character-header h1 {
+  color: var(--character-ink, #161732);
+  margin-bottom: .25rem;
+}
+
+.character-subtitle {
+  color: #777;
+  font-size: .84rem;
+  margin: 0;
+}
+
+.character-mini-tabs {
+  align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  gap: 1.1rem;
+  margin: 0 0 1.25rem;
+  overflow-x: auto;
+}
+
+.character-mini-tab {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: #777;
+  cursor: pointer;
+  font-size: .78rem;
+  font-weight: 800;
+  padding: .48rem 0 .52rem;
+  text-transform: uppercase;
+}
+
+.character-mini-tab.active {
+  border-bottom-color: var(--character-accent, #4e4a65);
+  color: var(--character-ink, #161732);
+}
+
+.character-panel {
+  display: none;
+}
+
+.character-panel.active {
+  display: block;
+}
+
+.character-profile-grid,
+.character-status-layout {
+  display: grid;
+  gap: 1.35rem;
+  grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+}
+
+.character-portrait-card,
+.character-status-card,
+.character-wiki-box,
+.character-stat-box,
+.character-memo-card {
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: .85rem;
+}
+
+.character-portrait,
+.character-status-image {
+  aspect-ratio: 1 / 1;
+  background: #e9edf0;
+  border-radius: 6px;
+  display: block;
+  margin-bottom: .8rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.character-section-title {
+  background: var(--character-accent, #4e4a65);
+  color: var(--character-soft, #e7e3d8);
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 800;
+  margin: 0 0 .65rem;
+  padding: .18rem .5rem;
+  text-transform: uppercase;
+}
+
+.character-section-title:not(:first-child) {
+  margin-top: .9rem;
+}
+
+.character-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .36rem;
+}
+
+.character-keywords span {
+  background: var(--character-soft, #e7e3d8);
+  border-radius: 999px;
+  color: var(--character-ink, #161732);
+  font-size: .74rem;
+  font-weight: 700;
+  padding: .22rem .52rem;
+}
+
+.character-markdown {
+  border-top: 1px solid #eeeeee;
+  font-size: .86rem;
+  line-height: 1.7;
+  margin-top: 1rem;
+  padding-top: .85rem;
+}
+
+.character-stat-list {
+  display: grid;
+  gap: .7rem;
+}
+
+.character-stat-row {
+  align-items: center;
+  display: grid;
+  gap: .55rem;
+  grid-template-columns: 5rem 1fr 2.5rem;
+}
+
+.character-stat-row span,
+.character-stat-row strong {
+  font-size: .78rem;
+}
+
+.character-stat-track {
+  background: #edf0f4;
+  border-radius: 999px;
+  height: .58rem;
+  overflow: hidden;
+}
+
+.character-stat-track i {
+  background: var(--character-accent, #4e4a65);
+  display: block;
+  height: 100%;
+}
+
+.character-timeline {
+  border-left: 2px solid color-mix(in srgb, var(--character-accent, #4e4a65) 35%, transparent);
+  display: grid;
+  gap: 1rem;
+  margin-left: .7rem;
+  padding-left: 1rem;
+}
+
+.character-timeline-item {
+  border-bottom: 1px solid #eeeeee;
+  padding: .2rem 0 1rem;
+  position: relative;
+}
+
+.character-timeline-item::before {
+  background: var(--character-accent, #4e4a65);
+  border-radius: 999px;
+  content: "";
+  height: .55rem;
+  left: -1.35rem;
+  position: absolute;
+  top: .45rem;
+  width: .55rem;
+}
+
+.character-timeline-item time,
+.character-memo-card time {
+  color: #9a9a9a;
+  display: block;
+  font-size: .72rem;
+  font-weight: 700;
+  margin-bottom: .24rem;
+}
+
+.character-timeline-item h2 {
+  color: var(--character-ink, #161732);
+  font-size: 1rem;
+  margin: 0 0 .35rem;
+}
+
+.character-timeline-item p,
+.character-memo-card p {
+  font-size: .84rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.character-memo-list {
+  display: grid;
+  gap: .72rem;
+}
+
+@media (max-width: 760px) {
+  .character-profile-grid,
+  .character-status-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .character-card-facts div,
+  .character-quick-facts div,
+  .character-info-list div,
+  .character-stat-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,124 @@
+---
+layout: default
+---
+
+<article class="character-page" style="--character-accent: {{ page.accent | default: '#4e4a65' }}; --character-soft: {{ page.soft | default: '#e7e3d8' }}; --character-ink: {{ page.ink | default: '#161732' }};">
+  <header class="character-header">
+    <p class="character-kicker">Character Wiki</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="character-subtitle">{{ page.subtitle }}</p>{% endif %}
+  </header>
+
+  <nav class="character-mini-tabs" aria-label="Character sections">
+    <button class="character-mini-tab active" type="button" data-character-tab="profile">Profile</button>
+    {% if page.stats %}<button class="character-mini-tab" type="button" data-character-tab="status">Status</button>{% endif %}
+    {% if page.story %}<button class="character-mini-tab" type="button" data-character-tab="story">Story</button>{% endif %}
+    {% if page.memo %}<button class="character-mini-tab" type="button" data-character-tab="memo">Memo</button>{% endif %}
+  </nav>
+
+  <section class="character-panel active" data-character-panel="profile">
+    <div class="character-profile-grid">
+      <aside class="character-portrait-card">
+        {% if page.profile_image %}
+          <img class="character-portrait" src="{{ page.profile_image | relative_url }}" alt="">
+        {% elsif page.card_image %}
+          <img class="character-portrait" src="{{ page.card_image | relative_url }}" alt="">
+        {% else %}
+          <div class="character-portrait character-portrait-placeholder">{{ page.title | slice: 0 }}</div>
+        {% endif %}
+        <dl class="character-quick-facts">
+          {% for fact in page.card_facts %}
+            <div><dt>{{ fact.label }}</dt><dd>{{ fact.value }}</dd></div>
+          {% endfor %}
+        </dl>
+      </aside>
+
+      <div class="character-wiki-box">
+        {% if page.profile %}
+          <div class="character-section-title">Name</div>
+          <dl class="character-info-list">
+            {% for item in page.profile %}
+              <div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>
+            {% endfor %}
+          </dl>
+        {% endif %}
+        {% if page.keywords %}
+          <div class="character-section-title">Keyword</div>
+          <div class="character-keywords">
+            {% for keyword in page.keywords %}<span>{{ keyword }}</span>{% endfor %}
+          </div>
+        {% endif %}
+        {% if content != blank %}
+          <div class="character-markdown">{{ content }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {% if page.stats %}
+  <section class="character-panel" data-character-panel="status">
+    <div class="character-status-layout">
+      <aside class="character-status-card">
+        {% if page.card_image %}<img class="character-status-image" src="{{ page.card_image | relative_url }}" alt="">{% endif %}
+        <h2>{{ page.title }}</h2>
+        {% if page.role %}<p>{{ page.role }}</p>{% endif %}
+      </aside>
+      <div class="character-stat-box">
+        <h2>Status</h2>
+        <div class="character-stat-list">
+          {% for stat in page.stats %}
+            <div class="character-stat-row">
+              <span>{{ stat.label }}</span>
+              <div class="character-stat-track"><i style="width: {{ stat.value }}%;"></i></div>
+              <strong>{{ stat.value }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.story %}
+  <section class="character-panel" data-character-panel="story">
+    <div class="character-timeline">
+      {% for item in page.story %}
+        <article class="character-timeline-item">
+          {% if item.date %}<time>{{ item.date }}</time>{% endif %}
+          <h2>{{ item.title }}</h2>
+          <p>{{ item.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.memo %}
+  <section class="character-panel" data-character-panel="memo">
+    <div class="character-memo-list">
+      {% for item in page.memo %}
+        <article class="character-memo-card">
+          {% if item.date %}<time>{{ item.date }}</time>{% endif %}
+          <p>{{ item.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</article>
+
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  if (!root || !root.classList.contains('character-page')) return;
+  var tabs = Array.prototype.slice.call(root.querySelectorAll('.character-mini-tab'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('.character-panel'));
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var id = tab.getAttribute('data-character-tab');
+      tabs.forEach(function (item) { item.classList.toggle('active', item === tab); });
+      panels.forEach(function (panel) { panel.classList.toggle('active', panel.getAttribute('data-character-panel') === id); });
+    });
+  });
+})();
+</script>
