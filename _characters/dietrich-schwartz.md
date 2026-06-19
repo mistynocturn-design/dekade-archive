@@ -79,4 +79,5 @@ profile_details:
       - "assets/characters/dietrich/emotion/05.png"
       - "assets/characters/dietrich/emotion/06.png"
       - "assets/characters/dietrich/emotion/07.png"
+      - "assets/characters/dietrich/emotion/08.png"
 ---
