@@ -600,19 +600,36 @@ function startEdit(type, a, b) {
 function renderItems() {
   var list = el('itemList');
   var html = '';
-  data.facts.forEach(function (item, index) { html += renderItem('Card fact', item.label + ' | ' + item.value, 'fact', index); });
-  data.groups.forEach(function (group, groupIndex) {
-    group.items.forEach(function (item, itemIndex) {
-      var body = group.style === 'keywords' ? item.value : item.label + ' | ' + item.value + (item.note ? ' (' + item.note + ')' : '');
-      html += renderItem(group.title, body, 'groupItem', groupIndex, itemIndex);
+  var tab = getActiveBuilderTab();
+  if (tab === 'facts') {
+    data.facts.forEach(function (item, index) { html += renderItem('Card fact', item.label + ' | ' + item.value, 'fact', index); });
+  }
+  if (tab === 'profile' || tab === 'keyword') {
+    data.groups.forEach(function (group, groupIndex) {
+      if (tab === 'profile' && group.style === 'keywords') return;
+      if (tab === 'keyword' && group.style !== 'keywords') return;
+      group.items.forEach(function (item, itemIndex) {
+        var body = group.style === 'keywords' ? item.value : item.label + ' | ' + item.value + (item.note ? ' (' + item.note + ')' : '');
+        html += renderItem(group.title, body, 'groupItem', groupIndex, itemIndex);
+      });
     });
-  });
-  data.details.forEach(function (item, index) { html += renderItem(item.type === 'section' ? 'Detail section' : 'Detail', item.title + (item.images && item.images.length ? ' | images: ' + item.images.length : ''), 'detail', index); });
-  data.stats.forEach(function (item, index) { html += renderItem('Status', item.label + ' | ' + item.value, 'stat', index); });
-  data.story.forEach(function (item, index) { html += renderItem('Story', (item.date ? item.date + ' | ' : '') + item.title, 'story', index); });
-  data.aus.forEach(function (item, index) { html += renderItem('AU', item.title + (item.subtitle ? ' | ' + item.subtitle : ''), 'au', index); });
-  data.memo.forEach(function (item, index) { html += renderItem('Memo', (item.date ? item.date + ' | ' : '') + item.text, 'memo', index); });
-  list.innerHTML = html || '<p class="small">No items yet.</p>';
+  }
+  if (tab === 'details') {
+    data.details.forEach(function (item, index) { html += renderItem(item.type === 'section' ? 'Detail section' : 'Detail', item.title + (item.images && item.images.length ? ' | images: ' + item.images.length : ''), 'detail', index); });
+  }
+  if (tab === 'status') {
+    data.stats.forEach(function (item, index) { html += renderItem('Status', item.label + ' | ' + item.value, 'stat', index); });
+  }
+  if (tab === 'story') {
+    data.story.forEach(function (item, index) { html += renderItem('Story', (item.date ? item.date + ' | ' : '') + item.title, 'story', index); });
+  }
+  if (tab === 'au') {
+    data.aus.forEach(function (item, index) { html += renderItem('AU', item.title + (item.subtitle ? ' | ' + item.subtitle : ''), 'au', index); });
+  }
+  if (tab === 'memo') {
+    data.memo.forEach(function (item, index) { html += renderItem('Memo', (item.date ? item.date + ' | ' : '') + item.text, 'memo', index); });
+  }
+  list.innerHTML = html || '<p class="small">No items in this tab yet.</p>';
 }
 function renderItem(label, body, type, a, b) {
   var bValue = b == null ? '' : b;
@@ -878,6 +895,7 @@ document.querySelectorAll('.tab').forEach(function (tab) {
     document.querySelectorAll('.tab').forEach(function (item) { item.classList.toggle('active', item === tab); });
     document.querySelectorAll('.builder-panel').forEach(function (panel) { panel.classList.toggle('active', panel.dataset.panel === tab.dataset.tab); });
     renderPreview();
+    renderItems();
   });
 });
 el('addFactBtn').addEventListener('click', addFact);
