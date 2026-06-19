@@ -461,6 +461,57 @@ function imageHtml(src, fallback) {
   if (previewSrc) return '<img src="' + escapeHtml(previewSrc) + '" alt="">';
   return escapeHtml((fallback || 'C').slice(0, 1));
 }
+function getActiveBuilderTab() {
+  var active = document.querySelector('.tab.active');
+  return active ? active.dataset.tab : 'facts';
+}
+function renderFactsHtml(facts) {
+  return (facts || []).map(function (fact) {
+    return '<div><dt>' + escapeHtml(fact.label) + '</dt><dd>' + escapeHtml(fact.value) + '</dd></div>';
+  }).join('');
+}
+function renderGroupsHtml(groups) {
+  return (groups || []).map(function (group) {
+    if (group.style === 'keywords') {
+      return '<div class="section-title">' + escapeHtml(group.title) + '</div><div class="keywords">' + group.items.map(function (item) { return '<span>' + escapeHtml(item.value) + '</span>'; }).join('') + '</div>';
+    }
+    return '<div class="section-title">' + escapeHtml(group.title) + '</div><dl class="info-list">' + group.items.map(function (item) { return '<div><dt>' + escapeHtml(item.label) + '</dt><dd>' + escapeHtml(item.value) + (item.note ? '<span class="note">' + escapeHtml(item.note) + '</span>' : '') + '</dd></div>'; }).join('') + '</dl>';
+  }).join('');
+}
+function renderDetailsHtml(details, title) {
+  if (!details || !details.length) return '<div class="wiki-preview"><div class="section-title">' + escapeHtml(title || 'Details') + '</div><p class="small">No detail toggles yet.</p></div>';
+  return '<div class="wiki-preview"><div class="section-title">' + escapeHtml(title || 'Details') + '</div>' + details.map(function (detail) {
+    var images = (detail.images || []).map(function (src) { return '<div class="portrait">' + imageHtml(src, '') + '</div>'; }).join('');
+    if (detail.type === 'section') return '<div class="section-title">' + escapeHtml(detail.title) + '</div>';
+    return '<details ' + (detail.open ? 'open' : '') + '><summary class="item-title">' + escapeHtml(detail.title) + '</summary><div class="small" style="margin:.5rem 0; white-space:pre-wrap">' + escapeHtml(detail.text || '') + '</div>' + (images ? '<div class="wiki-grid" style="grid-template-columns:repeat(auto-fit,minmax(90px,1fr))">' + images + '</div>' : '') + '</details>';
+  }).join('') + '</div>';
+}
+function renderStatsHtml() {
+  if (!data.stats.length) return '<div class="wiki-preview"><div class="section-title">Status</div><p class="small">No status stats yet.</p></div>';
+  return '<div class="wiki-preview"><div class="section-title">Status</div><div class="bars">' + data.stats.map(function (stat) { return '<div class="bar"><span>' + escapeHtml(stat.label) + '</span><div class="track"><i style="width:' + stat.value + '%"></i></div><strong>' + stat.value + '</strong></div>'; }).join('') + '</div></div>';
+}
+function renderStoryHtml() {
+  if (!data.story.length) return '<div class="wiki-preview"><div class="section-title">Story</div><p class="small">No story items yet.</p></div>';
+  return '<div class="wiki-preview"><div class="section-title">Story</div>' + data.story.map(function (item) { return '<div class="item"><div class="small">' + escapeHtml(item.date || '') + '</div><div class="item-title">' + escapeHtml(item.title) + '</div><div class="small" style="white-space:pre-wrap">' + escapeHtml(item.text) + '</div></div>'; }).join('') + '</div>';
+}
+function renderMemoHtml() {
+  if (!data.memo.length) return '<div class="wiki-preview"><div class="section-title">Memo</div><p class="small">No memo items yet.</p></div>';
+  return '<div class="wiki-preview"><div class="section-title">Memo</div>' + data.memo.map(function (item) { return '<div class="item"><div class="small">' + escapeHtml(item.date || '') + '</div><div class="small" style="white-space:pre-wrap">' + escapeHtml(item.text) + '</div></div>'; }).join('') + '</div>';
+}
+function renderAuHtml() {
+  if (!data.aus.length) return '<div class="wiki-preview"><div class="section-title">AU</div><p class="small">No AU cards yet.</p></div>';
+  var cards = '<div class="wiki-preview"><div class="section-title">AU gallery</div><div class="wiki-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">' + data.aus.map(function (au) {
+    return '<div class="preview-card"><div class="preview-card-img">' + imageHtml(au.image, au.title) + '</div><div class="preview-card-body"><p class="preview-role">' + escapeHtml(au.subtitle || 'AU') + '</p><h3>' + escapeHtml(au.title) + '</h3><p class="small">' + escapeHtml(au.summary || '') + '</p></div></div>';
+  }).join('') + '</div></div>';
+  var au = data.aus[data.aus.length - 1];
+  var facts = au.facts && au.facts.length ? au.facts : [{ label: 'Info', value: '' }];
+  var meta = getMeta();
+  var detail = '<div class="wiki-preview"><div class="section-title">Latest AU detail</div><div class="wiki-grid"><div><div class="portrait">' + imageHtml(au.image || meta.profileImage || meta.cardImage, au.title) + '</div><dl class="preview-facts" style="margin-top:10px">' + renderFactsHtml(facts) + '</dl></div><div>' + (renderGroupsHtml(au.groups) || '<p class="small">No AU profile rows yet.</p>') + '</div></div></div>' + renderDetailsHtml(au.details, 'AU details');
+  return cards + detail;
+}
+function renderProfileHtml(meta, facts, groups) {
+  return '<div class="wiki-preview"><div class="section-title">Profile</div><div class="wiki-grid"><div><div class="portrait">' + imageHtml(meta.profileImage || meta.cardImage, meta.title) + '</div><dl class="preview-facts" style="margin-top:10px">' + renderFactsHtml(facts) + '</dl></div><div>' + (groups || '<p class="small">Add profile items to preview the wiki box.</p>') + '</div></div></div>' + renderDetailsHtml(data.details, 'Profile details');
+}
 function renderPreview() {
   var meta = getMeta();
   document.documentElement.style.setProperty('--accent', meta.accent);
@@ -468,23 +519,20 @@ function renderPreview() {
   document.documentElement.style.setProperty('--ink', meta.ink);
   document.documentElement.style.setProperty('--tab-color', meta.tabColor);
   var facts = data.facts.length ? data.facts : [{label:'Gender',value:''},{label:'Age',value:''},{label:'Height',value:''}];
-  var cardFacts = facts.slice(0, 3).map(function (fact) { return '<div><dt>' + escapeHtml(fact.label) + '</dt><dd>' + escapeHtml(fact.value) + '</dd></div>'; }).join('');
-  var quickFacts = facts.map(function (fact) { return '<div><dt>' + escapeHtml(fact.label) + '</dt><dd>' + escapeHtml(fact.value) + '</dd></div>'; }).join('');
-  var groups = data.groups.map(function (group) {
-    if (group.style === 'keywords') {
-      return '<div class="section-title">' + escapeHtml(group.title) + '</div><div class="keywords">' + group.items.map(function (item) { return '<span>' + escapeHtml(item.value) + '</span>'; }).join('') + '</div>';
-    }
-    return '<div class="section-title">' + escapeHtml(group.title) + '</div><dl class="info-list">' + group.items.map(function (item) { return '<div><dt>' + escapeHtml(item.label) + '</dt><dd>' + escapeHtml(item.value) + (item.note ? '<span class="note">' + escapeHtml(item.note) + '</span>' : '') + '</dd></div>'; }).join('') + '</dl>';
-  }).join('');
-  var details = data.details.length ? '<div class="wiki-preview"><div class="section-title">Details</div>' + data.details.map(function (detail) {
-    var images = (detail.images || []).map(function (src) { return '<div class="portrait">' + imageHtml(src, '') + '</div>'; }).join('');
-    if (detail.type === 'section') return '<div class="section-title">' + escapeHtml(detail.title) + '</div>';
-    return '<details ' + (detail.open ? 'open' : '') + '><summary class="item-title">' + escapeHtml(detail.title) + '</summary><div class="small" style="margin:.5rem 0; white-space:pre-wrap">' + escapeHtml(detail.text || '') + '</div>' + (images ? '<div class="wiki-grid" style="grid-template-columns:repeat(auto-fit,minmax(90px,1fr))">' + images + '</div>' : '') + '</details>';
-  }).join('') + '</div>' : '';
-  var stats = data.stats.length ? '<div class="wiki-preview"><div class="section-title">Status</div><div class="bars">' + data.stats.map(function (stat) { return '<div class="bar"><span>' + escapeHtml(stat.label) + '</span><div class="track"><i style="width:' + stat.value + '%"></i></div><strong>' + stat.value + '</strong></div>'; }).join('') + '</div></div>' : '';
-  el('preview').innerHTML = '<div class="preview-card"><div class="preview-card-img">' + imageHtml(meta.cardImage, meta.title) + '</div><div class="preview-card-body"><p class="preview-role">' + escapeHtml(meta.role || 'Role') + '</p><h3>' + escapeHtml(meta.title) + '</h3><dl class="preview-facts">' + cardFacts + '</dl></div></div><div class="wiki-preview"><div class="wiki-grid"><div><div class="portrait">' + imageHtml(meta.profileImage || meta.cardImage, meta.title) + '</div><dl class="preview-facts" style="margin-top:10px">' + quickFacts + '</dl></div><div>' + (groups || '<p class="small">Add profile items to preview the wiki box.</p>') + '</div></div></div>' + details + stats;
-}
-function buildMarkdown() {
+  var cardFacts = renderFactsHtml(facts.slice(0, 3));
+  var groups = renderGroupsHtml(data.groups);
+  var activeTab = getActiveBuilderTab();
+  var card = '<div class="preview-card"><div class="preview-card-img">' + imageHtml(meta.cardImage, meta.title) + '</div><div class="preview-card-body"><p class="preview-role">' + escapeHtml(meta.role || 'Role') + '</p><h3>' + escapeHtml(meta.title) + '</h3><dl class="preview-facts">' + cardFacts + '</dl></div></div>';
+  var body = '';
+  if (activeTab === 'facts') body = card + renderProfileHtml(meta, facts, groups);
+  if (activeTab === 'profile' || activeTab === 'keyword') body = renderProfileHtml(meta, facts, groups);
+  if (activeTab === 'details') body = renderDetailsHtml(data.details, 'Profile details');
+  if (activeTab === 'status') body = renderStatsHtml();
+  if (activeTab === 'story') body = renderStoryHtml();
+  if (activeTab === 'au') body = renderAuHtml();
+  if (activeTab === 'memo') body = renderMemoHtml();
+  el('preview').innerHTML = body || card;
+}function buildMarkdown() {
   var meta = getMeta();
   var lines = ['---'];
   lines.push('layout: character');
@@ -653,6 +701,7 @@ document.querySelectorAll('.tab').forEach(function (tab) {
   tab.addEventListener('click', function () {
     document.querySelectorAll('.tab').forEach(function (item) { item.classList.toggle('active', item === tab); });
     document.querySelectorAll('.builder-panel').forEach(function (panel) { panel.classList.toggle('active', panel.dataset.panel === tab.dataset.tab); });
+    renderPreview();
   });
 });
 el('addFactBtn').addEventListener('click', addFact);
