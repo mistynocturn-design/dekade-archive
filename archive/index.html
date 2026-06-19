@@ -5,6 +5,7 @@ title: Archive
 
 <div class="archive-page-tools">
   <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener" aria-label="Open converter" title="Open converter">+</a>
+  <a class="archive-tool-button archive-writer-button" href="{{ site.baseurl }}/tools/archive-quick-writer.html" target="_blank" rel="noopener" aria-label="Open quick writer" title="Open quick writer">w</a>
 </div>
 <nav class="archive-tabs" aria-label="Archive categories">
   {% for category in site.data.archive_categories %}
@@ -77,7 +78,8 @@ title: Archive
   }{% unless forloop.last %},{% endunless %}
 {% endfor %}
 ]
-
+</script>
+<script>
 (function () {
   var dataElement = document.getElementById('archiveSearchData');
   var keywordInput = document.getElementById('archiveSearchKeyword');

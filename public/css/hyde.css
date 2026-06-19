@@ -1278,3 +1278,15 @@ a.sidebar-nav-item:focus {
     grid-template-columns: 1fr;
   }
 }
+/* Tool shortcut groups */
+.archive-page-tools,
+.twitter-page-tools {
+  gap: .35rem;
+}
+
+.content .archive-writer-button,
+.content .twitter-writer-button {
+  font-size: .68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
