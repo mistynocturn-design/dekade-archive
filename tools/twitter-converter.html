@@ -128,6 +128,36 @@ function parseAuthorStyles() {
   return map;
 }
 
+function indexColorsForAuthor(author) {
+  if (author === '\uBE44\uB2C8') return { accent: '#4e4a65', text: '#e7e3d8' };
+  if (author === '\uB179\uD2F0') return { accent: '#e7e3d8', text: '#4e4a65' };
+  return { accent: '#4e4a65', text: '#e7e3d8' };
+}
+
+function dominantAuthorForRows(items, threadMeta, currentMonth) {
+  var counts = {};
+  var order = [];
+  items.forEach(function (item) {
+    if (item.threadId) {
+      var meta = threadMeta[item.threadId];
+      if (currentMonth && (!meta || meta.ownerMonth !== currentMonth)) return;
+    } else if (currentMonth && item.writtenMonth !== currentMonth) return;
+
+    var author = String(item.row[1] || '').trim();
+    if (!author) return;
+    if (!counts[author]) {
+      counts[author] = 0;
+      order.push(author);
+    }
+    counts[author] += 1;
+  });
+
+  return order.sort(function (a, b) {
+    if (counts[a] !== counts[b]) return counts[b] - counts[a];
+    return order.indexOf(a) - order.indexOf(b);
+  })[0] || '';
+}
+
 function imageGridHtml(images) {
   if (!images.length) return '';
   var html = [];
@@ -219,6 +249,8 @@ function buildOutput() {
   var allTags = [];
   var styles = parseAuthorStyles();
   var blockItems = [];
+  var dominantAuthor = '';
+  var indexColors = indexColorsForAuthor('');
   var usedThreadIds = {};
 
   indexed.forEach(function (item) {
@@ -275,6 +307,9 @@ function buildOutput() {
     return b.index - a.index;
   });
 
+  dominantAuthor = dominantAuthorForRows(indexed, threadMeta, currentMonth);
+  indexColors = indexColorsForAuthor(dominantAuthor);
+
   var blocks = blockItems.map(function (item) { return item.html; }).filter(Boolean);
   var frontMatter = [
     '---',
@@ -282,6 +317,9 @@ function buildOutput() {
     'title: ' + yamlQuote(document.getElementById('title').value),
     'date: ' + document.getElementById('date').value,
     'twitter_font_size: ' + yamlQuote(document.getElementById('fontSize').value),
+    'twitter_dominant_author: ' + yamlQuote(dominantAuthor),
+    'twitter_accent: ' + yamlQuote(indexColors.accent),
+    'twitter_accent_text: ' + yamlQuote(indexColors.text),
     'tags:'
   ];
   if (allTags.length) allTags.forEach(function (tag) { frontMatter.push('  - ' + yamlQuote(tag)); });

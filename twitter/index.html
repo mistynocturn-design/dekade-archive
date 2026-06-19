@@ -9,7 +9,7 @@ title: Twitter
 <div class="twitter-index">
   {% assign months = site.twitter | sort: "date" | reverse %}
   {% for month in months %}
-    <article class="twitter-month-card">
+    <article class="twitter-month-card" style="--twitter-index-accent: {{ month.twitter_accent | default: '#4e4a65' }}; --twitter-index-accent-text: {{ month.twitter_accent_text | default: '#e7e3d8' }};">
       <a class="twitter-month-link" href="{{ month.url | relative_url }}">
         <div class="twitter-month-profile">
           <div class="twitter-month-avatar twitter-author-placeholder">{{ month.date | date: "%m" }}</div>

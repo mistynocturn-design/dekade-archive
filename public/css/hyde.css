@@ -1137,3 +1137,12 @@ a.sidebar-nav-item:focus {
 .twitter-thread .twitter-note .twitter-note-tags {
   top: .5rem;
 }
+/* Twitter index dominant author colors */
+.twitter-month-card .twitter-month-avatar {
+  background: var(--twitter-index-accent, #4e4a65);
+  color: var(--twitter-index-accent-text, #e7e3d8);
+}
+
+.twitter-month-card .twitter-index-tags span {
+  color: var(--twitter-index-accent, #4e4a65);
+}
