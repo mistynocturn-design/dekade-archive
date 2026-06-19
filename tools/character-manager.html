@@ -234,10 +234,50 @@
 <script>
 var STORAGE_KEY = 'dekade-character-manager-drafts-v2';
 var data = { facts: [], groups: [], details: [], stats: [], story: [], memo: [], aus: [] };
+var editing = null;
 var fields = ['title','fileName','order','subtitle','role','cardImage','profileImage','accent','soft','ink','tabColor'];
 function el(id) { return document.getElementById(id); }
 function val(id) { return el(id).value.trim(); }
-function setVal(id, value) { el(id).value = value || ''; }
+function setVal(id, value) { el(id).value = value || ''; }function setActiveTab(name) {
+  document.querySelectorAll('.tab').forEach(function (tab) { tab.classList.toggle('active', tab.dataset.tab === name); });
+  document.querySelectorAll('.builder-panel').forEach(function (panel) { panel.classList.toggle('active', panel.dataset.panel === name); });
+  renderPreview();
+}
+function resetEditButtons() {
+  var labels = {
+    addFactBtn: 'Add card fact',
+    addProfileBtn: 'Add profile item',
+    addKeywordBtn: 'Add keyword',
+    addDetailSectionBtn: 'Add section title',
+    addDetailBtn: 'Add detail toggle',
+    addStatBtn: 'Add status stat',
+    addStoryBtn: 'Add story item',
+    addAuBtn: 'Add AU card',
+    addMemoBtn: 'Add memo item'
+  };
+  Object.keys(labels).forEach(function (id) { if (el(id)) el(id).textContent = labels[id]; });
+}
+function beginEdit(kind, a, b) {
+  editing = { kind: kind, a: a, b: b };
+  resetEditButtons();
+}
+function finishEdit(message) {
+  editing = null;
+  resetEditButtons();
+  updateAll(message || 'Updated.');
+}
+function splitRows(items, formatter) {
+  return (items || []).map(formatter).join('\n');
+}
+function detailsToText(details) {
+  return (details || []).map(function (detail) {
+    if (detail.type === 'section') return 'section|' + (detail.title || 'SECTION');
+    var lines = ['toggle|' + (detail.title || 'Detail') + (detail.open ? '|open' : '')];
+    if (detail.text) String(detail.text).split(/\r?\n/).forEach(function (line) { lines.push('text|' + line); });
+    (detail.images || []).forEach(function (image) { lines.push('image|' + image); });
+    return lines.join('\n');
+  }).join('\n---\n');
+}
 function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, function (ch) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]); }); }
 function quoteYaml(value) { return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\r?\n/g, '\\n') + '"'; }
 function slugify(value) {
@@ -274,59 +314,122 @@ function addFact() {
   var label = val('factLabel');
   var value = val('factValue');
   if (!label && !value) return;
-  data.facts.push({ label: label || 'Label', value: value });
+  var item = { label: label || 'Label', value: value };
+  if (editing && editing.kind === 'fact') {
+    data.facts[editing.a] = item;
+    setVal('factLabel', ''); setVal('factValue', '');
+    finishEdit('Updated card fact.');
+    return;
+  }
+  data.facts.push(item);
   setVal('factLabel', ''); setVal('factValue', '');
   updateAll('Added card fact.');
-}
-function addProfile() {
-  var group = findGroup(val('profileGroup') || 'PROFILE', '');
+}function addProfile() {
+  var groupTitle = val('profileGroup') || 'PROFILE';
+  var group = findGroup(groupTitle, '');
   var label = val('profileLabel');
   var value = val('profileValue');
   var note = val('profileNote');
   if (!label && !value && !note) return;
-  group.items.push({ label: label || 'Item', value: value, note: note });
+  var item = { label: label || 'Item', value: value, note: note };
+  if (editing && editing.kind === 'groupItem') {
+    var oldGroup = data.groups[editing.a];
+    if (oldGroup && oldGroup.title === groupTitle && (oldGroup.style || '') === '') {
+      oldGroup.items[editing.b] = item;
+    } else {
+      if (oldGroup) {
+        oldGroup.items.splice(editing.b, 1);
+        if (!oldGroup.items.length) data.groups.splice(editing.a, 1);
+      }
+      group.items.push(item);
+    }
+    setVal('profileLabel', ''); setVal('profileValue', ''); setVal('profileNote', '');
+    finishEdit('Updated profile item.');
+    return;
+  }
+  group.items.push(item);
   setVal('profileLabel', ''); setVal('profileValue', ''); setVal('profileNote', '');
   updateAll('Added profile item.');
-}
-function addKeyword() {
+}function addKeyword() {
   var value = val('keywordValue');
   if (!value) return;
-  findGroup(val('keywordGroup') || 'KEYWORD', 'keywords').items.push({ value: value });
+  var groupTitle = val('keywordGroup') || 'KEYWORD';
+  var group = findGroup(groupTitle, 'keywords');
+  var item = { value: value };
+  if (editing && editing.kind === 'groupItem') {
+    var oldGroup = data.groups[editing.a];
+    if (oldGroup && oldGroup.title === groupTitle && oldGroup.style === 'keywords') {
+      oldGroup.items[editing.b] = item;
+    } else {
+      if (oldGroup) {
+        oldGroup.items.splice(editing.b, 1);
+        if (!oldGroup.items.length) data.groups.splice(editing.a, 1);
+      }
+      group.items.push(item);
+    }
+    setVal('keywordValue', '');
+    finishEdit('Updated keyword.');
+    return;
+  }
+  group.items.push(item);
   setVal('keywordValue', '');
   updateAll('Added keyword.');
-}
-function addDetailSection() {
+}function addDetailSection() {
   var title = val('detailSectionTitle') || 'SECTION';
-  data.details.push({ type: 'section', title: title });
+  var item = { type: 'section', title: title };
+  if (editing && editing.kind === 'detail') {
+    data.details[editing.a] = item;
+    setVal('detailSectionTitle', '');
+    finishEdit('Updated detail section title.');
+    return;
+  }
+  data.details.push(item);
   setVal('detailSectionTitle', '');
   updateAll('Added detail section title.');
-}
-function addDetail() {
+}function addDetail() {
   var title = val('detailTitle') || 'Detail';
   var text = val('detailText');
   var images = el('detailImages').value.split(/\r?\n/).map(function (line) { return line.trim(); }).filter(Boolean);
   if (!title && !text && !images.length) return;
-  data.details.push({ title: title, text: text, images: images, open: val('detailOpen') === 'true' });
+  var item = { title: title, text: text, images: images, open: val('detailOpen') === 'true' };
+  if (editing && editing.kind === 'detail') {
+    data.details[editing.a] = item;
+    setVal('detailTitle', ''); setVal('detailText', ''); setVal('detailImages', ''); el('detailOpen').value = 'false';
+    finishEdit('Updated detail toggle.');
+    return;
+  }
+  data.details.push(item);
   setVal('detailTitle', ''); setVal('detailText', ''); setVal('detailImages', ''); el('detailOpen').value = 'false';
   updateAll('Added detail toggle.');
-}
-function addStat() {
+}function addStat() {
   var label = val('statLabel');
   var value = parseInt(val('statValue'), 10);
   if (!label) return;
   if (isNaN(value)) value = 50;
-  data.stats.push({ label: label, value: Math.max(0, Math.min(100, value)) });
+  var item = { label: label, value: Math.max(0, Math.min(100, value)) };
+  if (editing && editing.kind === 'stat') {
+    data.stats[editing.a] = item;
+    setVal('statLabel', ''); setVal('statValue', '50');
+    finishEdit('Updated status stat.');
+    return;
+  }
+  data.stats.push(item);
   setVal('statLabel', ''); setVal('statValue', '50');
   updateAll('Added status stat.');
-}
-function addStory() {
+}function addStory() {
   var text = val('storyText');
   if (!text && !val('storyTitle')) return;
-  data.story.push({ date: val('storyDate'), title: val('storyTitle') || 'Timeline', text: text });
+  var item = { date: val('storyDate'), title: val('storyTitle') || 'Timeline', text: text };
+  if (editing && editing.kind === 'story') {
+    data.story[editing.a] = item;
+    setVal('storyDate', ''); setVal('storyTitle', ''); setVal('storyText', '');
+    finishEdit('Updated story item.');
+    return;
+  }
+  data.story.push(item);
   setVal('storyDate', ''); setVal('storyTitle', ''); setVal('storyText', '');
   updateAll('Added story item.');
-}
-function parsePipeRows(raw, fallbackSection) {
+}function parsePipeRows(raw, fallbackSection) {
   var groups = [];
   function getGroup(title, style) {
     title = title || fallbackSection || 'PROFILE';
@@ -383,7 +486,7 @@ function parseDetailBlocks(raw) {
 function addAu() {
   var title = val('auTitle') || 'New AU';
   var groups = parsePipeRows(el('auProfile').value, 'PROFILE').concat(parseKeywords(el('auKeywords').value));
-  data.aus.push({
+  var item = {
     title: title,
     subtitle: val('auSubtitle'),
     image: val('auImage'),
@@ -391,18 +494,30 @@ function addAu() {
     facts: parseFacts(el('auFacts').value),
     groups: groups,
     details: parseDetailBlocks(el('auDetails').value)
-  });
+  };
+  if (editing && editing.kind === 'au') {
+    data.aus[editing.a] = item;
+    ['auTitle','auSubtitle','auImage','auSummary','auFacts','auProfile','auKeywords','auDetails'].forEach(function (id) { setVal(id, ''); });
+    finishEdit('Updated AU card.');
+    return;
+  }
+  data.aus.push(item);
   ['auTitle','auSubtitle','auImage','auSummary','auFacts','auProfile','auKeywords','auDetails'].forEach(function (id) { setVal(id, ''); });
   updateAll('Added AU card.');
-}
-function addMemo() {
+}function addMemo() {
   var text = val('memoText') || val('memoTextShort');
   if (!text) return;
-  data.memo.push({ date: val('memoDate'), text: text });
+  var item = { date: val('memoDate'), text: text };
+  if (editing && editing.kind === 'memo') {
+    data.memo[editing.a] = item;
+    setVal('memoDate', ''); setVal('memoTextShort', ''); setVal('memoText', '');
+    finishEdit('Updated memo item.');
+    return;
+  }
+  data.memo.push(item);
   setVal('memoDate', ''); setVal('memoTextShort', ''); setVal('memoText', '');
   updateAll('Added memo item.');
-}
-function removeItem(type, groupIndex, itemIndex) {
+}function removeItem(type, groupIndex, itemIndex) {
   if (type === 'fact') data.facts.splice(groupIndex, 1);
   if (type === 'detail') data.details.splice(groupIndex, 1);
   if (type === 'stat') data.stats.splice(groupIndex, 1);
@@ -413,22 +528,75 @@ function removeItem(type, groupIndex, itemIndex) {
     data.groups[groupIndex].items.splice(itemIndex, 1);
     if (!data.groups[groupIndex].items.length) data.groups.splice(groupIndex, 1);
   }
+  if (editing && editing.kind === type && editing.a === groupIndex) editing = null;
+  resetEditButtons();
   updateAll('Removed.');
 }
-function moveItem(type, index, dir) {
-  var arr = data[type];
+function swapInArray(arr, index, dir) {
   var next = index + dir;
-  if (!arr || next < 0 || next >= arr.length) return;
+  if (!arr || next < 0 || next >= arr.length) return false;
   var item = arr.splice(index, 1)[0];
   arr.splice(next, 0, item);
-  updateAll('Moved.');
+  return true;
+}
+function moveItem(type, a, b, dir) {
+  var moved = false;
+  if (type === 'fact') moved = swapInArray(data.facts, a, dir);
+  if (type === 'detail') moved = swapInArray(data.details, a, dir);
+  if (type === 'stat') moved = swapInArray(data.stats, a, dir);
+  if (type === 'story') moved = swapInArray(data.story, a, dir);
+  if (type === 'memo') moved = swapInArray(data.memo, a, dir);
+  if (type === 'au') moved = swapInArray(data.aus, a, dir);
+  if (type === 'groupItem' && data.groups[a]) moved = swapInArray(data.groups[a].items, b, dir);
+  if (moved) updateAll('Moved.');
+}
+function startEdit(type, a, b) {
+  resetEditButtons();
+  if (type === 'fact') {
+    var fact = data.facts[a]; if (!fact) return;
+    beginEdit('fact', a, null); setActiveTab('facts'); setVal('factLabel', fact.label); setVal('factValue', fact.value); el('addFactBtn').textContent = 'Update card fact';
+  }
+  if (type === 'groupItem') {
+    var group = data.groups[a]; if (!group) return;
+    var item = group.items[b]; if (!item) return;
+    beginEdit('groupItem', a, b);
+    if (group.style === 'keywords') { setActiveTab('keyword'); setVal('keywordGroup', group.title); setVal('keywordValue', item.value); el('addKeywordBtn').textContent = 'Update keyword'; }
+    else { setActiveTab('profile'); setVal('profileGroup', group.title); setVal('profileLabel', item.label); setVal('profileValue', item.value); setVal('profileNote', item.note); el('addProfileBtn').textContent = 'Update profile item'; }
+  }
+  if (type === 'detail') {
+    var detail = data.details[a]; if (!detail) return;
+    beginEdit('detail', a, null); setActiveTab('details');
+    if (detail.type === 'section') { setVal('detailSectionTitle', detail.title); el('addDetailSectionBtn').textContent = 'Update section title'; }
+    else { setVal('detailTitle', detail.title); setVal('detailText', detail.text); setVal('detailImages', (detail.images || []).join('\n')); el('detailOpen').value = detail.open ? 'true' : 'false'; el('addDetailBtn').textContent = 'Update detail toggle'; }
+  }
+  if (type === 'stat') {
+    var stat = data.stats[a]; if (!stat) return;
+    beginEdit('stat', a, null); setActiveTab('status'); setVal('statLabel', stat.label); setVal('statValue', stat.value); el('addStatBtn').textContent = 'Update status stat';
+  }
+  if (type === 'story') {
+    var story = data.story[a]; if (!story) return;
+    beginEdit('story', a, null); setActiveTab('story'); setVal('storyDate', story.date); setVal('storyTitle', story.title); setVal('storyText', story.text); el('addStoryBtn').textContent = 'Update story item';
+  }
+  if (type === 'au') {
+    var au = data.aus[a]; if (!au) return;
+    beginEdit('au', a, null); setActiveTab('au'); setVal('auTitle', au.title); setVal('auSubtitle', au.subtitle); setVal('auImage', au.image); setVal('auSummary', au.summary);
+    setVal('auFacts', splitRows(au.facts, function (fact) { return fact.label + '|' + fact.value; }));
+    var normalGroups = (au.groups || []).filter(function (group) { return group.style !== 'keywords'; });
+    var keywordGroups = (au.groups || []).filter(function (group) { return group.style === 'keywords'; });
+    setVal('auProfile', normalGroups.map(function (group) { return group.items.map(function (item) { return group.title + '|' + item.label + '|' + item.value + (item.note ? '|' + item.note : ''); }).join('\n'); }).filter(Boolean).join('\n'));
+    setVal('auKeywords', keywordGroups.map(function (group) { return group.items.map(function (item) { return group.title + '|' + item.value; }).join('\n'); }).filter(Boolean).join('\n'));
+    setVal('auDetails', detailsToText(au.details)); el('addAuBtn').textContent = 'Update AU card';
+  }
+  if (type === 'memo') {
+    var memo = data.memo[a]; if (!memo) return;
+    beginEdit('memo', a, null); setActiveTab('memo'); setVal('memoDate', memo.date); setVal('memoText', memo.text); el('addMemoBtn').textContent = 'Update memo item';
+  }
+  el('status').textContent = 'Editing selected item. Update it from the opened panel.';
 }
 function renderItems() {
   var list = el('itemList');
   var html = '';
-  data.facts.forEach(function (item, index) {
-    html += renderItem('Card fact', item.label + ' | ' + item.value, 'fact', index);
-  });
+  data.facts.forEach(function (item, index) { html += renderItem('Card fact', item.label + ' | ' + item.value, 'fact', index); });
   data.groups.forEach(function (group, groupIndex) {
     group.items.forEach(function (item, itemIndex) {
       var body = group.style === 'keywords' ? item.value : item.label + ' | ' + item.value + (item.note ? ' (' + item.note + ')' : '');
@@ -443,9 +611,9 @@ function renderItems() {
   list.innerHTML = html || '<p class="small">No items yet.</p>';
 }
 function renderItem(label, body, type, a, b) {
-  return '<div class="item"><div class="item-head"><div><div class="item-title">' + escapeHtml(label) + '</div><div class="small">' + escapeHtml(body) + '</div></div><div class="mini-actions"><button type="button" data-remove="' + type + '" data-a="' + a + '" data-b="' + (b == null ? '' : b) + '">Remove</button></div></div></div>';
-}
-function previewImageSrc(src) {
+  var bValue = b == null ? '' : b;
+  return '<div class="item"><div class="item-head"><div><div class="item-title">' + escapeHtml(label) + '</div><div class="small">' + escapeHtml(body) + '</div></div><div class="mini-actions"><button type="button" data-move="up" data-type="' + type + '" data-a="' + a + '" data-b="' + bValue + '">Up</button><button type="button" data-move="down" data-type="' + type + '" data-a="' + a + '" data-b="' + bValue + '">Down</button><button type="button" data-edit="' + type + '" data-a="' + a + '" data-b="' + bValue + '">Edit</button><button type="button" data-remove="' + type + '" data-a="' + a + '" data-b="' + bValue + '">Remove</button></div></div></div>';
+}function previewImageSrc(src) {
   src = String(src || '').trim();
   if (!src) return '';
   if (/^(https?:|data:|blob:)/i.test(src)) return src;
@@ -728,9 +896,12 @@ el('downloadBtn').addEventListener('click', function () {
 });
 el('draftSelect').addEventListener('change', function () { setVal('draftName', el('draftSelect').value); });
 el('itemList').addEventListener('click', function (event) {
-  var btn = event.target.closest('[data-remove]');
-  if (!btn) return;
-  removeItem(btn.dataset.remove, Number(btn.dataset.a), btn.dataset.b === '' ? null : Number(btn.dataset.b));
+  var removeBtn = event.target.closest('[data-remove]');
+  var editBtn = event.target.closest('[data-edit]');
+  var moveBtn = event.target.closest('[data-move]');
+  if (removeBtn) { removeItem(removeBtn.dataset.remove, Number(removeBtn.dataset.a), removeBtn.dataset.b === '' ? null : Number(removeBtn.dataset.b)); return; }
+  if (editBtn) { startEdit(editBtn.dataset.edit, Number(editBtn.dataset.a), editBtn.dataset.b === '' ? null : Number(editBtn.dataset.b)); return; }
+  if (moveBtn) { moveItem(moveBtn.dataset.type, Number(moveBtn.dataset.a), moveBtn.dataset.b === '' ? null : Number(moveBtn.dataset.b), moveBtn.dataset.move === 'up' ? -1 : 1); }
 });
 fields.forEach(function (id) { el(id).addEventListener('input', function () { updateAll(); }); });
 el('title').addEventListener('input', function () { if (!val('fileName')) el('fileName').placeholder = slugify(val('title') || 'character') + '.md'; if (!val('draftName')) el('draftName').placeholder = val('title') || 'Dietrich, Katia...'; });
