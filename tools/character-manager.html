@@ -318,9 +318,20 @@ function renderItems() {
 function renderItem(label, body, type, a, b) {
   return '<div class="item"><div class="item-head"><div><div class="item-title">' + escapeHtml(label) + '</div><div class="small">' + escapeHtml(body) + '</div></div><div class="mini-actions"><button type="button" data-remove="' + type + '" data-a="' + a + '" data-b="' + (b == null ? '' : b) + '">Remove</button></div></div></div>';
 }
+function previewImageSrc(src) {
+  src = String(src || '').trim();
+  if (!src) return '';
+  if (/^(https?:|data:|blob:)/i.test(src)) return src;
+  if (location.protocol === 'file:') {
+    if (src.indexOf('/dekade-archive/') === 0) return '../' + src.replace(/^\/dekade-archive\//, '');
+    if (src.indexOf('/assets/') === 0) return '..' + src;
+    if (src.indexOf('assets/') === 0) return '../' + src;
+  }
+  return src;
+}
 function imageHtml(src, fallback) {
-  src = src || '';
-  if (src) return '<img src="' + escapeHtml(src) + '" alt="">';
+  var previewSrc = previewImageSrc(src);
+  if (previewSrc) return '<img src="' + escapeHtml(previewSrc) + '" alt="">';
   return escapeHtml((fallback || 'C').slice(0, 1));
 }
 function renderPreview() {
