@@ -2192,3 +2192,29 @@ a.sidebar-nav-item:focus {
     font-size: .84rem;
   }
 }
+/* Character card facts alignment */
+.character-card-facts,
+.character-quick-facts {
+  gap: .18rem;
+}
+
+.character-card-facts div,
+.character-quick-facts div {
+  align-items: start;
+  column-gap: .45rem;
+  grid-template-columns: 4.15rem minmax(0, 1fr);
+  row-gap: .04rem;
+}
+
+.character-card-facts dt,
+.character-quick-facts dt {
+  max-width: none;
+  padding-top: .04rem;
+  white-space: nowrap;
+}
+
+.character-card-facts dd,
+.character-quick-facts dd {
+  line-height: 1.38;
+  min-width: 0;
+}
