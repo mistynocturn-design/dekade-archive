@@ -2300,3 +2300,74 @@ a.sidebar-nav-item:focus {
 .character-info-list dt {
   padding-top: 0;
 }
+/* Character compact text scale */
+.character-card h2 {
+  font-size: 1.04rem;
+  line-height: 1.22;
+  margin-bottom: .42rem;
+}
+
+.character-card-role {
+  font-size: .6rem;
+  line-height: 1.25;
+  margin-bottom: .22rem;
+}
+
+.character-card-facts,
+.character-quick-facts {
+  gap: .14rem;
+}
+
+.character-card-facts div,
+.character-quick-facts div {
+  column-gap: .4rem;
+  grid-template-columns: 3.85rem minmax(0, 1fr);
+}
+
+.character-card-facts dt,
+.character-quick-facts dt,
+.character-card-facts dd,
+.character-quick-facts dd {
+  font-size: .68rem;
+  line-height: 1.38;
+}
+
+.character-info-list {
+  gap: .24rem;
+}
+
+.character-info-list div {
+  column-gap: .52rem;
+  row-gap: .08rem;
+}
+
+.character-info-list dt,
+.character-info-list dd {
+  font-size: .72rem;
+  line-height: 1.46;
+}
+
+.character-markdown,
+.character-detail-text,
+.character-story-body,
+.character-memo-body,
+.character-stat-row,
+.character-au-card-text,
+.character-au-detail-text {
+  font-size: .76rem;
+  line-height: 1.72;
+}
+
+.character-profile-detail summary {
+  font-size: .72rem;
+  line-height: 1.32;
+}
+
+.character-keywords span {
+  font-size: .61rem;
+}
+
+.character-info-note {
+  font-size: .56rem;
+  line-height: 1.45;
+}
