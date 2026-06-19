@@ -1727,20 +1727,18 @@ a.sidebar-nav-item:focus {
 }
 
 .character-info-note {
-  background: color-mix(in srgb, var(--character-keyword-bg, var(--character-soft, #e7e3d8)) 42%, transparent);
-  border-radius: 5px;
-  color: color-mix(in srgb, var(--character-ink, #161732) 56%, transparent);
-  font-size: .68rem;
-  font-weight: 500;
-  line-height: 1.35;
-  margin-left: .28rem;
-  padding: .08rem .3rem;
+  background: transparent;
+  color: color-mix(in srgb, var(--character-ink, #222) 52%, transparent);
+  font-size: .72em;
+  font-weight: 400;
+  line-height: 1.45;
+  margin-left: .18rem;
 }
 
 .character-info-note.block {
   display: block;
-  margin: .22rem 0 0;
-  width: fit-content;
+  margin-left: 0;
+  margin-top: .18rem;
 }
 /* Character detail tool placement */
 .character-detail-tools {
