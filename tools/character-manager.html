@@ -93,10 +93,14 @@
           <div><label for="soft">Soft</label><input id="soft" value="#e7e3d8"></div>
           <div><label for="ink">Ink</label><input id="ink" value="#161732"></div>
         </div>
+        <div class="grid two">
+          <div><label for="draftName">Draft name</label><input id="draftName" placeholder="Dietrich, Katia..."></div>
+          <div><label for="draftSelect">Saved drafts</label><select id="draftSelect"></select></div>
+        </div>
         <div class="actions">
           <button id="saveDraftBtn" type="button">Save draft</button>
-          <button class="secondary" id="loadDraftBtn" type="button">Load draft</button>
-          <button class="danger" id="clearDraftBtn" type="button">Clear draft</button>
+          <button class="secondary" id="loadDraftBtn" type="button">Load selected</button>
+          <button class="danger" id="clearDraftBtn" type="button">Delete selected</button>
         </div>
         <div class="status" id="draftStatus"></div>
       </section>
@@ -194,7 +198,7 @@
 </main>
 
 <script>
-var STORAGE_KEY = 'dekade-character-manager-draft-v1';
+var STORAGE_KEY = 'dekade-character-manager-drafts-v2';
 var data = { facts: [], groups: [], stats: [], story: [], memo: [] };
 var fields = ['title','fileName','order','subtitle','role','cardImage','profileImage','accent','soft','ink'];
 function el(id) { return document.getElementById(id); }
@@ -408,26 +412,55 @@ function getDraft() {
   fields.forEach(function (id) { meta[id] = el(id).value; });
   return { meta: meta, data: data };
 }
+function getDrafts() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; }
+  catch (err) { return {}; }
+}
+function setDrafts(drafts) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(drafts));
+}
+function currentDraftName() {
+  return val('draftName') || val('title') || 'New Character';
+}
+function renderDraftSelect(selectedName) {
+  var select = el('draftSelect');
+  var drafts = getDrafts();
+  var names = Object.keys(drafts).sort(function (a, b) { return a.localeCompare(b); });
+  select.innerHTML = names.length ? names.map(function (name) {
+    return '<option value="' + escapeHtml(name) + '">' + escapeHtml(name) + '</option>';
+  }).join('') : '<option value="">No saved drafts</option>';
+  if (selectedName && drafts[selectedName]) select.value = selectedName;
+}
 function saveDraft() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(getDraft()));
-  el('draftStatus').textContent = 'Draft saved in this browser.';
+  var name = currentDraftName();
+  var drafts = getDrafts();
+  drafts[name] = getDraft();
+  drafts[name].savedAt = new Date().toISOString();
+  setDrafts(drafts);
+  setVal('draftName', name);
+  renderDraftSelect(name);
+  el('draftStatus').textContent = 'Draft saved: ' + name;
 }
 function loadDraft() {
-  var raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) { el('draftStatus').textContent = 'No saved draft.'; return; }
-  try {
-    var draft = JSON.parse(raw);
-    fields.forEach(function (id) { if (draft.meta && draft.meta[id] != null) el(id).value = draft.meta[id]; });
-    data = Object.assign({ facts: [], groups: [], stats: [], story: [], memo: [] }, draft.data || {});
-    updateAll('Draft loaded.');
-  } catch (err) {
-    el('draftStatus').textContent = 'Draft could not be loaded.';
-  }
+  var name = el('draftSelect').value || val('draftName');
+  var drafts = getDrafts();
+  var draft = drafts[name];
+  if (!name || !draft) { el('draftStatus').textContent = 'No selected draft.'; return; }
+  fields.forEach(function (id) { if (draft.meta && draft.meta[id] != null) el(id).value = draft.meta[id]; });
+  setVal('draftName', name);
+  data = Object.assign({ facts: [], groups: [], stats: [], story: [], memo: [] }, draft.data || {});
+  updateAll('Draft loaded: ' + name);
 }
 function clearDraft() {
-  if (!confirm('Clear saved browser draft?')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  el('draftStatus').textContent = 'Draft cleared.';
+  var name = el('draftSelect').value || val('draftName');
+  var drafts = getDrafts();
+  if (!name || !drafts[name]) { el('draftStatus').textContent = 'No selected draft.'; return; }
+  if (!confirm('Delete draft: ' + name + '?')) return;
+  delete drafts[name];
+  setDrafts(drafts);
+  setVal('draftName', '');
+  renderDraftSelect();
+  el('draftStatus').textContent = 'Draft deleted.';
 }
 function updateAll(message) {
   renderItems();
@@ -460,13 +493,15 @@ el('downloadBtn').addEventListener('click', function () {
   a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
   el('status').textContent = 'Downloaded ' + fileName + '.';
 });
+el('draftSelect').addEventListener('change', function () { setVal('draftName', el('draftSelect').value); });
 el('itemList').addEventListener('click', function (event) {
   var btn = event.target.closest('[data-remove]');
   if (!btn) return;
   removeItem(btn.dataset.remove, Number(btn.dataset.a), btn.dataset.b === '' ? null : Number(btn.dataset.b));
 });
 fields.forEach(function (id) { el(id).addEventListener('input', function () { updateAll(); }); });
-el('title').addEventListener('input', function () { if (!val('fileName')) el('fileName').placeholder = slugify(val('title') || 'character') + '.md'; });
+el('title').addEventListener('input', function () { if (!val('fileName')) el('fileName').placeholder = slugify(val('title') || 'character') + '.md'; if (!val('draftName')) el('draftName').placeholder = val('title') || 'Dietrich, Katia...'; });
+renderDraftSelect();
 updateAll();
 </script>
 </body>
