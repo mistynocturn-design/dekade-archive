@@ -58,14 +58,6 @@ profile_groups:
       - value: "염세주의"
       - value: "불가지론자"
       - value: "과학을 믿음"
-  - title: "RELATIONSHIP"
-    items:
-      - label: "연인"
-        value: "카디아 펠트루프"
-        note: "(@비니)"
-      - label: "친구"
-        value: "에버츠 베스퍼"
-        note: "(@비니)"
 profile_details:
   - title: "EMOTIONS"
     type: "section"
