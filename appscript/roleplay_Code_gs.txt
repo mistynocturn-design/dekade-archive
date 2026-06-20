@@ -1,5 +1,5 @@
 var ROLEPLAY = {
-  API_VERSION: '2026-06-20.3',
+  API_VERSION: '2026-06-20.4',
   AUTHORS_SHEET: 'Authors',
   THREADS_SHEET: 'Threads',
   MESSAGES_SHEET: 'Messages',
@@ -52,6 +52,7 @@ function doPost(e) {
     else if (action === 'delete_message') result = withLock_(function () { return deleteMessage_(body); });
     else if (action === 'delete_thread') result = withLock_(function () { return deleteThread_(body); });
     else if (action === 'upload_image') result = uploadImage_(body);
+    else if (action === 'read_image') result = readImage_(body);
     else throw new Error('Unknown POST action: ' + action);
 
     return json_({ ok: true, data: result });
@@ -281,6 +282,28 @@ function uploadImage_(body) {
   return {
     file_id: driveFile.getId(),
     url: 'https://drive.google.com/uc?export=view&id=' + driveFile.getId()
+  };
+}
+
+function readImage_(body) {
+  var fileId = required_(body.file_id, 'file_id');
+  var folderId = PropertiesService.getScriptProperties().getProperty(ROLEPLAY.IMAGE_FOLDER_PROPERTY);
+  if (!folderId) throw new Error('ROLEPLAY_IMAGE_FOLDER_ID is not configured.');
+  var driveFile = DriveApp.getFileById(fileId);
+  var parents = driveFile.getParents();
+  var allowed = false;
+  while (parents.hasNext()) {
+    if (parents.next().getId() === folderId) allowed = true;
+  }
+  if (!allowed) throw new Error('This image is outside the Roleplay image folder.');
+  var blob = driveFile.getBlob();
+  var bytes = blob.getBytes();
+  if (bytes.length > 3 * 1024 * 1024) throw new Error('Archived image is too large.');
+  return {
+    file_id: fileId,
+    name: driveFile.getName(),
+    mime_type: blob.getContentType(),
+    base64: Utilities.base64Encode(bytes)
   };
 }
 

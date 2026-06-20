@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Completed Roleplay Converter</title>
+  <style>
+    :root { --ink:#3f3b4d; --muted:#8d8991; --line:#e7e4e9; --accent:#4e4a65; --paper:#f7f7f8; }
+    * { box-sizing:border-box; }
+    body { background:#f3f2f4; color:var(--ink); font-family:Arial,sans-serif; margin:0; }
+    main { margin:0 auto; max-width:1180px; padding:28px 20px 60px; }
+    h1 { font-size:1.35rem; margin:0 0 18px; }
+    h2 { font-size:.82rem; margin:0 0 12px; text-transform:uppercase; }
+    .layout { display:grid; gap:16px; grid-template-columns:minmax(320px,.85fr) minmax(420px,1.15fr); }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:7px; margin-bottom:14px; padding:16px; }
+    .grid { display:grid; gap:11px; grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .wide { grid-column:1 / -1; }
+    label { color:#77727e; display:block; font-size:.68rem; font-weight:700; }
+    input,select,textarea { background:#fff; border:1px solid #dcd9df; border-radius:4px; color:var(--ink); font:inherit; font-size:.76rem; margin-top:5px; padding:9px; width:100%; }
+    textarea { line-height:1.55; min-height:82px; resize:vertical; }
+    #output { min-height:250px; white-space:pre; }
+    button { background:var(--accent); border:1px solid var(--accent); border-radius:4px; color:#fff; cursor:pointer; font:inherit; font-size:.72rem; font-weight:700; padding:9px 12px; }
+    button.secondary { background:#fff; border-color:#d8d4dc; color:#696472; }
+    button:disabled { cursor:wait; opacity:.55; }
+    .actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+    .status { color:var(--muted); font-size:.68rem; min-height:1em; margin-top:9px; }
+    .status.error { color:#a45454; }
+    .preview { background:#fff; border:1px solid var(--line); border-radius:7px; min-height:420px; padding:18px; }
+    .preview-head { border-bottom:1px solid var(--line); margin-bottom:14px; padding-bottom:11px; }
+    .preview-head span,.message time { color:var(--muted); font-size:.62rem; }
+    .preview-head h3 { font-size:1rem; margin:4px 0; }
+    .message { background:var(--bg); border-left:3px solid var(--message-accent); border-radius:5px; color:var(--text); margin:7px 0; padding:9px; }
+    .message header { align-items:center; display:flex; gap:7px; margin-bottom:6px; }
+    .message header img { background:#fff; border-radius:50%; height:28px; margin:0; object-fit:contain; width:28px; }
+    .message header strong { font-size:.7rem; }
+    .message time { margin-left:auto; }
+    .message-body { border:1px solid color-mix(in srgb,var(--text) 10%,transparent); border-radius:4px; font-size:.72rem; line-height:1.7; padding:9px; white-space:pre-wrap; }
+    .images { display:grid; gap:3px; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:8px; }
+    .images img { height:150px; object-fit:cover; width:100%; }
+    .images.one { grid-template-columns:1fr; }
+    .images.one img { height:auto; max-height:420px; object-fit:contain; }
+    @media (max-width:850px) { .layout { grid-template-columns:1fr; } }
+    @media (max-width:520px) { .grid { grid-template-columns:1fr; } .wide { grid-column:auto; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Completed Roleplay Converter</h1>
+  <div class="layout">
+    <div>
+      <section class="panel">
+        <h2>Completed thread</h2>
+        <label>Thread<select id="threadSelect"></select></label>
+        <div class="actions"><button id="reloadBtn" class="secondary" type="button">Reload</button><button id="loadBtn" type="button">Load thread</button></div>
+      </section>
+
+      <section class="panel">
+        <h2>Archive file</h2>
+        <div class="grid">
+          <label class="wide">Title<input id="titleInput"></label>
+          <label>Category<input id="categoryInput" list="categoryList"><datalist id="categoryList"><option value="Basic"><option value="AU"><option value="ETC"></datalist></label>
+          <label>Archive date<input id="dateInput" type="date"></label>
+          <label class="wide">File name<input id="fileInput" placeholder="roleplay-2026-06-20"></label>
+          <label class="wide">Summary<input id="summaryInput"></label>
+          <label class="wide">Access key<input id="passcodeInput" type="password" autocomplete="current-password"></label>
+        </div>
+        <div class="actions"><button id="previewBtn" class="secondary" type="button">Refresh preview</button><button id="copyBtn" class="secondary" type="button">Copy HTML</button><button id="downloadBtn" type="button">Download package</button><button id="archiveBtn" class="secondary" type="button">Mark archived</button></div>
+        <div class="status" id="status"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Output</h2>
+        <textarea id="output" spellcheck="false"></textarea>
+      </section>
+    </div>
+    <aside>
+      <section class="preview" id="preview"><p class="status">Select a completed thread.</p></section>
+    </aside>
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var API_URL = 'https://script.google.com/macros/s/AKfycbwF7InylwgPXBUWCUBSwSCi4dhzql6lMwtCc64RpZ2cBH2OvKxlUF2lt_qwHzxRE4Y/exec';
+  var API_VERSION = '2026-06-20.4';
+  var PASSCODE_KEY = 'dekade-roleplay-passcode';
+  var threadSelect = document.getElementById('threadSelect');
+  var status = document.getElementById('status');
+  var current = null;
+
+  function el(id) { return document.getElementById(id); }
+  function escapeHtml(value) { return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function safeColor(value, fallback) { return /^#[0-9a-f]{3,8}$/i.test(String(value || '')) ? value : fallback; }
+  function setStatus(text, error) { status.textContent = text || ''; status.classList.toggle('error', Boolean(error)); }
+  function dateText(value) { var date = new Date(value); return isNaN(date.getTime()) ? String(value || '') : new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(date); }
+  function dateOnly(value) { var date = new Date(value); return isNaN(date.getTime()) ? '' : date.toISOString().slice(0,10); }
+  function slug(value) { var clean=String(value||'').toLowerCase().replace(/[^a-z0-9가-힣]+/g,'-').replace(/^-|-$/g,''); return clean || 'roleplay'; }
+  function yaml(value) { return JSON.stringify(String(value == null ? '' : value)); }
+
+  async function getJson(action, params) {
+    var url = new URL(API_URL); url.searchParams.set('action', action);
+    Object.keys(params || {}).forEach(function (key) { url.searchParams.set(key, params[key]); });
+    var response = await fetch(url.toString(), { cache:'no-store', redirect:'follow' });
+    var data = await response.json();
+    if (!data.ok) throw new Error(data.error || 'Request failed.');
+    if (data.api_version !== API_VERSION) throw new Error('Apps Script 최신 버전을 확인해주세요.');
+    return data;
+  }
+
+  async function postJson(payload) {
+    var passcode = el('passcodeInput').value;
+    if (!passcode) throw new Error('Access key를 입력해주세요.');
+    localStorage.setItem(PASSCODE_KEY, passcode);
+    payload.passcode = passcode;
+    var response = await fetch(API_URL, { method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload) });
+    var data = await response.json();
+    if (!data.ok) throw new Error(data.error || 'Request failed.');
+    return data.data;
+  }
+
+  async function loadCompleted() {
+    setStatus('Loading...');
+    try {
+      var data = await getJson('threads', { status:'completed' });
+      threadSelect.innerHTML = data.threads.length ? data.threads.map(function (thread) {
+        return '<option value="' + escapeHtml(thread.thread_id) + '">' + escapeHtml(thread.title) + ' · ' + escapeHtml(thread.category) + '</option>';
+      }).join('') : '<option value="">No completed threads</option>';
+      setStatus(data.threads.length + ' completed thread(s).');
+    } catch (error) { setStatus(error.message, true); }
+  }
+
+  async function loadThread() {
+    if (!threadSelect.value) return;
+    setStatus('Loading thread...');
+    try {
+      var response = await getJson('export', { thread_id:threadSelect.value });
+      current = response.data;
+      var thread = current.thread;
+      el('titleInput').value = thread.title;
+      el('categoryInput').value = normalizeCategory(thread.category);
+      el('dateInput').value = dateOnly(thread.created_at);
+      el('fileInput').value = 'roleplay-' + dateOnly(thread.created_at) + '-' + thread.thread_id.slice(0,8);
+      el('summaryInput').value = '';
+      refreshPreview();
+      setStatus('Thread loaded.');
+    } catch (error) { setStatus(error.message, true); }
+  }
+
+  function normalizeCategory(value) { var text=String(value||''); return text.toUpperCase()==='BASIC'?'Basic':text.toUpperCase(); }
+  function allImageUrls() {
+    if (!current) return [];
+    var found=[];
+    current.messages.forEach(function (message) { (message.image_urls||[]).forEach(function (url) { if(found.indexOf(url)===-1) found.push(url); }); });
+    return found;
+  }
+  function plannedImageMap() {
+    var folder=slug(el('fileInput').value); var map={};
+    allImageUrls().forEach(function (url,index) { map[url]='/dekade-archive/assets/roleplay/'+folder+'/image-'+String(index+1).padStart(2,'0')+'.webp'; });
+    return map;
+  }
+
+  function messageBody(message, imageMap) {
+    var author=current.authors[message.author_id]||{name:message.author_id};
+    var images=(message.image_urls||[]).map(function(url){return imageMap&&imageMap[url]?imageMap[url]:url;});
+    var imageHtml=images.length?'<div class="roleplay-image-grid count-'+Math.min(images.length,4)+'">'+images.slice(0,4).map(function(url){return '<button type="button" data-roleplay-static-image="'+escapeHtml(url)+'"><img src="'+escapeHtml(url)+'" alt=""></button>';}).join('')+'</div>':'';
+    return '<article class="roleplay-message" style="--roleplay-bg:'+safeColor(author.background_color,'#fafafa')+';--roleplay-text:'+safeColor(author.text_color,'#333333')+';--roleplay-accent:'+safeColor(author.accent_color,'#dedede')+'">\n'+
+      '  <header><span class="roleplay-avatar"><img src="'+escapeHtml(author.profile_image||'')+'" alt=""></span><strong>'+escapeHtml(author.name||message.author_id)+'</strong><time>'+escapeHtml(dateText(message.created_at))+'</time></header>\n'+
+      '  <div class="roleplay-message-body"><div class="roleplay-message-text">'+escapeHtml(message.content)+'</div>'+imageHtml+'</div>\n</article>';
+  }
+
+  function buildBody(imageMap) {
+    if (!current) return '';
+    var root=current.messages.filter(function(message){return !message.parent_id;});
+    var replies=current.messages.filter(function(message){return message.parent_id;});
+    return '<div class="roleplay-archive-thread">\n'+root.map(function(message){return messageBody(message,imageMap);}).join('\n')+
+      (replies.length?'\n<div class="roleplay-archive-replies">\n'+replies.map(function(message){return messageBody(message,imageMap);}).join('\n')+'\n</div>':'')+'\n</div>';
+  }
+
+  function buildHtml(imageMap) {
+    if (!current) return '';
+    return '---\nlayout: roleplay_log\ntitle: '+yaml(el('titleInput').value)+'\ncategory: '+yaml(el('categoryInput').value)+'\narchive_date: '+yaml(el('dateInput').value)+'\nsummary: '+yaml(el('summaryInput').value)+'\nthread_id: '+yaml(current.thread.thread_id)+'\n---\n\n'+buildBody(imageMap||plannedImageMap())+'\n';
+  }
+
+  function previewMessage(message) {
+    var author=current.authors[message.author_id]||{name:message.author_id};
+    var images=message.image_urls||[];
+    return '<article class="message" style="--bg:'+safeColor(author.background_color,'#fafafa')+';--text:'+safeColor(author.text_color,'#333')+';--message-accent:'+safeColor(author.accent_color,'#ddd')+'"><header><img src="'+escapeHtml(author.profile_image||'')+'" alt=""><strong>'+escapeHtml(author.name||message.author_id)+'</strong><time>'+escapeHtml(dateText(message.created_at))+'</time></header><div class="message-body">'+escapeHtml(message.content)+(images.length?'<div class="images '+(images.length===1?'one':'')+'">'+images.map(function(url){return '<img src="'+escapeHtml(url)+'" alt="">';}).join('')+'</div>':'')+'</div></article>';
+  }
+
+  function refreshPreview() {
+    if (!current) return;
+    el('preview').innerHTML='<header class="preview-head"><span>'+escapeHtml(el('categoryInput').value)+'</span><h3>'+escapeHtml(el('titleInput').value)+'</h3><span>'+escapeHtml(el('dateInput').value)+'</span></header>'+current.messages.map(previewMessage).join('');
+    el('output').value=buildHtml(plannedImageMap());
+  }
+
+  function driveId(url) { var match=String(url||'').match(/[?&]id=([^&]+)/)||String(url||'').match(/\/d\/([^/]+)/); return match?decodeURIComponent(match[1]):''; }
+  function base64Bytes(value) { var binary=atob(value), bytes=new Uint8Array(binary.length); for(var i=0;i<binary.length;i+=1)bytes[i]=binary.charCodeAt(i); return bytes; }
+  function textBytes(value) { return new TextEncoder().encode(value); }
+  function extension(mime) { if(mime==='image/png')return'png'; if(mime==='image/jpeg')return'jpg'; if(mime==='image/gif')return'gif'; return'webp'; }
+
+  async function prepareEntries() {
+    var fileName=slug(el('fileInput').value).replace(/\.html?$/,'');
+    var urls=allImageUrls(), imageMap={}, entries=[];
+    for(var i=0;i<urls.length;i+=1){
+      setStatus('Collecting image '+(i+1)+' / '+urls.length+'...');
+      var id=driveId(urls[i]);
+      if(!id)throw new Error('Drive image ID를 찾을 수 없습니다: '+urls[i]);
+      var file=await postJson({action:'read_image',file_id:id});
+      var ext=extension(file.mime_type), zipPath='assets/roleplay/'+fileName+'/image-'+String(i+1).padStart(2,'0')+'.'+ext;
+      imageMap[urls[i]]='/dekade-archive/'+zipPath;
+      entries.push({name:zipPath,data:base64Bytes(file.base64)});
+    }
+    entries.unshift({name:'_roleplays/'+fileName+'.html',data:textBytes(buildHtml(imageMap))});
+    return {entries:entries,fileName:fileName,imageMap:imageMap};
+  }
+
+  var crcTable=(function(){var table=[];for(var n=0;n<256;n+=1){var c=n;for(var k=0;k<8;k+=1)c=(c&1)?0xedb88320^(c>>>1):c>>>1;table[n]=c>>>0;}return table;})();
+  function crc32(bytes){var crc=0xffffffff;for(var i=0;i<bytes.length;i+=1)crc=crcTable[(crc^bytes[i])&255]^(crc>>>8);return(crc^0xffffffff)>>>0;}
+  function header(size){return new Uint8Array(size);}
+  function write16(view,offset,value){view.setUint16(offset,value,true);}
+  function write32(view,offset,value){view.setUint32(offset,value>>>0,true);}
+  function join(parts){var length=parts.reduce(function(sum,p){return sum+p.length;},0),out=new Uint8Array(length),offset=0;parts.forEach(function(p){out.set(p,offset);offset+=p.length;});return out;}
+  function dosTime(){var d=new Date(),time=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),date=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();return{time:time,date:date};}
+  function makeZip(entries){var locals=[],centrals=[],offset=0,stamp=dosTime();entries.forEach(function(entry){var name=textBytes(entry.name),data=entry.data,crc=crc32(data),local=header(30),lv=new DataView(local.buffer);write32(lv,0,0x04034b50);write16(lv,4,20);write16(lv,6,0x0800);write16(lv,8,0);write16(lv,10,stamp.time);write16(lv,12,stamp.date);write32(lv,14,crc);write32(lv,18,data.length);write32(lv,22,data.length);write16(lv,26,name.length);var localPart=join([local,name,data]);locals.push(localPart);var central=header(46),cv=new DataView(central.buffer);write32(cv,0,0x02014b50);write16(cv,4,20);write16(cv,6,20);write16(cv,8,0x0800);write16(cv,10,0);write16(cv,12,stamp.time);write16(cv,14,stamp.date);write32(cv,16,crc);write32(cv,20,data.length);write32(cv,24,data.length);write16(cv,28,name.length);write32(cv,42,offset);centrals.push(join([central,name]));offset+=localPart.length;});var centralData=join(centrals),localData=join(locals),end=header(22),ev=new DataView(end.buffer);write32(ev,0,0x06054b50);write16(ev,8,entries.length);write16(ev,10,entries.length);write32(ev,12,centralData.length);write32(ev,16,localData.length);return new Blob([localData,centralData,end],{type:'application/zip'});}
+  function download(blob,name){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);}
+
+  el('reloadBtn').onclick=loadCompleted;
+  el('loadBtn').onclick=loadThread;
+  el('previewBtn').onclick=refreshPreview;
+  ['titleInput','categoryInput','dateInput','fileInput','summaryInput'].forEach(function(id){el(id).addEventListener('input',refreshPreview);});
+  el('copyBtn').onclick=async function(){if(!current)return;await navigator.clipboard.writeText(buildHtml(plannedImageMap()));setStatus('HTML copied. Download the package for its image files.');};
+  el('downloadBtn').onclick=async function(){if(!current)return;var button=this;button.disabled=true;try{var pack=await prepareEntries();download(makeZip(pack.entries),pack.fileName+'-roleplay.zip');el('output').value=buildHtml(pack.imageMap);setStatus('Package downloaded. Extract it at the repository root.');}catch(error){setStatus(error.message,true);}finally{button.disabled=false;}};
+  el('archiveBtn').onclick=async function(){if(!current||!confirm('GitHub 백업을 확인한 뒤 archived 상태로 바꿀까요?'))return;var button=this;button.disabled=true;try{await postJson({action:'set_thread_status',thread_id:current.thread.thread_id,status:'archived'});current=null;el('preview').innerHTML='<p class="status">Archived.</p>';el('output').value='';await loadCompleted();setStatus('Thread marked archived.');}catch(error){setStatus(error.message,true);}finally{button.disabled=false;}};
+  el('passcodeInput').value=localStorage.getItem(PASSCODE_KEY)||'';
+  loadCompleted();
+})();
+</script>
+</body>
+</html>

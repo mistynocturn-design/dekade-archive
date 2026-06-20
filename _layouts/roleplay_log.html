@@ -12,3 +12,35 @@ layout: default
     {{ content }}
   </div>
 </article>
+
+<div class="roleplay-image-modal" data-roleplay-static-modal hidden aria-hidden="true">
+  <button type="button" data-roleplay-static-close aria-label="Close image">×</button>
+  <img src="" alt="">
+</div>
+
+<script>
+(function () {
+  var modal = document.querySelector('[data-roleplay-static-modal]');
+  if (!modal) return;
+  var image = modal.querySelector('img');
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-roleplay-static-image]');
+    if (trigger) {
+      image.src = trigger.getAttribute('data-roleplay-static-image');
+      modal.hidden = false;
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('twitter-modal-open');
+      return;
+    }
+    if (event.target === modal || event.target.closest('[data-roleplay-static-close]')) {
+      modal.hidden = true;
+      modal.setAttribute('aria-hidden', 'true');
+      image.removeAttribute('src');
+      document.body.classList.remove('twitter-modal-open');
+    }
+  });
+  window.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !modal.hidden) modal.querySelector('[data-roleplay-static-close]').click();
+  });
+})();
+</script>

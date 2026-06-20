@@ -2569,6 +2569,10 @@ a.sidebar-nav-item:focus {
   width: 1.75rem;
 }
 
+.content a.roleplay-icon-button {
+  text-decoration: none;
+}
+
 .content .roleplay-icon-button:hover,
 .content .roleplay-icon-button:focus {
   background: #7f785b;
@@ -3071,6 +3075,23 @@ a.sidebar-nav-item:focus {
   border-bottom: 1px solid #eee;
   margin-bottom: 1rem;
   padding-bottom: .8rem;
+}
+
+.roleplay-archive-page {
+  --roleplay-ink: #3f3b4d;
+  --roleplay-muted: #918d99;
+  color: var(--roleplay-ink);
+  font-family: 'Paperlogy', sans-serif;
+}
+
+.roleplay-archive-thread > .roleplay-message {
+  margin-bottom: .7rem;
+}
+
+.roleplay-archive-replies {
+  border-left: 1px solid #ddd9df;
+  margin-left: .75rem;
+  padding-left: .7rem;
 }
 
 .roleplay-archive-header h1 {

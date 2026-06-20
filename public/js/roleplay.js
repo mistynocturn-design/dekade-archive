@@ -5,7 +5,7 @@
   if (!app) return;
 
   var apiUrl = app.getAttribute('data-api-url');
-  var requiredApiVersion = '2026-06-20.3';
+  var requiredApiVersion = '2026-06-20.4';
   var storageKey = 'dekade-roleplay-passcode';
   var draftStorageKey = 'dekade-roleplay-reply-drafts';
   var readStorageKey = 'dekade-roleplay-read-replies';
