@@ -3313,7 +3313,7 @@ a.sidebar-nav-item:focus {
 .writing-series-toc ol { color:#8b858c; font-size:.7rem; line-height:1.75; margin:.65rem 0 0; padding-left:1.4rem; }
 .writing-series-toc li.current a { color:var(--writing-accent); font-weight:800; }
 .writing-series-toc a { color:#625d63; text-decoration:none; }
-.writing-body { color:#302e31; font-family:Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:clamp(.86rem,1.7vw,.92rem); line-height:1.85; overflow-wrap:anywhere; }
+.writing-body { color:#302e31; font-family:Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:.73rem; line-height:1.85; overflow-wrap:anywhere; }
 .writing-body p { margin:0 0 1.55em; }
 .writing-body h1,.writing-body h2,.writing-body h3,.writing-body h4 { color:#29262a; font-family:Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.45; margin:2.4em 0 .9em; }
 .writing-body h2 { font-size:1.25rem; }.writing-body h3 { font-size:1.08rem; }
