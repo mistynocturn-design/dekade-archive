@@ -22,6 +22,10 @@ card_facts:
 profile_groups:
   - title: "PROFILE"
     items:
+      - label: "이름"
+        value: "디트리히 슈바르츠"
+        note: "Dietrich Schwartz"
+        note_break: true
       - label: "출신"
         value: "독일"
       - label: "종족"
