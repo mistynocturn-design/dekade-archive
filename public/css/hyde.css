@@ -1550,8 +1550,25 @@ a.sidebar-nav-item:focus {
 }
 
 .character-mini-tab.active {
-  border-bottom-color: var(--character-tab-color, var(--character-accent, #4e4a65));
+  border-bottom-color: transparent;
   color: var(--character-tab-color, var(--character-ink, #161732));
+}
+
+.character-mini-tabs {
+  position: relative;
+}
+
+.character-tab-indicator {
+  background: var(--character-tab-color, var(--character-accent, #4e4a65));
+  border-radius: 999px;
+  bottom: -1px;
+  height: 3px;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(0);
+  transition: transform .24s ease, width .24s ease, background-color .15s ease;
+  width: 0;
 }
 
 .character-panel {

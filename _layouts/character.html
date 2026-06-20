@@ -18,6 +18,7 @@ layout: default
     {% if page.story %}<button class="character-mini-tab" type="button" data-character-tab="story">Story</button>{% endif %}
     {% if page.aus %}<button class="character-mini-tab" type="button" data-character-tab="au">AU</button>{% endif %}
     {% if page.memo %}<button class="character-mini-tab" type="button" data-character-tab="memo">Memo</button>{% endif %}
+    <span class="character-tab-indicator" aria-hidden="true"></span>
   </nav>
 
   <section class="character-panel active" data-character-panel="profile">
@@ -247,11 +248,29 @@ layout: default
   if (!root || !root.classList.contains('character-page')) return;
   var tabs = Array.prototype.slice.call(root.querySelectorAll('.character-mini-tab'));
   var panels = Array.prototype.slice.call(root.querySelectorAll('.character-panel'));
+  var tabBar = root.querySelector('.character-mini-tabs');
+  var tabIndicator = root.querySelector('.character-tab-indicator');
+
+  function moveTabIndicator(tab) {
+    if (!tabBar || !tabIndicator || !tab) return;
+    var tabRect = tab.getBoundingClientRect();
+    var barRect = tabBar.getBoundingClientRect();
+    tabIndicator.style.width = tabRect.width + 'px';
+    tabIndicator.style.transform = 'translateX(' + (tabRect.left - barRect.left + tabBar.scrollLeft) + 'px)';
+  }
+
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       var id = tab.getAttribute('data-character-tab');
       tabs.forEach(function (item) { item.classList.toggle('active', item === tab); });
       panels.forEach(function (panel) { panel.classList.toggle('active', panel.getAttribute('data-character-panel') === id); });
+      moveTabIndicator(tab);
+    });
+  });
+  moveTabIndicator(root.querySelector('.character-mini-tab.active'));
+  window.addEventListener('resize', function () {
+    window.requestAnimationFrame(function () {
+      moveTabIndicator(root.querySelector('.character-mini-tab.active'));
     });
   });
   var auList = root.querySelector('[data-au-list]');
