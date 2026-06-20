@@ -34,3 +34,6 @@ collections:
   roleplays:
     output: true
     permalink: /roleplay/:name/
+  character_aus:
+    output: true
+    permalink: /character-au/:name/

@@ -3094,6 +3094,93 @@ a.sidebar-nav-item:focus {
   padding-left: .7rem;
 }
 
+/* Standalone character AU profiles */
+.character-au-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin: -.35rem 0 .6rem;
+}
+
+.character-au-grid {
+  gap: .65rem;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 11rem));
+}
+
+.character-au-card {
+  border-radius: 6px;
+}
+
+.character-au-card-link {
+  text-decoration: none;
+}
+
+.character-au-card .character-card-image {
+  border-radius: 0;
+  display: block;
+  height: 7.2rem;
+  margin: 0;
+  object-fit: cover;
+  width: 100%;
+}
+
+.character-au-card .character-card-body {
+  display: block;
+  padding: .5rem .58rem .58rem;
+}
+
+.character-au-card strong {
+  font-size: .78rem;
+  margin-top: .1rem;
+}
+
+.character-au-card small {
+  font-size: .6rem;
+  line-height: 1.42;
+  margin-top: .2rem;
+}
+
+.character-au-card .character-card-role {
+  font-size: .54rem;
+}
+
+.character-au-empty {
+  color: #aaa5ad;
+  font-size: .68rem;
+  margin: .45rem 0;
+}
+
+.character-au-parent-link {
+  color: #9b969f;
+  display: inline-block;
+  font-size: .64rem;
+  margin-bottom: .7rem;
+  text-decoration: none;
+}
+
+.character-au-profile-grid {
+  display: grid;
+  gap: .9rem;
+  grid-template-columns: minmax(13rem, .82fr) minmax(0, 1.18fr);
+}
+
+.character-au-status-card {
+  align-self: stretch;
+}
+
+.character-au-detail-box {
+  margin-top: .9rem;
+}
+
+@media (max-width: 42rem) {
+  .character-au-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .character-au-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .roleplay-archive-header h1 {
   margin: .1rem 0;
 }
