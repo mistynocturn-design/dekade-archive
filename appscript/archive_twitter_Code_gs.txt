@@ -1,5 +1,5 @@
 var BACKUP_API = {
-  VERSION: '2026-06-20.4',
+  VERSION: '2026-06-21.1',
   ARCHIVE_SHEET: 'Archive',
   TWITTER_SHEET: 'Twitter',
   READ_KEY_PROPERTY: 'BACKUP_READ_KEY',
@@ -36,11 +36,11 @@ function readArchive_(body) {
   var sheet = getSheet_(BACKUP_API.ARCHIVE_SHEET);
   var table = readTable_(sheet);
   var columns = {
-    date: findColumn_(table.headers, ['작성일', 'date']),
-    title: findColumn_(table.headers, ['카테고리제목', '카테고리 제목', '제목', 'title']),
-    content: findColumn_(table.headers, ['내용', '본문', 'content', 'text']),
-    image: findOptionalColumn_(table.headers, ['이미지', '이미지링크', 'image', 'imageurl']),
-    side: findColumn_(table.headers, ['좌우', '화자', 'side'])
+    date: findColumnOrFallback_(table.headers, ['작성일', '작성 날짜', '날짜', 'date'], 0),
+    title: findColumnOrFallback_(table.headers, ['카테고리제목', '카테고리 제목', '카테고리', '대화제목', '대화 제목', '로그제목', '로그 제목', '제목', 'title', 'categorytitle', 'category'], 1),
+    content: findColumnOrFallback_(table.headers, ['내용', '본문', '대화내용', '대화 내용', 'content', 'text'], 2),
+    image: findOptionalColumnOrFallback_(table.headers, ['이미지', '이미지링크', '이미지 링크', 'image', 'imageurl'], 3),
+    side: findColumnOrFallback_(table.headers, ['좌우', '화자', '방향', 'side'], 4)
   };
   var selectedTitle = String(body.title || '').trim();
   if (!selectedTitle) throw new Error('Archive title is required.');
@@ -69,8 +69,8 @@ function readArchive_(body) {
 function listArchiveTitles_() {
   var sheet = getSheet_(BACKUP_API.ARCHIVE_SHEET);
   var table = readTable_(sheet);
-  var titleColumn = findColumn_(table.headers, ['카테고리제목', '카테고리 제목', '제목', 'title']);
-  var dateColumn = findColumn_(table.headers, ['작성일', 'date']);
+  var titleColumn = findColumnOrFallback_(table.headers, ['카테고리제목', '카테고리 제목', '카테고리', '대화제목', '대화 제목', '로그제목', '로그 제목', '제목', 'title', 'categorytitle', 'category'], 1);
+  var dateColumn = findColumnOrFallback_(table.headers, ['작성일', '작성 날짜', '날짜', 'date'], 0);
   var found = {};
   var titles = [];
   table.rows.forEach(function (row) {
@@ -164,10 +164,10 @@ function readTwitter_(body) {
 
 function validateBackupSheets() {
   var archive = readTable_(getSheet_(BACKUP_API.ARCHIVE_SHEET));
-  findColumn_(archive.headers, ['작성일', 'date']);
-  findColumn_(archive.headers, ['카테고리제목', '카테고리 제목', '제목', 'title']);
-  findColumn_(archive.headers, ['내용', '본문', 'content', 'text']);
-  findColumn_(archive.headers, ['좌우', '화자', 'side']);
+  findColumnOrFallback_(archive.headers, ['작성일', '작성 날짜', '날짜', 'date'], 0);
+  findColumnOrFallback_(archive.headers, ['카테고리제목', '카테고리 제목', '카테고리', '대화제목', '대화 제목', '로그제목', '로그 제목', '제목', 'title', 'categorytitle', 'category'], 1);
+  findColumnOrFallback_(archive.headers, ['내용', '본문', '대화내용', '대화 내용', 'content', 'text'], 2);
+  findColumnOrFallback_(archive.headers, ['좌우', '화자', '방향', 'side'], 4);
   var twitter = readTable_(getSheet_(BACKUP_API.TWITTER_SHEET));
   findColumn_(twitter.headers, ['작성일', 'date']);
   findColumn_(twitter.headers, ['작성자', 'author']);
@@ -197,6 +197,18 @@ function findColumn_(headers, aliases) {
   var index = findOptionalColumn_(headers, aliases);
   if (index === -1) throw new Error('Missing column. Expected one of: ' + aliases.join(', '));
   return index;
+}
+
+function findColumnOrFallback_(headers, aliases, fallbackIndex) {
+  var index = findOptionalColumn_(headers, aliases);
+  if (index !== -1) return index;
+  if (fallbackIndex >= 0 && fallbackIndex < headers.length) return fallbackIndex;
+  throw new Error('Missing column. Expected one of: ' + aliases.join(', ') + '. Found: ' + headers.join(', '));
+}
+
+function findOptionalColumnOrFallback_(headers, aliases, fallbackIndex) {
+  var index = findOptionalColumn_(headers, aliases);
+  return index !== -1 ? index : (fallbackIndex >= 0 && fallbackIndex < headers.length ? fallbackIndex : -1);
 }
 
 function findOptionalColumn_(headers, aliases) {
