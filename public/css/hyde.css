@@ -7,6 +7,57 @@
   font-display: swap;
 }
 
+/* Gallery */
+.gallery-shell .gallery-content { max-width:none; }
+.gallery-page { --gallery-ink:#28272d; --gallery-muted:#85818a; --gallery-line:#e7e5e8; --gallery-accent:#7b5864; max-width:1180px; min-width:0; }
+.gallery-header { align-items:flex-end; border-bottom:1px solid var(--gallery-line); display:flex; justify-content:space-between; margin-bottom:1rem; padding-bottom:.8rem; }
+.gallery-header h1 { color:var(--gallery-ink); font-size:2rem; letter-spacing:0; margin:0; }
+.gallery-kicker { color:#5b7771; font-size:.64rem; font-weight:800; letter-spacing:0; margin:0 0 .22rem; }
+.content .gallery-tool-button { align-items:center; background:#28272d; border:0; border-radius:50%; color:#fff; display:inline-flex; font-size:.9rem; height:1.75rem; justify-content:center; line-height:1; text-decoration:none; width:1.75rem; }
+.content .gallery-tool-button:hover,.content .gallery-tool-button:focus { background:#7b5864; color:#fff; text-decoration:none; }
+.gallery-tabs { border-bottom:1px solid var(--gallery-line); display:flex; gap:1.05rem; margin-bottom:1.15rem; overflow-x:auto; padding:0 0 .55rem; position:relative; scrollbar-width:none; }
+.gallery-tabs::-webkit-scrollbar { display:none; }
+.gallery-tab { background:transparent; border:0; color:#aaa6ad; cursor:pointer; flex:0 0 auto; font:inherit; font-size:.68rem; font-weight:800; letter-spacing:0; padding:.25rem 0; }
+.gallery-tab.active { color:var(--gallery-ink); }
+.gallery-tab-indicator { background:var(--gallery-accent); bottom:0; height:3px; left:0; pointer-events:none; position:absolute; transition:transform .28s ease,width .28s ease; }
+.gallery-grid { display:grid; gap:.85rem; grid-template-columns:repeat(5,minmax(0,1fr)); }
+.gallery-card[hidden] { display:none; }
+.gallery-card { min-width:0; }
+.gallery-card-open { background:#fff; border:1px solid var(--gallery-line); border-radius:5px; color:var(--gallery-ink); cursor:pointer; display:block; overflow:hidden; padding:0; text-align:left; width:100%; }
+.gallery-card-open:hover,.gallery-card-open:focus { border-color:#b8a7ad; box-shadow:0 6px 18px rgba(33,31,38,.08); transform:translateY(-2px); }
+.gallery-card-collage { aspect-ratio:1/1; background:#f1f0f2; display:grid; gap:2px; overflow:hidden; position:relative; width:100%; }
+.gallery-card-collage img { display:block; height:100%; margin:0; min-height:0; object-fit:cover; width:100%; }
+.gallery-card-collage.count-1 { grid-template-columns:1fr; }
+.gallery-card-collage.count-2 { grid-template-columns:repeat(2,1fr); }
+.gallery-card-collage.count-3 { grid-template-columns:1.35fr .85fr; grid-template-rows:repeat(2,1fr); }
+.gallery-card-collage.count-3 img:first-child { grid-row:1 / 3; }
+.gallery-card-collage.count-4,.gallery-card-collage.count-many { grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(2,1fr); }
+.gallery-more-count { align-items:center; background:rgba(25,24,29,.68); bottom:0; color:#fff; display:flex; font-size:.78rem; font-weight:800; justify-content:center; padding:.35rem; position:absolute; right:0; top:50%; width:50%; }
+.gallery-card-meta { display:block; min-height:3.6rem; padding:.62rem .68rem .7rem; }
+.gallery-card-meta strong { display:block; font-size:.72rem; line-height:1.35; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.gallery-card-meta > span { color:var(--gallery-muted); display:block; font-size:.58rem; line-height:1.35; margin-top:.25rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.gallery-empty { color:var(--gallery-muted); font-size:.75rem; padding:3rem 0; text-align:center; }
+.gallery-pagination { display:flex; gap:.25rem; justify-content:center; margin-top:1.6rem; min-height:1.8rem; }
+.gallery-pagination button { background:transparent; border:0; border-bottom:2px solid transparent; color:#99959d; cursor:pointer; font:inherit; font-size:.7rem; min-width:1.6rem; padding:.3rem; }
+.gallery-pagination button.active { border-bottom-color:var(--gallery-accent); color:var(--gallery-ink); font-weight:800; }
+.gallery-modal-open { overflow:hidden; }
+.gallery-lightbox[hidden] { display:none; }
+.gallery-lightbox { align-items:center; background:rgba(18,18,21,.94); display:grid; grid-template-columns:3rem minmax(0,1fr) 3rem; inset:0; padding:2rem 3rem; position:fixed; z-index:1200; }
+.gallery-lightbox figure { align-items:center; display:grid; gap:1rem; grid-template-columns:minmax(0,1fr) 15rem; margin:0 auto; max-height:calc(100vh - 4rem); max-width:1120px; min-width:0; width:100%; }
+.gallery-lightbox figure > img { display:block; margin:0 auto; max-height:calc(100vh - 4rem); max-width:100%; object-fit:contain; }
+.gallery-lightbox figcaption { color:#eceaed; min-width:0; }
+.gallery-lightbox figcaption > div:first-child { align-items:baseline; display:flex; gap:.6rem; justify-content:space-between; }
+.gallery-lightbox figcaption strong { font-size:.9rem; }
+.gallery-lightbox figcaption span,.gallery-modal-meta { color:#aaa6ad; font-size:.64rem; }
+.gallery-lightbox figcaption p { color:#d4d0d5; font-size:.72rem; line-height:1.7; margin:.8rem 0; white-space:pre-wrap; }
+.gallery-lightbox button { background:transparent; border:0; color:#fff; cursor:pointer; font-family:Arial,sans-serif; font-size:2rem; padding:.5rem; }
+.gallery-lightbox-close { position:absolute; right:1.2rem; top:.8rem; }
+@media (min-width:48em) { .gallery-shell .gallery-content { margin-right:2rem; width:calc(100vw - 22rem); } }
+@media (min-width:64em) { .gallery-shell .gallery-content { margin-right:3rem; width:calc(100vw - 25rem); } }
+@media (max-width:1050px) { .gallery-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media (max-width:820px) { .gallery-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } .gallery-lightbox figure { grid-template-columns:1fr; } .gallery-lightbox figcaption { max-width:42rem; } }
+@media (max-width:47.99em) { .gallery-page { width:100%; } .gallery-grid { gap:.65rem; grid-template-columns:repeat(2,minmax(0,1fr)); } .gallery-card-meta { min-height:3.35rem; } .gallery-lightbox { grid-template-columns:2rem minmax(0,1fr) 2rem; padding:2.7rem .4rem 1rem; } .gallery-lightbox figure > img { max-height:65vh; } }
+
 @font-face {
   font-family: "Paperlogy";
   src: url("../fonts/paperlogy/Paperlogy-Medium.ttf") format("truetype");

@@ -37,3 +37,5 @@ collections:
   character_aus:
     output: true
     permalink: /character-au/:name/
+  gallery:
+    output: false

@@ -1,0 +1,120 @@
+---
+layout: gallery_index
+title: Gallery
+---
+
+<section class="gallery-page" data-gallery-page>
+  <header class="gallery-header">
+    <div><p class="gallery-kicker">VISUAL ARCHIVE</p><h1>Gallery</h1></div>
+    <a class="gallery-tool-button" href="{{ site.baseurl }}/tools/gallery-editor.html" target="_blank" rel="noopener" aria-label="Open Gallery editor" title="Open Gallery editor">+</a>
+  </header>
+
+  <nav class="gallery-tabs" aria-label="Gallery categories" data-gallery-tabs>
+    <span class="gallery-tab-indicator" aria-hidden="true"></span>
+    <button class="gallery-tab active" type="button" data-gallery-category="all">ALL</button>
+    <button class="gallery-tab" type="button" data-gallery-category="noctea">NOCTEA</button>
+    <button class="gallery-tab" type="button" data-gallery-category="bini">BINI</button>
+    <button class="gallery-tab" type="button" data-gallery-category="picrew &amp; neka">PICREW &amp; NEKA</button>
+    <button class="gallery-tab" type="button" data-gallery-category="commission">COMMISSION</button>
+    <button class="gallery-tab" type="button" data-gallery-category="given">GIVEN</button>
+    <button class="gallery-tab" type="button" data-gallery-category="etc">ETC</button>
+  </nav>
+
+  <div class="gallery-grid" data-gallery-grid>
+    {% assign gallery_items = site.gallery | sort: "date" | reverse %}
+    {% for item in gallery_items %}
+      {% assign image_count = item.images | size %}
+      <article class="gallery-card" data-gallery-card data-category="{{ item.category | downcase | escape }}" data-date="{{ item.date | date: '%Y-%m-%d' }}">
+        <button class="gallery-card-open" type="button" aria-label="Open {{ item.title | escape }}">
+          <span class="gallery-card-collage {% if image_count > 4 %}count-many{% else %}count-{{ image_count }}{% endif %}">
+            {% for image in item.images limit:4 %}<img src="{{ image }}" alt="" loading="lazy">{% endfor %}
+            {% if image_count > 4 %}<span class="gallery-more-count">+{{ image_count | minus: 4 }}</span>{% endif %}
+          </span>
+          <span class="gallery-card-meta"><strong>{{ item.title }}</strong><span>{{ item.date | date: "%Y.%m.%d" }}{% if item.artist %} · {{ item.artist }}{% endif %}</span></span>
+        </button>
+        <script type="application/json" class="gallery-card-data">{
+          "title": {{ item.title | jsonify }},
+          "date": {{ item.date | date: "%Y-%m-%d" | jsonify }},
+          "category": {{ item.category | jsonify }},
+          "artist": {{ item.artist | default: "" | jsonify }},
+          "characters": {{ item.characters | jsonify }},
+          "tags": {{ item.tags | jsonify }},
+          "description": {{ item.description | default: "" | jsonify }},
+          "images": {{ item.images | jsonify }}
+        }</script>
+      </article>
+    {% endfor %}
+  </div>
+  <p class="gallery-empty" data-gallery-empty hidden>No works in this category.</p>
+  <nav class="gallery-pagination" data-gallery-pagination aria-label="Gallery pages"></nav>
+</section>
+
+<div class="gallery-lightbox" data-gallery-lightbox hidden aria-hidden="true">
+  <button class="gallery-lightbox-close" type="button" aria-label="Close">&times;</button>
+  <button class="gallery-lightbox-prev" type="button" aria-label="Previous image">&#8249;</button>
+  <figure><img src="" alt=""><figcaption><div><strong data-gallery-modal-title></strong><span data-gallery-modal-count></span></div><p data-gallery-modal-description></p><div class="gallery-modal-meta" data-gallery-modal-meta></div></figcaption></figure>
+  <button class="gallery-lightbox-next" type="button" aria-label="Next image">&#8250;</button>
+</div>
+
+<script>
+(function () {
+  var page = document.querySelector('[data-gallery-page]');
+  if (!page) return;
+  var pageSize = 20, currentCategory = 'all', currentPage = 1, activeItem = null, activeImage = 0;
+  var cards = Array.prototype.slice.call(page.querySelectorAll('[data-gallery-card]'));
+  var tabs = Array.prototype.slice.call(page.querySelectorAll('[data-gallery-category]'));
+  var pagination = page.querySelector('[data-gallery-pagination]');
+  var empty = page.querySelector('[data-gallery-empty]');
+  var indicator = page.querySelector('.gallery-tab-indicator');
+  var lightbox = document.querySelector('[data-gallery-lightbox]');
+  var lightboxImage = lightbox.querySelector('figure img');
+  var modalTitle = lightbox.querySelector('[data-gallery-modal-title]');
+  var modalCount = lightbox.querySelector('[data-gallery-modal-count]');
+  var modalDescription = lightbox.querySelector('[data-gallery-modal-description]');
+  var modalMeta = lightbox.querySelector('[data-gallery-modal-meta]');
+
+  function moveIndicator(tab) { if (tab && indicator) { indicator.style.width = tab.offsetWidth + 'px'; indicator.style.transform = 'translateX(' + tab.offsetLeft + 'px)'; } }
+  function filteredCards() { return cards.filter(function (card) { return currentCategory === 'all' || card.getAttribute('data-category') === currentCategory; }); }
+  function renderPage() {
+    var filtered = filteredCards();
+    var pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+    if (currentPage > pageCount) currentPage = pageCount;
+    cards.forEach(function (card) { card.hidden = true; });
+    filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize).forEach(function (card) { card.hidden = false; });
+    empty.hidden = filtered.length !== 0;
+    pagination.innerHTML = '';
+    if (pageCount > 1) for (var number = 1; number <= pageCount; number += 1) {
+      var button = document.createElement('button');
+      button.type = 'button'; button.textContent = number; button.className = number === currentPage ? 'active' : '';
+      button.setAttribute('aria-label', 'Page ' + number);
+      button.addEventListener('click', (function (selected) { return function () { currentPage = selected; renderPage(); page.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; })(number));
+      pagination.appendChild(button);
+    }
+  }
+  function itemData(card) { try { return JSON.parse(card.querySelector('.gallery-card-data').textContent); } catch (error) { return { title: '', images: [] }; } }
+  function renderLightbox() {
+    var images = activeItem.images || [];
+    lightboxImage.src = images[activeImage] || ''; lightboxImage.alt = activeItem.title || '';
+    modalTitle.textContent = activeItem.title || ''; modalCount.textContent = images.length > 1 ? (activeImage + 1) + ' / ' + images.length : '';
+    modalDescription.textContent = activeItem.description || '';
+    var meta = [activeItem.date, activeItem.artist, activeItem.category].filter(Boolean);
+    var characters = (activeItem.characters || []).map(function (name) { return '@' + name; });
+    var tags = (activeItem.tags || []).map(function (tag) { return '#' + tag; });
+    modalMeta.textContent = meta.concat(characters, tags).join(' · ');
+    lightbox.querySelector('.gallery-lightbox-prev').hidden = images.length < 2;
+    lightbox.querySelector('.gallery-lightbox-next').hidden = images.length < 2;
+  }
+  function openLightbox(card) { activeItem = itemData(card); activeImage = 0; renderLightbox(); lightbox.hidden = false; lightbox.setAttribute('aria-hidden', 'false'); document.documentElement.classList.add('gallery-modal-open'); }
+  function closeLightbox() { lightbox.hidden = true; lightbox.setAttribute('aria-hidden', 'true'); lightboxImage.src = ''; document.documentElement.classList.remove('gallery-modal-open'); }
+  function moveImage(direction) { var length = (activeItem.images || []).length; if (length) { activeImage = (activeImage + direction + length) % length; renderLightbox(); } }
+  tabs.forEach(function (tab) { tab.addEventListener('click', function () { currentCategory = tab.getAttribute('data-gallery-category'); currentPage = 1; tabs.forEach(function (item) { item.classList.toggle('active', item === tab); }); moveIndicator(tab); renderPage(); }); });
+  cards.forEach(function (card) { card.querySelector('.gallery-card-open').addEventListener('click', function () { openLightbox(card); }); });
+  lightbox.querySelector('.gallery-lightbox-close').addEventListener('click', closeLightbox);
+  lightbox.querySelector('.gallery-lightbox-prev').addEventListener('click', function () { moveImage(-1); });
+  lightbox.querySelector('.gallery-lightbox-next').addEventListener('click', function () { moveImage(1); });
+  lightbox.addEventListener('click', function (event) { if (event.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function (event) { if (!lightbox.hidden) { if (event.key === 'Escape') closeLightbox(); if (event.key === 'ArrowLeft') moveImage(-1); if (event.key === 'ArrowRight') moveImage(1); } });
+  window.addEventListener('resize', function () { moveIndicator(page.querySelector('.gallery-tab.active')); });
+  renderPage(); requestAnimationFrame(function () { moveIndicator(page.querySelector('.gallery-tab.active')); });
+})();
+</script>

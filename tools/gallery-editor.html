@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gallery Editor</title>
+  <style>
+    :root{--ink:#29272e;--muted:#827e88;--line:#dfdde2;--accent:#7b5864;--green:#5b7771;--paper:#f5f5f6}*{box-sizing:border-box}body{background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}main{margin:0 auto;max-width:1180px;padding:26px 18px 60px}h1{font-size:1.45rem;margin:0 0 8px;letter-spacing:0}h2{font-size:.76rem;margin:0 0 12px;text-transform:uppercase}.guide,.panel,.preview{background:#fff;border:1px solid var(--line);border-radius:7px}.guide{margin:0 0 15px;padding:0 13px}.guide summary{color:var(--muted);cursor:pointer;font-size:.7rem;font-weight:750;padding:10px 0}.guide ol{color:var(--muted);font-size:.68rem;line-height:1.7;margin:0 0 12px;padding-left:20px}.layout{display:grid;gap:16px;grid-template-columns:minmax(360px,.9fr) minmax(380px,1.1fr)}.panel{margin-bottom:14px;padding:15px}.grid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}.wide{grid-column:1/-1}label{color:#716d76;display:block;font-size:.67rem;font-weight:750}input,select,textarea{background:#fff;border:1px solid #d8d5db;border-radius:4px;color:var(--ink);font:inherit;font-size:.75rem;margin-top:5px;padding:8px 9px;width:100%}textarea{line-height:1.6;min-height:80px;resize:vertical}button{background:var(--accent);border:1px solid var(--accent);border-radius:4px;color:#fff;cursor:pointer;font:inherit;font-size:.68rem;font-weight:750;padding:8px 10px}button.secondary{background:#fff;border-color:#cbc7ce;color:#69646e}button.danger{background:#fff;border-color:#caa8aa;color:#92575b}.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.status,.small{color:var(--muted);font-size:.64rem;line-height:1.5}.status{min-height:1em;margin-top:8px}.image-list{display:grid;gap:6px;margin-top:10px}.image-item{align-items:center;border:1px solid var(--line);border-radius:5px;display:grid;gap:8px;grid-template-columns:42px minmax(0,1fr) auto;padding:6px}.image-item img{background:#efedf0;height:42px;margin:0;object-fit:cover;width:42px}.image-item span{font-size:.65rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.image-actions{display:flex;gap:3px}.image-actions button{background:#fff;border-color:#ddd9df;color:#77727e;padding:4px 6px}.output{font-family:Consolas,"Courier New",monospace;min-height:280px;white-space:pre}.preview-wrap{position:sticky;top:14px}.preview{min-height:520px;padding:16px}.preview-card{background:#fff;border:1px solid var(--line);border-radius:5px;max-width:280px;overflow:hidden}.collage{aspect-ratio:1/1;background:#eeecef;display:grid;gap:2px;overflow:hidden;position:relative}.collage img{height:100%;margin:0;min-height:0;object-fit:cover;width:100%}.collage.count-2{grid-template-columns:repeat(2,1fr)}.collage.count-3{grid-template-columns:1.35fr .85fr;grid-template-rows:repeat(2,1fr)}.collage.count-3 img:first-child{grid-row:1/3}.collage.count-4,.collage.count-many{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}.more{align-items:center;background:rgba(25,24,29,.68);bottom:0;color:#fff;display:flex;font-size:.8rem;font-weight:800;justify-content:center;position:absolute;right:0;top:50%;width:50%}.preview-meta{padding:10px}.preview-meta strong{display:block;font-size:.78rem}.preview-meta span{color:var(--muted);display:block;font-size:.62rem;margin-top:4px}.preview-description{border-top:1px solid var(--line);font-size:.68rem;line-height:1.65;margin-top:16px;padding-top:13px;white-space:pre-wrap}@media(max-width:850px){.layout{grid-template-columns:1fr}.preview-wrap{position:static}}@media(max-width:560px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Gallery Editor</h1>
+  <details class="guide"><summary>사용방법</summary><ol><li>이미지를 repo의 <code>assets/gallery/작품폴더/</code>에 먼저 넣습니다.</li><li>작품 정보와 이미지 경로를 입력하고 Add image로 묶음에 추가합니다.</li><li>Current images에서 순서를 바꾸거나 삭제하고 Preview를 확인합니다.</li><li>Save draft는 이 브라우저에만 임시 저장합니다.</li><li>완성된 Markdown을 Download한 뒤 repo의 <code>_gallery</code> 폴더에 넣고 Commit/Push합니다.</li></ol></details>
+  <div class="layout">
+    <div>
+      <section class="panel"><h2>Artwork</h2><div class="grid">
+        <label>Title<input id="title" placeholder="Artwork title"></label><label>Date<input id="date" type="date"></label>
+        <label>Category<select id="category"><option>Noctea</option><option>Bini</option><option>Picrew &amp; Neka</option><option>Commission</option><option>Given</option><option>ETC</option></select></label><label>Artist<input id="artist" placeholder="Artist or source"></label>
+        <label>Characters<input id="characters" placeholder="Dietrich, Katia"></label><label>Tags<input id="tags" placeholder="portrait, AU"></label>
+        <label class="wide">Description<textarea id="description"></textarea></label><label>File name<input id="fileName" placeholder="2026-06-artwork.md"></label><label>Draft name<input id="draftName"></label>
+        <label class="wide">Saved drafts<select id="draftSelect"></select></label>
+      </div><div class="actions"><button id="saveDraft" type="button">Save draft</button><button id="loadDraft" class="secondary" type="button">Load selected</button><button id="deleteDraft" class="danger" type="button">Delete selected</button></div><div class="status" id="draftStatus"></div></section>
+      <section class="panel"><h2>Images</h2><label>Repo image path<input id="imagePath" placeholder="/dekade-archive/assets/gallery/work/image-01.jpg"></label><div class="actions"><button id="addImage" type="button">Add image</button></div><div class="image-list" id="imageList"></div><p class="small">1–4장은 각기 다른 조합으로 보이고, 5장 이상은 앞의 4장과 +N 표시가 나옵니다.</p></section>
+      <section class="panel"><h2>Output</h2><textarea class="output" id="output" spellcheck="false"></textarea><div class="actions"><button id="copy" type="button">Copy Markdown</button><button id="download" class="secondary" type="button">Download .md</button></div><div class="status" id="status"></div></section>
+    </div>
+    <aside class="preview-wrap"><section class="preview"><h2>Preview</h2><div id="preview"></div></section></aside>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var STORAGE='dekade-gallery-drafts-v1',images=[];
+  var ids=['title','date','category','artist','characters','tags','description','fileName'];
+  function el(id){return document.getElementById(id)}function val(id){return el(id).value.trim()}function set(id,value){el(id).value=value==null?'':value}
+  function esc(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+  function yaml(value){return JSON.stringify(String(value==null?'':value))}function list(value){return String(value||'').split(',').map(function(x){return x.trim()}).filter(Boolean)}
+  function slug(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'gallery-item'}
+  function meta(){var out={};ids.forEach(function(id){out[id]=val(id)});return out}
+  function build(){var m=meta(),lines=['---','title: '+yaml(m.title),'date: '+yaml(m.date),'category: '+yaml(m.category),'artist: '+yaml(m.artist),'characters: '+JSON.stringify(list(m.characters)),'tags: '+JSON.stringify(list(m.tags)),'description: '+yaml(m.description),'images:'];images.forEach(function(path){lines.push('  - '+yaml(path))});lines.push('---','');el('output').value=lines.join('\n');return (m.fileName||slug(m.title)+'.md').replace(/\.md$/,'')+'.md'}
+  function renderList(){el('imageList').innerHTML=images.length?images.map(function(path,index){return '<div class="image-item"><img src="'+esc(path)+'" alt=""><span>'+esc(path)+'</span><span class="image-actions"><button type="button" data-action="up" data-index="'+index+'">↑</button><button type="button" data-action="down" data-index="'+index+'">↓</button><button type="button" data-action="edit" data-index="'+index+'">Edit</button><button type="button" data-action="remove" data-index="'+index+'">×</button></span></div>'}).join(''):'<p class="small">No images yet.</p>'}
+  function renderPreview(){var m=meta(),shown=images.slice(0,4),count=images.length>4?'many':Math.max(1,images.length);el('preview').innerHTML='<div class="preview-card"><div class="collage count-'+count+'">'+shown.map(function(path){return '<img src="'+esc(path)+'" alt="">'}).join('')+(images.length>4?'<span class="more">+'+(images.length-4)+'</span>':'')+'</div><div class="preview-meta"><strong>'+esc(m.title||'Artwork title')+'</strong><span>'+esc(m.date)+(m.artist?' · '+esc(m.artist):'')+'</span></div></div><div class="preview-description">'+esc(m.description)+'</div>'}
+  function update(){renderList();renderPreview();build()}
+  el('addImage').onclick=function(){var path=val('imagePath');if(!path)return;images.push(path);set('imagePath','');update()};
+  el('imagePath').addEventListener('keydown',function(event){if(event.key==='Enter'){event.preventDefault();el('addImage').click()}});
+  el('imageList').onclick=function(event){var button=event.target.closest('[data-action]');if(!button)return;var index=Number(button.dataset.index),action=button.dataset.action;if(action==='edit'){set('imagePath',images[index]);images.splice(index,1);el('imagePath').focus()}if(action==='remove')images.splice(index,1);if(action==='up'&&index>0){var a=images[index-1];images[index-1]=images[index];images[index]=a}if(action==='down'&&index<images.length-1){var b=images[index+1];images[index+1]=images[index];images[index]=b}update()};
+  ids.forEach(function(id){el(id).addEventListener('input',function(){if(id==='title'&&!val('fileName'))el('fileName').placeholder=slug(val('title'))+'.md';update()})});
+  function drafts(){try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')}catch(error){return{}}}function refresh(selected){var all=drafts(),names=Object.keys(all).sort();el('draftSelect').innerHTML=names.length?names.map(function(name){return '<option>'+esc(name)+'</option>'}).join(''):'<option value="">No drafts</option>';if(selected)el('draftSelect').value=selected}
+  el('saveDraft').onclick=function(){var name=val('draftName')||val('title')||'Gallery draft',all=drafts();all[name]={meta:meta(),images:images};localStorage.setItem(STORAGE,JSON.stringify(all));refresh(name);el('draftStatus').textContent='Draft saved: '+name};
+  el('loadDraft').onclick=function(){var name=val('draftSelect'),saved=drafts()[name];if(!saved)return;ids.forEach(function(id){set(id,saved.meta[id])});images=(saved.images||[]).slice();set('draftName',name);update();el('draftStatus').textContent='Draft loaded.'};
+  el('deleteDraft').onclick=function(){var name=val('draftSelect'),all=drafts();if(!name||!all[name])return;delete all[name];localStorage.setItem(STORAGE,JSON.stringify(all));refresh();el('draftStatus').textContent='Draft deleted.'};
+  el('copy').onclick=async function(){build();try{await navigator.clipboard.writeText(el('output').value)}catch(error){el('output').select();document.execCommand('copy')}el('status').textContent='Markdown copied.'};
+  el('download').onclick=function(){var name=build(),blob=new Blob([el('output').value],{type:'text/markdown;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000)};
+  var now=new Date();set('date',new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10));refresh();update();
+})();
+</script>
+</body>
+</html>
