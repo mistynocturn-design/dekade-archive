@@ -9,3 +9,14 @@ description: ""
 images:
   - "assets/gallery/Noctea/01.jpg"
 ---
+---
+title: "골동품 로봇"
+date: "2026-05-25"
+category: "Noctea"
+artist: "녹티"
+characters: ["로봇"]
+tags: ["낙서"]
+description: ""
+images:
+  - "assets/gallery/Noctea/02.jpg"
+---
