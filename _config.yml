@@ -31,3 +31,6 @@ collections:
   archive:
     output: true
     permalink: /archive/:name/
+  roleplays:
+    output: true
+    permalink: /roleplay/:name/

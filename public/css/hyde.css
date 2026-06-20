@@ -2474,3 +2474,561 @@ a.sidebar-nav-item:focus {
 .character-image-modal-nav:hover {
   color: #fff;
 }
+
+/* Roleplay live board and static archive */
+.roleplay-app {
+  --roleplay-ink: #3f3b4d;
+  --roleplay-muted: #918d99;
+  --roleplay-line: #e8e6eb;
+  --roleplay-live: #7f785b;
+  color: var(--roleplay-ink);
+  font-family: 'Paperlogy', sans-serif;
+}
+
+.roleplay-tabs {
+  align-items: center;
+  border-bottom: 1px solid var(--roleplay-line);
+  display: flex;
+  gap: .28rem .55rem;
+  margin: .2rem 0 1.2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: .66rem;
+  position: relative;
+  scrollbar-width: none;
+}
+
+.roleplay-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.roleplay-tab {
+  background: transparent;
+  border: 0;
+  color: #c2bdc6;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: .83rem;
+  font-weight: 700;
+  padding: .16rem .04rem;
+  transition: color .16s ease;
+}
+
+.roleplay-tab:hover,
+.roleplay-tab:focus,
+.roleplay-tab.active {
+  color: var(--roleplay-live);
+}
+
+.roleplay-tab-divider {
+  color: #ddd9df;
+  flex: 0 0 auto;
+  font-size: .72rem;
+}
+
+.roleplay-tab-indicator {
+  background: var(--roleplay-live);
+  border-radius: 999px;
+  bottom: 0;
+  height: 3px;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: transform .24s ease, width .24s ease;
+  width: 0;
+}
+
+.roleplay-panel {
+  display: none;
+}
+
+.roleplay-panel.active {
+  display: block;
+}
+
+.roleplay-live-tools {
+  display: flex;
+  gap: .35rem;
+  justify-content: flex-end;
+  margin: -.35rem 0 .7rem;
+}
+
+.content .roleplay-icon-button {
+  align-items: center;
+  background: #faf9f5;
+  border: 1px solid #eae2d3;
+  border-radius: 5px;
+  color: #7f785b;
+  display: inline-flex;
+  font: inherit;
+  font-size: .88rem;
+  height: 1.75rem;
+  justify-content: center;
+  padding: 0;
+  width: 1.75rem;
+}
+
+.content .roleplay-icon-button:hover,
+.content .roleplay-icon-button:focus {
+  background: #7f785b;
+  border-color: #7f785b;
+  color: #faf9f5;
+}
+
+.content .roleplay-key-button {
+  color: #afa4cf;
+}
+
+.roleplay-key-panel,
+.roleplay-compose {
+  background: #fcfcfc;
+  border: 1px solid var(--roleplay-line);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  padding: .8rem;
+}
+
+.roleplay-key-panel label,
+.roleplay-compose label {
+  color: #77727e;
+  display: block;
+  font-size: .66rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.roleplay-key-panel input,
+.roleplay-compose input,
+.roleplay-compose select,
+.roleplay-compose textarea,
+.roleplay-reply-form select,
+.roleplay-reply-form textarea {
+  background: #fff;
+  border: 1px solid #dedbe1;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #3f3b4d;
+  font: inherit;
+  font-size: .72rem;
+  margin-top: .25rem;
+  padding: .48rem .55rem;
+  width: 100%;
+}
+
+.roleplay-compose textarea,
+.roleplay-reply-form textarea {
+  line-height: 1.65;
+  resize: vertical;
+}
+
+.roleplay-form-grid {
+  display: grid;
+  gap: .6rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(6rem, .7fr) minmax(6rem, .7fr);
+  margin-bottom: .65rem;
+}
+
+.roleplay-file-label {
+  margin-top: .55rem !important;
+}
+
+.roleplay-file-label input {
+  padding: .32rem;
+}
+
+.roleplay-inline-control,
+.roleplay-form-actions {
+  align-items: center;
+  display: flex;
+  gap: .45rem;
+}
+
+.roleplay-inline-control input {
+  flex: 1 1 auto;
+}
+
+.roleplay-form-actions {
+  justify-content: flex-end;
+  margin-top: .7rem;
+}
+
+.content .roleplay-compose button,
+.content .roleplay-key-panel button,
+.content .roleplay-reply-form > button {
+  background: #4e4a65;
+  border: 1px solid #4e4a65;
+  border-radius: 4px;
+  color: #fff;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: .48rem .72rem;
+}
+
+.content .roleplay-secondary-button {
+  background: #fff;
+  border-color: #dcd9df;
+  color: #77727e;
+}
+
+.roleplay-status,
+.roleplay-loading,
+.roleplay-empty {
+  color: var(--roleplay-muted);
+  font-size: .68rem;
+  margin: .65rem 0;
+}
+
+.roleplay-status.error {
+  color: #a45454;
+}
+
+.roleplay-thread-list {
+  display: grid;
+}
+
+.roleplay-thread {
+  border-bottom: 1px solid var(--roleplay-line);
+  padding: 1rem 0 1.2rem;
+}
+
+.roleplay-thread:first-child {
+  padding-top: .35rem;
+}
+
+.roleplay-thread-header {
+  align-items: flex-start;
+  display: flex;
+  gap: .7rem;
+  justify-content: space-between;
+  margin-bottom: .55rem;
+}
+
+.roleplay-thread-header h2 {
+  color: var(--roleplay-ink);
+  font-size: .91rem;
+  line-height: 1.35;
+  margin: .18rem 0 0;
+}
+
+.roleplay-category {
+  color: var(--roleplay-muted);
+  font-size: .58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.content .roleplay-complete-button {
+  background: transparent;
+  border: 0;
+  color: #c1bdc5;
+  font: inherit;
+  font-size: .82rem;
+  padding: .18rem;
+}
+
+.content .roleplay-complete-button:hover,
+.content .roleplay-complete-button:focus {
+  color: #7f785b;
+}
+
+.roleplay-message {
+  background: var(--roleplay-bg, #fafafa);
+  border-left: 3px solid var(--roleplay-accent, #ddd);
+  border-radius: 5px;
+  color: var(--roleplay-text, #333);
+  margin: .4rem 0;
+  padding: .55rem .62rem .62rem;
+}
+
+.roleplay-message header {
+  align-items: center;
+  display: flex;
+  gap: .38rem;
+  margin-bottom: .35rem;
+  min-height: 1.55rem;
+}
+
+.roleplay-avatar {
+  align-items: center;
+  background: var(--roleplay-accent, #ddd);
+  border-radius: 50%;
+  display: inline-flex;
+  flex: 0 0 1.55rem;
+  height: 1.55rem;
+  justify-content: center;
+  overflow: hidden;
+  width: 1.55rem;
+}
+
+.roleplay-avatar img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.roleplay-message header strong {
+  font-size: .67rem;
+}
+
+.roleplay-message header time {
+  color: color-mix(in srgb, var(--roleplay-text, #333) 55%, transparent);
+  font-size: .56rem;
+  margin-left: auto;
+}
+
+.roleplay-message-body {
+  border: 1px solid color-mix(in srgb, var(--roleplay-text, #333) 10%, transparent);
+  border-radius: 4px;
+  padding: .58rem;
+}
+
+.roleplay-message-text {
+  font-size: .7rem;
+  line-height: 1.72;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.roleplay-replies {
+  margin-top: .5rem;
+}
+
+.roleplay-replies > summary {
+  color: #8d8991;
+  cursor: pointer;
+  font-size: .64rem;
+  font-weight: 700;
+  list-style: none;
+  padding: .24rem 0;
+}
+
+.roleplay-replies > summary::-webkit-details-marker {
+  display: none;
+}
+
+.roleplay-replies > summary::before {
+  content: "+";
+  display: inline-block;
+  margin-right: .3rem;
+}
+
+.roleplay-replies[open] > summary::before {
+  content: "−";
+}
+
+.roleplay-replies > summary span {
+  color: #b3afb6;
+  margin-left: .18rem;
+}
+
+.roleplay-reply-area {
+  border-left: 1px solid #ddd9df;
+  margin: .35rem 0 0 .75rem;
+  padding-left: .7rem;
+}
+
+.roleplay-reply-list .roleplay-message {
+  margin: .28rem 0;
+}
+
+.roleplay-pagination {
+  display: flex;
+  gap: .25rem;
+  justify-content: center;
+  margin: .6rem 0;
+}
+
+.content .roleplay-pagination button {
+  background: transparent;
+  border: 0;
+  color: #aaa5ad;
+  font: inherit;
+  font-size: .62rem;
+  min-width: 1.35rem;
+  padding: .2rem;
+}
+
+.content .roleplay-pagination button.active {
+  color: #4e4a65;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.roleplay-reply-form {
+  align-items: end;
+  display: grid;
+  gap: .4rem;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  margin-top: .65rem;
+}
+
+.roleplay-reply-controls {
+  display: flex;
+  gap: .3rem;
+}
+
+.roleplay-reply-form select,
+.roleplay-reply-form textarea {
+  margin: 0;
+}
+
+.roleplay-file-button {
+  align-items: center;
+  border: 1px solid #dedbe1;
+  border-radius: 4px;
+  color: #8d8991;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 1.9rem;
+  font-size: .8rem;
+  justify-content: center;
+}
+
+.roleplay-file-button input {
+  display: none;
+}
+
+.roleplay-image-grid {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: .5rem;
+  max-height: 28rem;
+  overflow: hidden;
+}
+
+.roleplay-image-grid.count-1 {
+  grid-template-columns: 1fr;
+}
+
+.roleplay-image-grid.count-3 button:first-child {
+  grid-row: span 2;
+}
+
+.content .roleplay-image-grid button {
+  background: transparent;
+  border: 0;
+  min-height: 7rem;
+  padding: 0;
+}
+
+.roleplay-image-grid img {
+  height: 100%;
+  max-height: 20rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.roleplay-image-grid.count-1 img {
+  object-fit: contain;
+}
+
+.roleplay-archive-list {
+  display: grid;
+  gap: .42rem;
+}
+
+.content .roleplay-archive-link {
+  align-items: center;
+  border-bottom: 1px solid var(--roleplay-line);
+  color: var(--roleplay-ink);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: .7rem .2rem;
+  text-decoration: none;
+}
+
+.roleplay-archive-link span {
+  min-width: 0;
+}
+
+.roleplay-archive-link strong {
+  display: block;
+  font-size: .78rem;
+}
+
+.roleplay-archive-link small,
+.roleplay-archive-link time,
+.roleplay-archive-header p,
+.roleplay-archive-header time {
+  color: var(--roleplay-muted);
+  font-size: .6rem;
+}
+
+.roleplay-archive-link small {
+  margin-top: .14rem;
+}
+
+.roleplay-image-modal[hidden] {
+  display: none;
+}
+
+.roleplay-image-modal {
+  align-items: center;
+  background: rgba(10, 10, 12, .88);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 2.5rem;
+  position: fixed;
+  z-index: 1000;
+}
+
+.roleplay-image-modal img {
+  max-height: 90vh;
+  max-width: 92vw;
+  object-fit: contain;
+}
+
+.content .roleplay-image-modal button {
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font: inherit;
+  font-size: 1.6rem;
+  position: absolute;
+  right: 1rem;
+  top: .7rem;
+}
+
+.roleplay-archive-header {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+  padding-bottom: .8rem;
+}
+
+.roleplay-archive-header h1 {
+  margin: .1rem 0;
+}
+
+@media (max-width: 40rem) {
+  .roleplay-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .roleplay-form-grid label:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .roleplay-reply-form {
+    grid-template-columns: 1fr auto;
+  }
+
+  .roleplay-reply-controls {
+    grid-column: 1 / -1;
+  }
+
+  .roleplay-reply-area {
+    margin-left: .25rem;
+    padding-left: .48rem;
+  }
+
+  .roleplay-image-modal {
+    padding: 1rem;
+  }
+}

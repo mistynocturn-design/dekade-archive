@@ -1,0 +1,78 @@
+---
+layout: page
+title: Roleplay
+---
+
+<div class="roleplay-app" data-roleplay-app data-api-url="https://script.google.com/macros/s/AKfycbzL4ejQrKsXF_AIDp8kRklMFo53uuAyAe9IVt5qn2EnRDwB6YJFxyS09EhODV3Ce9nt/exec">
+  <nav class="roleplay-tabs" aria-label="Roleplay categories">
+    <button class="roleplay-tab active" type="button" data-roleplay-tab="live">LIVE</button>
+    <span class="roleplay-tab-divider" aria-hidden="true">|</span>
+    {% for category in site.data.roleplay_categories %}
+      <button class="roleplay-tab" type="button" data-roleplay-tab="{{ category | slugify }}">{{ category }}</button>
+      {% unless forloop.last %}<span class="roleplay-tab-divider" aria-hidden="true">|</span>{% endunless %}
+    {% endfor %}
+    <span class="roleplay-tab-indicator" aria-hidden="true"></span>
+  </nav>
+
+  <section class="roleplay-panel active" data-roleplay-panel="live">
+    <div class="roleplay-live-tools">
+      <button class="roleplay-icon-button" type="button" data-roleplay-new aria-label="New roleplay thread" title="New roleplay thread">+</button>
+      <button class="roleplay-icon-button" type="button" data-roleplay-refresh aria-label="Refresh threads" title="Refresh threads">↻</button>
+      <button class="roleplay-icon-button roleplay-key-button" type="button" data-roleplay-key aria-label="Set access key" title="Set access key">●</button>
+    </div>
+
+    <form class="roleplay-key-panel" data-roleplay-key-form hidden>
+      <label for="roleplayAccessKey">Access key</label>
+      <div class="roleplay-inline-control">
+        <input id="roleplayAccessKey" data-roleplay-passcode type="password" autocomplete="current-password" required>
+        <button type="submit">Save</button>
+      </div>
+    </form>
+
+    <form class="roleplay-compose" data-roleplay-compose hidden>
+      <div class="roleplay-form-grid">
+        <label>Title<input name="title" maxlength="100" required></label>
+        <label>Category
+          <select name="category">
+            {% for category in site.data.roleplay_categories %}<option value="{{ category }}">{{ category }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Author<select name="author_id" data-roleplay-author required></select></label>
+      </div>
+      <label>Text<textarea name="content" rows="5" required></textarea></label>
+      <label class="roleplay-file-label">Images<input name="images" type="file" accept="image/*" multiple></label>
+      <div class="roleplay-form-actions">
+        <button class="roleplay-secondary-button" type="button" data-roleplay-compose-close>Cancel</button>
+        <button type="submit">Publish</button>
+      </div>
+    </form>
+
+    <p class="roleplay-status" data-roleplay-status aria-live="polite">Loading...</p>
+    <div class="roleplay-thread-list" data-roleplay-threads></div>
+  </section>
+
+  {% for category in site.data.roleplay_categories %}
+    <section class="roleplay-panel" data-roleplay-panel="{{ category | slugify }}">
+      {% assign category_logs = site.roleplays | where: "category", category | sort: "archive_date" | reverse %}
+      {% if category_logs.size > 0 %}
+        <div class="roleplay-archive-list">
+          {% for log in category_logs %}
+            <a class="roleplay-archive-link" href="{{ log.url | relative_url }}">
+              <span><strong>{{ log.title }}</strong>{% if log.summary %}<small>{{ log.summary }}</small>{% endif %}</span>
+              <time>{{ log.archive_date | date: "%Y-%m-%d" }}</time>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="roleplay-empty">No archived threads yet.</p>
+      {% endif %}
+    </section>
+  {% endfor %}
+
+  <div class="roleplay-image-modal" data-roleplay-image-modal hidden aria-hidden="true">
+    <button type="button" data-roleplay-image-close aria-label="Close image">×</button>
+    <img src="" alt="">
+  </div>
+</div>
+
+<script src="{{ site.baseurl }}/public/js/roleplay.js"></script>
