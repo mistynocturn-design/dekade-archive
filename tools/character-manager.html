@@ -987,7 +987,7 @@ var fieldHelp = {
 Object.keys(fieldHelp).forEach(function (id) {
   var control = el(id);
   var label = control && control.closest('label');
-  if (label) { label.dataset.help = fieldHelp[id]; label.setAttribute('tabindex', '0'); }
+  if (label) { label.dataset.help = fieldHelp[id]; label.title = fieldHelp[id]; label.setAttribute('tabindex', '0'); }
 });
 var tabHelp = {
   facts:'목록 카드와 Profile 왼쪽 카드에 표시할 요약 정보입니다.',
@@ -999,7 +999,7 @@ var tabHelp = {
   memo:'분류하기 어려운 메모와 조각 설정을 기록합니다.'
 };
 document.querySelectorAll('.tab[data-tab]').forEach(function (tab) {
-  if (tabHelp[tab.dataset.tab]) { tab.dataset.help = tabHelp[tab.dataset.tab]; tab.setAttribute('aria-label', tab.textContent + ': ' + tabHelp[tab.dataset.tab]); }
+  if (tabHelp[tab.dataset.tab]) { tab.dataset.help = tabHelp[tab.dataset.tab]; tab.title = tabHelp[tab.dataset.tab]; tab.setAttribute('aria-label', tab.textContent + ': ' + tabHelp[tab.dataset.tab]); }
 });
 fields.forEach(function (id) { el(id).addEventListener('input', function () { updateAll(); }); });
 el('title').addEventListener('input', function () { if (!val('fileName')) el('fileName').placeholder = slugify(val('title') || 'character') + '.md'; if (!val('draftName')) el('draftName').placeholder = val('title') || 'Dietrich, Katia...'; });

@@ -1,5 +1,5 @@
 var BACKUP_API = {
-  VERSION: '2026-06-20.1',
+  VERSION: '2026-06-20.4',
   ARCHIVE_SHEET: 'Archive',
   TWITTER_SHEET: 'Twitter',
   READ_KEY_PROPERTY: 'BACKUP_READ_KEY',
@@ -23,6 +23,7 @@ function doPost(e) {
     var body = parseBody_(e);
     checkReadKey_(body.read_key);
     var action = String(body.action || '').toLowerCase();
+    if (action === 'list_archive_titles') return json_(listArchiveTitles_());
     if (action === 'read_archive') return json_(readArchive_(body));
     if (action === 'read_twitter') return json_(readTwitter_(body));
     throw new Error('Unknown POST action: ' + action);
@@ -41,26 +42,13 @@ function readArchive_(body) {
     image: findOptionalColumn_(table.headers, ['이미지', '이미지링크', 'image', 'imageurl']),
     side: findColumn_(table.headers, ['좌우', '화자', 'side'])
   };
-  var startRow = Math.max(2, parseInt(body.start_row, 10) || 2);
-  var endRow = Math.min(sheet.getLastRow(), parseInt(body.end_row, 10) || startRow);
-  if (endRow < startRow) throw new Error('End row must be greater than or equal to start row.');
-  if (endRow - startRow + 1 > BACKUP_API.MAX_ARCHIVE_ROWS) throw new Error('Archive range is too large.');
-
-  if (body.expand_thread !== false && String(body.expand_thread).toLowerCase() !== 'false') {
-    var startIndex = startRow - 2;
-    var endIndex = endRow - 2;
-    var startTitle = cell_(table.rows[startIndex], columns.title);
-    var endTitle = cell_(table.rows[endIndex], columns.title);
-    while (startIndex > 0 && startTitle && cell_(table.rows[startIndex - 1], columns.title) === startTitle) startIndex -= 1;
-    while (endIndex < table.rows.length - 1 && endTitle && cell_(table.rows[endIndex + 1], columns.title) === endTitle) endIndex += 1;
-    startRow = startIndex + 2;
-    endRow = endIndex + 2;
-  }
-
+  var selectedTitle = String(body.title || '').trim();
+  if (!selectedTitle) throw new Error('Archive title is required.');
   var output = [];
-  for (var rowNumber = startRow; rowNumber <= endRow; rowNumber += 1) {
+  for (var rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber += 1) {
     var row = table.rows[rowNumber - 2];
     if (!row) continue;
+    if (cell_(row, columns.title) !== selectedTitle) continue;
     var content = cell_(row, columns.content);
     var image = columns.image === -1 ? '' : cell_(row, columns.image);
     if (!content && !image) continue;
@@ -72,8 +60,30 @@ function readArchive_(body) {
       image: image,
       side: cell_(row, columns.side).toLowerCase()
     });
+    if (output.length > BACKUP_API.MAX_ARCHIVE_ROWS) throw new Error('This Archive title has too many rows.');
   }
-  return { ok: true, api_version: BACKUP_API.VERSION, start_row: startRow, end_row: endRow, rows: output };
+  if (!output.length) throw new Error('No Archive rows found for title: ' + selectedTitle);
+  return { ok: true, api_version: BACKUP_API.VERSION, title: selectedTitle, rows: output };
+}
+
+function listArchiveTitles_() {
+  var sheet = getSheet_(BACKUP_API.ARCHIVE_SHEET);
+  var table = readTable_(sheet);
+  var titleColumn = findColumn_(table.headers, ['카테고리제목', '카테고리 제목', '제목', 'title']);
+  var dateColumn = findColumn_(table.headers, ['작성일', 'date']);
+  var found = {};
+  var titles = [];
+  table.rows.forEach(function (row) {
+    var title = cell_(row, titleColumn);
+    if (!title) return;
+    if (!found[title]) {
+      found[title] = { title: title, count: 0, first_date: dateText_(row[dateColumn]), last_date: dateText_(row[dateColumn]) };
+      titles.push(found[title]);
+    }
+    found[title].count += 1;
+    found[title].last_date = dateText_(row[dateColumn]) || found[title].last_date;
+  });
+  return { ok: true, api_version: BACKUP_API.VERSION, titles: titles };
 }
 
 function readTwitter_(body) {
@@ -105,21 +115,48 @@ function readTwitter_(body) {
     };
   }).filter(function (row) { return row.date || row.content || row.image_urls; });
 
-  var threadOwners = {};
+  // Thread numbers may be reused every month. Without an explicit start-month
+  // column, consecutive rows with the same ID are treated as one thread block.
+  var blockNumber = 0;
+  var previousImplicitId = '';
+  var previousImplicitKey = '';
+  var previousImplicitMonth = '';
   normalized.forEach(function (row) {
-    if (!row.thread_id) return;
     var writtenMonth = row.date.slice(0, 7);
-    var current = threadOwners[row.thread_id];
-    if (!current) threadOwners[row.thread_id] = row.thread_start_month || writtenMonth;
-    else if (row.thread_start_month) threadOwners[row.thread_id] = row.thread_start_month;
-    else if (writtenMonth && writtenMonth < current) threadOwners[row.thread_id] = writtenMonth;
+    if (!row.thread_id) {
+      row.thread_owner_month = writtenMonth;
+      row.thread_key = '';
+      previousImplicitId = '';
+      previousImplicitKey = '';
+      previousImplicitMonth = '';
+      return;
+    }
+    if (row.thread_start_month) {
+      row.thread_owner_month = row.thread_start_month;
+      row.thread_key = row.thread_start_month + '::' + row.thread_id;
+      previousImplicitId = '';
+      previousImplicitKey = '';
+      previousImplicitMonth = '';
+      return;
+    }
+    if (row.thread_id === previousImplicitId && writtenMonth === previousImplicitMonth && previousImplicitKey) {
+      row.thread_key = previousImplicitKey;
+    } else {
+      blockNumber += 1;
+      row.thread_key = writtenMonth + '::' + row.thread_id + '::' + blockNumber;
+    }
+    row.thread_owner_month = row.thread_key.slice(0, 7);
+    previousImplicitId = row.thread_id;
+    previousImplicitKey = row.thread_key;
+    previousImplicitMonth = writtenMonth;
   });
 
   var output = normalized.filter(function (row) {
-    if (row.thread_id) return threadOwners[row.thread_id] === month;
-    return row.date.slice(0, 7) === month;
+    return row.thread_owner_month === month;
   }).map(function (row) {
-    row.thread_start_month = row.thread_id ? threadOwners[row.thread_id] : '';
+    row.thread_start_month = row.thread_id ? row.thread_owner_month : '';
+    delete row.thread_owner_month;
+    delete row.thread_key;
     return row;
   });
   return { ok: true, api_version: BACKUP_API.VERSION, month: month, rows: output };

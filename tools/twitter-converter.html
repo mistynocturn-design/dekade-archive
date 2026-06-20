@@ -36,6 +36,7 @@
       <li>배포된 <code>/exec</code> URL과 방금 정한 Read key를 아래에 입력합니다. 같은 값은 Archive 컨버터에서도 사용하며 이 브라우저가 기억합니다.</li>
       <li><a href="https://docs.google.com/spreadsheets/d/1LKhVkxpyAEMXRmGpF_HNi27CD5SrezMgpioASLQrFVw/edit?usp=sharing" target="_blank" rel="noopener">스프레드시트</a>의 Twitter 탭에 트윗을 정리합니다.</li>
       <li>원트윗 기준 월을 선택하고 Load month를 누릅니다. 다음 달까지 이어진 타래도 시작월 파일에 함께 포함됩니다.</li>
+      <li>타래ID는 월마다 1부터 다시 써도 됩니다. 같은 타래의 행은 스프레드시트에서 서로 붙여 둡니다. 여러 달에 걸친 타래는 선택 사항인 <code>타래시작월</code> 열을 추가하면 가장 정확합니다.</li>
       <li>작성자 색상과 미리 생성된 결과를 확인한 뒤 <code>_twitter/YYYY-MM.md</code>로 저장합니다.</li>
       <li>프로필·첨부 이미지는 repo에 올린 뒤 시트에 해당 경로를 기록합니다.</li>
     </ol>
@@ -66,7 +67,7 @@
   <section class="panel">
     <label for="input">Loaded rows / manual paste fallback</label>
     <textarea id="input" placeholder="Copy columns A:G from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, author, profile image, tags, content, image URLs, thread ID, thread start month. Put 1 to 4 image URLs in the image cell, one URL per line.</p>
+    <p class="hint">Expected columns: date, author, profile image, tags, content, image URLs, thread ID. Thread start month is optional. Put 1 to 4 image URLs in the image cell, one URL per line.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -81,7 +82,7 @@
 </main>
 
 <script>
-var BACKUP_API_VERSION = '2026-06-20.1';
+var BACKUP_API_VERSION = '2026-06-20.4';
 var BACKUP_SOURCE_STORAGE = 'dekade-twitter-sheet-source';
 function loadSourceSettings() {
   try {
