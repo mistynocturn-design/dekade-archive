@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+  {% include head.html %}
+  <body class="writing-shell">
+    {% include sidebar.html %}
+    <main class="content container writing-content" style="--writing-accent:{{ page.accent | default: '#685867' }};--writing-soft:{{ page.soft | default: '#f2eeeb' }};">
+      <article class="writing-article">
+        {% if page.original_url %}<a class="writing-original-link" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">원문 보기 <span aria-hidden="true">↗</span></a>{% endif %}
+        <header class="writing-article-header">
+          <p class="writing-type">{{ page.type | default: "ETC" }}</p>
+          <h1>{{ page.title }}</h1>
+          {% if page.summary %}<p class="writing-deck">{{ page.summary }}</p>{% endif %}
+          <div class="writing-meta">
+            {% if page.author %}<span>{{ page.author }}</span>{% endif %}
+            {% if page.date %}<time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%Y.%m.%d" }}</time>{% endif %}
+            {% if page.series %}<span>{{ page.series }}{% if page.episode %} · {{ page.episode }}화{% endif %}</span>{% endif %}
+          </div>
+          {% if page.characters or page.tags %}<div class="writing-labels">{% for character in page.characters %}<span>@{{ character }}</span>{% endfor %}{% for tag in page.tags %}<span>#{{ tag }}</span>{% endfor %}</div>{% endif %}
+        </header>
+
+        {% if page.series %}
+          {% assign series_items = site.writings | where: "series", page.series | sort: "episode" %}
+          <details class="writing-series-toc" open>
+            <summary>{{ page.series }} 목차</summary>
+            <ol>{% for item in series_items %}<li{% if item.url == page.url %} class="current"{% endif %}><a href="{{ item.url | relative_url }}">{% if item.episode %}{{ item.episode }}. {% endif %}{{ item.title }}</a></li>{% endfor %}</ol>
+          </details>
+        {% endif %}
+
+        <div class="writing-body">{{ content }}</div>
+
+        {% if page.series %}
+          {% assign previous_item = nil %}{% assign next_item = nil %}
+          {% for item in series_items %}
+            {% if item.url == page.url %}
+              {% assign previous_index = forloop.index0 | minus: 1 %}{% assign next_index = forloop.index0 | plus: 1 %}
+              {% if previous_index >= 0 %}{% assign previous_item = series_items[previous_index] %}{% endif %}
+              {% if next_index < series_items.size %}{% assign next_item = series_items[next_index] %}{% endif %}
+            {% endif %}
+          {% endfor %}
+          {% if previous_item or next_item %}<nav class="writing-series-nav" aria-label="시리즈 이전 및 다음 글">
+            {% if previous_item %}<a class="previous" href="{{ previous_item.url | relative_url }}"><small>이전 글</small><strong>{{ previous_item.title }}</strong></a>{% else %}<span></span>{% endif %}
+            {% if next_item %}<a class="next" href="{{ next_item.url | relative_url }}"><small>다음 글</small><strong>{{ next_item.title }}</strong></a>{% endif %}
+          </nav>{% endif %}
+        {% endif %}
+        <a class="writing-back" href="{{ site.baseurl }}/writings/">← Writings</a>
+      </article>
+    </main>
+  </body>
+</html>

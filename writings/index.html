@@ -1,0 +1,37 @@
+---
+layout: writings_index
+title: Writings
+---
+
+<section class="writings-page" data-writings-page>
+  <header class="writings-header">
+    <div><p class="writings-kicker">TEXT ARCHIVE</p><h1>Writings</h1></div>
+    <a class="writings-tool-button" href="{{ site.baseurl }}/tools/writing-editor.html" target="_blank" rel="noopener" aria-label="Open Writing editor" title="Open Writing editor">+</a>
+  </header>
+  <nav class="writings-tabs" aria-label="Writing categories">
+    <button class="active" type="button" data-writing-type="all">ALL</button><button type="button" data-writing-type="short">SHORT</button><button type="button" data-writing-type="series">SERIES</button><button type="button" data-writing-type="setting">SETTING</button><button type="button" data-writing-type="etc">ETC</button>
+  </nav>
+  <details class="writings-search">
+    <summary>검색</summary>
+    <div class="writings-search-grid"><label class="wide">제목·작성자·본문·캐릭터·태그<input type="search" data-writing-query placeholder="검색어"></label><label>시작일<input type="date" data-writing-date-from></label><label>종료일<input type="date" data-writing-date-to></label></div>
+    <button class="writings-search-reset" type="button" data-writing-reset>초기화</button>
+  </details>
+  <p class="writings-result-count" data-writing-count></p>
+  <div class="writings-list" data-writings-list>
+    {% assign writing_items = site.writings | sort: "date" | reverse %}
+    {% for item in writing_items %}
+      <article class="writings-card" data-writing-card data-type="{{ item.type | default: 'ETC' | downcase | escape }}" data-date="{{ item.date | date: '%Y-%m-%d' }}" style="--writing-accent:{{ item.accent | default: '#685867' }};--writing-soft:{{ item.soft | default: '#f2eeeb' }};">
+        <a href="{{ item.url | relative_url }}">
+          {% if item.cover %}<img class="writings-card-cover" src="{{ item.cover }}" alt="" loading="lazy">{% else %}<span class="writings-card-cover writings-card-placeholder" aria-hidden="true">{{ item.title | slice: 0 }}</span>{% endif %}
+          <span class="writings-card-main"><span class="writings-card-top"><span>{{ item.type | default: "ETC" }}{% if item.series %} · {{ item.series }}{% if item.episode %} {{ item.episode }}화{% endif %}{% endif %}</span><time>{{ item.date | date: "%Y.%m.%d" }}</time></span><strong>{{ item.title }}</strong>{% if item.summary %}<span class="writings-card-summary">{{ item.summary }}</span>{% endif %}<span class="writings-card-meta">{% if item.author %}{{ item.author }}{% endif %}{% for character in item.characters %}<em>@{{ character }}</em>{% endfor %}{% for tag in item.tags %}<em>#{{ tag }}</em>{% endfor %}</span></span>
+        </a>
+        <script type="application/json" class="writings-card-data">{"title":{{ item.title | jsonify }},"author":{{ item.author | default: '' | jsonify }},"body":{{ item.content | strip_html | strip_newlines | jsonify }},"characters":{{ item.characters | jsonify }},"tags":{{ item.tags | jsonify }}}</script>
+      </article>
+    {% endfor %}
+  </div>
+  <p class="writings-empty" data-writings-empty hidden>조건에 맞는 글이 없습니다.</p>
+</section>
+
+<script>
+(function(){'use strict';var root=document.querySelector('[data-writings-page]');if(!root)return;var cards=Array.prototype.slice.call(root.querySelectorAll('[data-writing-card]')),activeType='all',query=root.querySelector('[data-writing-query]'),dateFrom=root.querySelector('[data-writing-date-from]'),dateTo=root.querySelector('[data-writing-date-to]'),count=root.querySelector('[data-writing-count]'),empty=root.querySelector('[data-writings-empty]');function searchText(card){try{var data=JSON.parse(card.querySelector('.writings-card-data').textContent),parts=[data.title,data.author,data.body].concat(data.characters||[],data.tags||[]);return parts.join(' ').toLocaleLowerCase()}catch(error){return card.textContent.toLocaleLowerCase()}}cards.forEach(function(card){card._searchText=searchText(card)});function render(){var keyword=query.value.trim().toLocaleLowerCase(),from=dateFrom.value,to=dateTo.value,shown=0;cards.forEach(function(card){var visible=(activeType==='all'||card.dataset.type===activeType)&&(!from||card.dataset.date>=from)&&(!to||card.dataset.date<=to)&&(!keyword||card._searchText.indexOf(keyword)>=0);card.hidden=!visible;if(visible)shown+=1});count.textContent=shown+'개의 글';empty.hidden=shown!==0}root.querySelectorAll('[data-writing-type]').forEach(function(button){button.addEventListener('click',function(){activeType=button.dataset.writingType;root.querySelectorAll('[data-writing-type]').forEach(function(item){item.classList.toggle('active',item===button)});render()})});[query,dateFrom,dateTo].forEach(function(input){input.addEventListener('input',render)});root.querySelector('[data-writing-reset]').addEventListener('click',function(){query.value='';dateFrom.value='';dateTo.value='';render();query.focus()});render()})();
+</script>

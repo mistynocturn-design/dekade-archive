@@ -39,3 +39,6 @@ collections:
     permalink: /character-au/:name/
   gallery:
     output: false
+  writings:
+    output: true
+    permalink: /writings/:name/
