@@ -20,6 +20,8 @@
   var lastThreadSignature = '';
   var replyDrafts = readReplyDrafts();
   var readReplies = readReplyState();
+  var roleplayImageCache = {};
+  var transparentPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
   function readReplyState() {
     try {
@@ -149,12 +151,51 @@
       ';--roleplay-accent:' + safeColor(author && author.accent_color, '#dedede');
   }
 
+  function driveImageId(url) {
+    var text = String(url || '');
+    var match = text.match(/[?&]id=([^&]+)/) || text.match(/\/d\/([^/]+)/);
+    return match ? decodeURIComponent(match[1]) : '';
+  }
+
+  async function driveImageData(fileId) {
+    if (!roleplayImageCache[fileId]) {
+      roleplayImageCache[fileId] = writeJson({ action: 'read_image', file_id: fileId }).then(function (file) {
+        return 'data:' + file.mime_type + ';base64,' + file.base64;
+      }).catch(function (error) {
+        delete roleplayImageCache[fileId];
+        throw error;
+      });
+    }
+    return roleplayImageCache[fileId];
+  }
+
+  function hydrateRoleplayImages(container) {
+    if (!container) return;
+    container.querySelectorAll('img[data-roleplay-file-id]').forEach(function (image) {
+      if (image.getAttribute('data-roleplay-loading') === 'true') return;
+      image.setAttribute('data-roleplay-loading', 'true');
+      driveImageData(image.getAttribute('data-roleplay-file-id')).then(function (dataUrl) {
+        image.src = dataUrl;
+        image.removeAttribute('data-roleplay-loading');
+        image.setAttribute('data-roleplay-loaded', 'true');
+        var button = image.closest('[data-roleplay-image]');
+        if (button) button.setAttribute('data-roleplay-image', dataUrl);
+      }).catch(function () {
+        image.alt = 'Image could not be loaded.';
+        image.setAttribute('data-roleplay-error', 'true');
+      });
+    });
+  }
+
   function imageGrid(images) {
     if (!images || !images.length) return '';
     var count = Math.min(images.length, 4);
     return '<div class="roleplay-image-grid count-' + count + '">' + images.slice(0, 4).map(function (url) {
       var safeUrl = escapeHtml(url);
-      return '<button type="button" data-roleplay-image="' + safeUrl + '"><img src="' + safeUrl + '" alt=""></button>';
+      var fileId = driveImageId(url);
+      var src = fileId ? transparentPixel : safeUrl;
+      var fileAttr = fileId ? ' data-roleplay-file-id="' + escapeHtml(fileId) + '"' : '';
+      return '<button type="button" data-roleplay-image="' + src + '"><img src="' + src + '"' + fileAttr + ' alt=""></button>';
     }).join('') + '</div>';
   }
 
@@ -215,6 +256,7 @@
       threadList.innerHTML = data.threads.length
         ? data.threads.map(threadHtml).join('')
         : '<p class="roleplay-empty">No active threads.</p>';
+      hydrateRoleplayImages(threadList);
       attachReplyToggles();
       setStatus('');
       openThreads.forEach(function (saved) {
@@ -264,6 +306,7 @@
         '<label class="roleplay-file-button" title="Attach images">＋<input name="images" type="file" accept="image/*" multiple></label></div>' +
         '<textarea name="content" rows="3" placeholder="Reply" required>' + escapeHtml(draft.content || '') + '</textarea>' +
         '<button type="submit">Post</button></form>';
+      hydrateRoleplayImages(area);
       if (draft.author_id) area.querySelector('[name="author_id"]').value = draft.author_id;
       if (data.page === data.total_pages && data.messages.length) {
         markReplyRead(threadId, data.messages[data.messages.length - 1].message_id);
