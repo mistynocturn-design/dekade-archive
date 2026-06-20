@@ -43,7 +43,7 @@
 .gallery-modal-open { overflow:hidden; }
 .gallery-lightbox[hidden] { display:none; }
 .gallery-lightbox { align-items:center; background:rgba(18,18,21,.94); display:grid; grid-template-columns:3rem minmax(0,1fr) 3rem; inset:0; padding:2rem 3rem; position:fixed; z-index:1200; }
-.gallery-lightbox figure { align-items:center; display:grid; gap:1rem; grid-template-columns:minmax(0,1fr) 15rem; margin:0 auto; max-height:calc(100vh - 4rem); max-width:1120px; min-width:0; width:100%; }
+.gallery-lightbox figure { align-items:center; display:grid; gap:1rem; grid-column:2; grid-template-columns:minmax(0,1fr) 15rem; margin:0 auto; max-height:calc(100vh - 4rem); max-width:1120px; min-width:0; width:100%; }
 .gallery-lightbox figure > img { display:block; margin:0 auto; max-height:calc(100vh - 4rem); max-width:100%; object-fit:contain; }
 .gallery-lightbox figcaption { color:#eceaed; min-width:0; }
 .gallery-lightbox figcaption > div:first-child { align-items:baseline; display:flex; gap:.6rem; justify-content:space-between; }

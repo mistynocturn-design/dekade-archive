@@ -7,5 +7,5 @@ characters: ["카디아"]
 tags: ["낙서"]
 description: ""
 images:
-  - "/dekade-archive/assets/gallery/Noctea/01.jpg\"assets/gallery/Noctea/03.png"
+  - "/dekade-archive/assets/gallery/Noctea/01.jpg"
 ---
