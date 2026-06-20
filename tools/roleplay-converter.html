@@ -39,6 +39,11 @@
     .images img { height:150px; object-fit:cover; width:100%; }
     .images.one { grid-template-columns:1fr; }
     .images.one img { height:auto; max-height:420px; object-fit:contain; }
+    .tool-guide { background:#fff; border:1px solid var(--line); border-radius:7px; margin:0 0 15px; padding:0 12px; }
+    .tool-guide summary { color:#77727e; cursor:pointer; font-size:.69rem; font-weight:700; padding:9px 0; }
+    .tool-guide ol,.tool-guide p { color:var(--muted); font-size:.67rem; line-height:1.65; }
+    .tool-guide ol { margin:0 0 7px; padding-left:19px; }
+    .tool-guide p { margin:0 0 11px; }
     @media (max-width:850px) { .layout { grid-template-columns:1fr; } }
     @media (max-width:520px) { .grid { grid-template-columns:1fr; } .wide { grid-column:auto; } }
   </style>
@@ -46,6 +51,19 @@
 <body>
 <main>
   <h1>Completed Roleplay Converter</h1>
+  <details class="tool-guide">
+    <summary>Backup workflow</summary>
+    <ol>
+      <li>LIVE 게시판에서 대화 타래를 완료 상태로 바꿉니다.</li>
+      <li>Reload 후 해당 타래를 선택하고 Load thread를 누릅니다.</li>
+      <li>제목, 카테고리, 날짜와 파일명을 확인한 뒤 Download package를 누릅니다.</li>
+      <li>ZIP의 <code>_roleplays</code> 안 새 HTML만 repo의 같은 폴더에 추가합니다.</li>
+      <li>ZIP의 이미지 하위 폴더를 repo의 <code>assets/roleplay</code>에 추가합니다.</li>
+      <li>Commit/Push 후 Basic, AU 또는 ETC에서 정상 표시되는지 확인합니다.</li>
+      <li>확인이 끝난 뒤에만 Mark archived를 누릅니다.</li>
+    </ol>
+    <p><code>.gitkeep</code>과 기존 대화 파일은 지우거나 덮지 않아도 됩니다. 새 파일만 추가하면 됩니다.</p>
+  </details>
   <div class="layout">
     <div>
       <section class="panel">

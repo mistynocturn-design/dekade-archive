@@ -53,18 +53,6 @@ title: Archive
   {% endfor %}
 </div>
 
-<details class="backup-guide">
-  <summary>Archive backup guide</summary>
-  <ol>
-    <li><a href="https://docs.google.com/spreadsheets/d/1PZ7iu20GJSREA8WG5_SmO33kpNWcgwDOB3fWJgI3YsM/edit?usp=sharing" target="_blank" rel="noopener">spreadsheet</a>의 Archive 탭에서 백업하고싶은 부분을 A~E열까지 복사합니다..</li>
-    <li>'+'버튼을 눌러 컨버터를 엽니다.</li>
-    <li>세부 내용을 커스터마이징합니다.</li>
-    <li>복사한 스프레드시트를 붙여넣고 변환합니다.</li>
-    <li>결과물을 _archive/파일명(제목).html에 붙여넣고 발행합니다.</li>
-    <li>첨부할 이미지가 있다면 in assets/archive/log-folder/ 에 이미지를 넣고 스프레드시트에 적어둔 경로와 일치시킵니다.</li>
-  </ol>
-</details>
-
 <script type="application/json" id="archiveSearchData">
 [
 {% assign archive_items = site.archive | sort: "date" | reverse %}

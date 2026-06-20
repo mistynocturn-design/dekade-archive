@@ -18,12 +18,39 @@
     button.secondary { background: #596273; color: #fff; }
     .hint { color: #646b76; font-size: 13px; line-height: 1.55; margin: 8px 0 0; }
     .status { font-size: 13px; color: #4e4a65; min-height: 20px; }
+    .guide { margin: 0 0 16px; color: #6f6a76; font-size: 13px; }
+    .guide summary { cursor: pointer; font-weight: 700; }
+    .guide ol { line-height: 1.7; margin-bottom: 0; }
     @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 <main>
   <h1>Twitter Archive Converter</h1>
+
+  <details class="guide">
+    <summary>사용방법</summary>
+    <ol>
+      <li><strong>최초 1회:</strong> 스프레드시트의 확장 프로그램 → Apps Script에서 repo의 <code>appscript/archive_twitter_Code_gs.txt</code> 내용을 붙여넣습니다.</li>
+      <li>Apps Script의 스크립트 속성에 <code>BACKUP_READ_KEY</code>를 만들고 원하는 비밀 문자를 저장한 뒤, 웹 앱을 '나로 실행 / 모든 사용자'로 배포합니다.</li>
+      <li>배포된 <code>/exec</code> URL과 방금 정한 Read key를 아래에 입력합니다. 같은 값은 Archive 컨버터에서도 사용하며 이 브라우저가 기억합니다.</li>
+      <li><a href="https://docs.google.com/spreadsheets/d/1LKhVkxpyAEMXRmGpF_HNi27CD5SrezMgpioASLQrFVw/edit?usp=sharing" target="_blank" rel="noopener">스프레드시트</a>의 Twitter 탭에 트윗을 정리합니다.</li>
+      <li>원트윗 기준 월을 선택하고 Load month를 누릅니다. 다음 달까지 이어진 타래도 시작월 파일에 함께 포함됩니다.</li>
+      <li>작성자 색상과 미리 생성된 결과를 확인한 뒤 <code>_twitter/YYYY-MM.md</code>로 저장합니다.</li>
+      <li>프로필·첨부 이미지는 repo에 올린 뒤 시트에 해당 경로를 기록합니다.</li>
+    </ol>
+  </details>
+
+  <section class="panel">
+    <h2>Load from spreadsheet</h2>
+    <div class="grid">
+      <div><label for="sourceUrl">Apps Script URL</label><input id="sourceUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div><label for="readKey">Read key</label><input id="readKey" type="password"></div>
+      <div><label for="sourceMonth">Original thread month</label><input id="sourceMonth" type="month" value="2026-06"></div>
+    </div>
+    <div class="actions"><button id="loadMonthBtn" type="button">Load month</button></div>
+    <div class="status" id="sourceStatus"></div>
+  </section>
 
   <section class="panel">
     <div class="grid">
@@ -37,9 +64,9 @@
   </section>
 
   <section class="panel">
-    <label for="input">Paste spreadsheet rows</label>
+    <label for="input">Loaded rows / manual paste fallback</label>
     <textarea id="input" placeholder="Copy columns A:G from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, author, profile image, tags, content, image URLs, thread ID. Put 1 to 4 image URLs in the image cell, one URL per line. Threaded notes are assigned to the month of the first note in that thread.</p>
+    <p class="hint">Expected columns: date, author, profile image, tags, content, image URLs, thread ID, thread start month. Put 1 to 4 image URLs in the image cell, one URL per line.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -54,6 +81,40 @@
 </main>
 
 <script>
+var BACKUP_API_VERSION = '2026-06-20.1';
+var BACKUP_SOURCE_STORAGE = 'dekade-twitter-sheet-source';
+function loadSourceSettings() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(BACKUP_SOURCE_STORAGE) || '{}');
+    ['sourceUrl', 'readKey', 'sourceMonth'].forEach(function (id) { if (saved[id] != null) document.getElementById(id).value = saved[id]; });
+  } catch (error) {}
+}
+function saveSourceSettings() {
+  localStorage.setItem(BACKUP_SOURCE_STORAGE, JSON.stringify({ sourceUrl: document.getElementById('sourceUrl').value.trim(), readKey: document.getElementById('readKey').value, sourceMonth: document.getElementById('sourceMonth').value }));
+}
+function tsvCell(value) {
+  var text = String(value == null ? '' : value);
+  return /["\t\r\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+}
+async function loadTwitterMonth() {
+  var sourceStatus = document.getElementById('sourceStatus');
+  var url = document.getElementById('sourceUrl').value.trim();
+  var month = document.getElementById('sourceMonth').value;
+  if (!url || !month) { sourceStatus.textContent = 'Apps Script URL과 월을 입력해주세요.'; return; }
+  saveSourceSettings(); sourceStatus.textContent = 'Loading...';
+  try {
+    var response = await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'read_twitter', read_key: document.getElementById('readKey').value, month: month }) });
+    var data = await response.json();
+    if (!data.ok) throw new Error(data.error || 'Load failed.');
+    if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 최신 버전을 배포해주세요.');
+    document.getElementById('input').value = data.rows.map(function (row) { return [row.date, row.author, row.profile_image, row.tags, row.content, row.image_urls, row.thread_id, row.thread_start_month].map(tsvCell).join('\t'); }).join('\n');
+    document.getElementById('title').value = month;
+    document.getElementById('date').value = month + '-01';
+    buildOutput();
+    sourceStatus.textContent = month + ' · ' + data.rows.length + '개 트윗을 불러왔습니다.';
+  } catch (error) { sourceStatus.textContent = error.message; }
+}
+
 function parseTsv(text) {
   var rows = [];
   var row = [];
@@ -223,6 +284,7 @@ function buildOutput() {
       index: index,
       date: normalizeDate(row[0]),
       threadId: threadId,
+      threadStartMonth: monthFromDate(row[7]),
       writtenMonth: monthFromDate(row[0])
     };
   });
@@ -234,15 +296,16 @@ function buildOutput() {
       threadMeta[item.threadId] = {
         originDate: item.date,
         originIndex: item.index,
-        ownerMonth: monthFromDate(item.date)
+        ownerMonth: item.threadStartMonth || monthFromDate(item.date)
       };
       return;
     }
     var meta = threadMeta[item.threadId];
+    if (item.threadStartMonth) meta.ownerMonth = item.threadStartMonth;
     if (item.date < meta.originDate || (item.date === meta.originDate && item.index < meta.originIndex)) {
       meta.originDate = item.date;
       meta.originIndex = item.index;
-      meta.ownerMonth = monthFromDate(item.date);
+      if (!meta.ownerMonth) meta.ownerMonth = item.threadStartMonth || monthFromDate(item.date);
     }
   });
 
@@ -356,6 +419,8 @@ function saveRememberedFields() {
 }
 
 loadRememberedFields();
+loadSourceSettings();
+document.getElementById('loadMonthBtn').addEventListener('click', loadTwitterMonth);
 var authorStylesElement = document.getElementById('authorStyles');
 if (authorStylesElement && authorStylesElement.value.indexOf('#ceccd9') !== -1) {
   authorStylesElement.value = authorStylesElement.value.replace(/#ceccd9/g, '#e6eaf3');

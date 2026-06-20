@@ -19,12 +19,44 @@
     button.secondary { background: #596273; }
     .hint { color: #646b76; font-size: 13px; line-height: 1.55; margin: 8px 0 0; }
     .status { font-size: 13px; color: #2457a6; min-height: 20px; }
+    .guide { margin: 0 0 16px; color: #596273; font-size: 13px; }
+    .guide summary { cursor: pointer; font-weight: 700; }
+    .guide ol { line-height: 1.7; margin-bottom: 0; }
+    .source-actions { align-items: end; display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+    .check { align-items: center; display: flex; gap: 7px; font-size: 13px; margin-top: 10px; }
+    .check input { margin: 0; width: auto; }
     @media (max-width: 760px) { .grid, .colors { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 <main>
   <h1>Chat Log Converter</h1>
+
+  <details class="guide">
+    <summary>사용방법</summary>
+    <ol>
+      <li><strong>최초 1회:</strong> 스프레드시트의 확장 프로그램 → Apps Script에서 repo의 <code>appscript/archive_twitter_Code_gs.txt</code> 내용을 붙여넣습니다.</li>
+      <li>Apps Script의 스크립트 속성에 <code>BACKUP_READ_KEY</code>를 만들고 원하는 비밀 문자를 저장한 뒤, 웹 앱을 '나로 실행 / 모든 사용자'로 배포합니다.</li>
+      <li>배포된 <code>/exec</code> URL과 방금 정한 Read key를 아래에 입력합니다. 같은 값은 Twitter 컨버터에서도 사용하며 이 브라우저가 기억합니다.</li>
+      <li><a href="https://docs.google.com/spreadsheets/d/1LKhVkxpyAEMXRmGpF_HNi27CD5SrezMgpioASLQrFVw/edit?usp=sharing" target="_blank" rel="noopener">스프레드시트</a>의 Archive 탭에 대화를 정리합니다.</li>
+      <li>시작 행과 끝 행을 입력하고 Load rows를 누릅니다. 같은 제목 전체 확장을 켜면 범위 양끝의 이어진 대화까지 포함합니다.</li>
+      <li>색상과 제목을 확인한 뒤 Convert를 누르고, 결과물을 <code>_archive/파일명.html</code>에 저장합니다.</li>
+      <li>이미지는 미리 repo의 <code>assets/archive/...</code>에 넣고 시트의 이미지 열에 같은 경로를 적습니다.</li>
+    </ol>
+  </details>
+
+  <section class="panel">
+    <h2>Load from spreadsheet</h2>
+    <div class="grid">
+      <div><label for="sourceUrl">Apps Script URL</label><input id="sourceUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div><label for="readKey">Read key</label><input id="readKey" type="password"></div>
+      <div><label for="startRow">Start row</label><input id="startRow" type="number" min="2" value="2"></div>
+      <div><label for="endRow">End row</label><input id="endRow" type="number" min="2" value="100"></div>
+    </div>
+    <label class="check"><input id="expandThread" type="checkbox" checked> 같은 제목의 대화가 범위 밖으로 이어지면 전체 타래까지 확장</label>
+    <div class="actions"><button id="loadRowsBtn" type="button">Load rows</button></div>
+    <div class="status" id="sourceStatus"></div>
+  </section>
 
   <section class="panel">
     <div class="grid">
@@ -43,7 +75,7 @@
   </section>
 
   <section class="panel">
-    <label for="input">Paste spreadsheet rows</label>
+    <label for="input">Loaded rows / manual paste fallback</label>
     <textarea id="input" placeholder="Copy columns A:E from Google Sheets, then paste here."></textarea>
     <p class="hint">Expected columns: date, title, text, image, side. This converter outputs finished bubble HTML, so multiline text and spreadsheet quotes do not need to be parsed by the site.</p>
     <div class="actions">
@@ -60,6 +92,51 @@
 </main>
 
 <script>
+var BACKUP_API_VERSION = '2026-06-20.1';
+var BACKUP_SOURCE_STORAGE = 'dekade-archive-sheet-source';
+
+function loadSourceSettings() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(BACKUP_SOURCE_STORAGE) || '{}');
+    ['sourceUrl', 'readKey', 'startRow', 'endRow'].forEach(function (id) { if (saved[id] != null) document.getElementById(id).value = saved[id]; });
+    if (saved.expandThread != null) document.getElementById('expandThread').checked = saved.expandThread;
+  } catch (error) {}
+}
+function saveSourceSettings() {
+  localStorage.setItem(BACKUP_SOURCE_STORAGE, JSON.stringify({
+    sourceUrl: document.getElementById('sourceUrl').value.trim(), readKey: document.getElementById('readKey').value,
+    startRow: document.getElementById('startRow').value, endRow: document.getElementById('endRow').value,
+    expandThread: document.getElementById('expandThread').checked
+  }));
+}
+function tsvCell(value) {
+  var text = String(value == null ? '' : value);
+  return /["\t\r\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+}
+async function loadArchiveRows() {
+  var sourceStatus = document.getElementById('sourceStatus');
+  var url = document.getElementById('sourceUrl').value.trim();
+  if (!url) { sourceStatus.textContent = 'Apps Script URL을 입력해주세요.'; return; }
+  saveSourceSettings(); sourceStatus.textContent = 'Loading...';
+  try {
+    var response = await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({
+      action: 'read_archive', read_key: document.getElementById('readKey').value,
+      start_row: Number(document.getElementById('startRow').value), end_row: Number(document.getElementById('endRow').value),
+      expand_thread: document.getElementById('expandThread').checked
+    }) });
+    var data = await response.json();
+    if (!data.ok) throw new Error(data.error || 'Load failed.');
+    if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 최신 버전을 배포해주세요.');
+    document.getElementById('input').value = data.rows.map(function (row) { return [row.date, row.title, row.content, row.image, row.side].map(tsvCell).join('\t'); }).join('\n');
+    if (data.rows.length) {
+      document.getElementById('title').value = data.rows[0].title || document.getElementById('title').value;
+      document.getElementById('date').value = data.rows[0].date || document.getElementById('date').value;
+    }
+    buildOutput();
+    sourceStatus.textContent = data.start_row + '–' + data.end_row + '행 · ' + data.rows.length + '개 메시지를 불러왔습니다.';
+  } catch (error) { sourceStatus.textContent = error.message; }
+}
+
 function parseTsv(text) {
   var rows = [];
   var row = [];
@@ -209,6 +286,8 @@ function saveRememberedFields() {
 }
 
 loadRememberedFields();
+loadSourceSettings();
+document.getElementById('loadRowsBtn').addEventListener('click', loadArchiveRows);
 REMEMBERED_FIELDS.forEach(function (id) {
   var element = document.getElementById(id);
   if (element) element.addEventListener('input', saveRememberedFields);
