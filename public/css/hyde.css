@@ -1555,13 +1555,19 @@ a.sidebar-nav-item:focus {
 }
 
 .character-mini-tabs {
+  overflow-y: hidden;
   position: relative;
+  scrollbar-width: none;
+}
+
+.character-mini-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .character-tab-indicator {
   background: var(--character-tab-color, var(--character-accent, #4e4a65));
   border-radius: 999px;
-  bottom: -1px;
+  bottom: 0;
   height: 3px;
   left: 0;
   pointer-events: none;
