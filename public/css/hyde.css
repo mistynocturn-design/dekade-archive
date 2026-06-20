@@ -881,6 +881,49 @@ a.sidebar-nav-item:focus {
 .backup-guide li {
   margin-bottom: .24rem;
 }
+
+.backup-guide-content h3 {
+  color: #777;
+  font-size: .72rem;
+  margin: .8rem 0 .35rem;
+}
+
+.backup-guide-content p {
+  line-height: 1.62;
+  margin: .42rem 0;
+}
+
+.backup-guide-content code {
+  color: #666;
+  font-size: .64rem;
+}
+
+.backup-guide-glossary {
+  display: grid;
+  gap: .3rem .65rem;
+  grid-template-columns: 6.2rem minmax(0, 1fr);
+  line-height: 1.55;
+  margin: .35rem 0 .7rem;
+}
+
+.backup-guide-glossary dt {
+  color: #777;
+  font-weight: 700;
+}
+
+.backup-guide-glossary dd {
+  margin: 0;
+}
+
+@media (max-width: 34rem) {
+  .backup-guide-glossary {
+    display: block;
+  }
+
+  .backup-guide-glossary dt {
+    margin-top: .42rem;
+  }
+}
 /* Twitter image grids */
 .twitter-image-grid {
   border: 1px solid color-mix(in srgb, var(--twitter-note-text, #343a40) 14%, transparent);
