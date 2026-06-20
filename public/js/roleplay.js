@@ -5,6 +5,7 @@
   if (!app) return;
 
   var apiUrl = app.getAttribute('data-api-url');
+  var requiredApiVersion = '2026-06-20.3';
   var storageKey = 'dekade-roleplay-passcode';
   var draftStorageKey = 'dekade-roleplay-reply-drafts';
   var readStorageKey = 'dekade-roleplay-read-replies';
@@ -131,6 +132,7 @@
 
   async function loadAuthors() {
     var data = await readJson('authors');
+    if (data.api_version !== requiredApiVersion) throw new Error('Apps Script 최신 버전을 재배포해주세요.');
     authors = {};
     data.authors.forEach(function (author) { authors[author.author_id] = author; });
     authorOptions = data.authors.map(function (author) {
@@ -201,6 +203,7 @@
     if (!quiet) setStatus('Loading...');
     try {
       var data = await readJson('threads', { status: 'active' });
+      if (data.api_version !== requiredApiVersion) throw new Error('Apps Script 최신 버전을 재배포해주세요.');
       var signature = JSON.stringify(data.threads.map(function (thread) {
         return [thread.thread_id, thread.updated_at, thread.reply_count, thread.last_reply_message_id];
       }));
@@ -242,6 +245,7 @@
     area.innerHTML = '<p class="roleplay-loading">Loading...</p>';
     try {
       var data = await readJson('messages', { thread_id: threadId, page: page });
+      if (data.api_version !== requiredApiVersion) throw new Error('Apps Script 최신 버전을 재배포해주세요.');
       details.setAttribute('data-loaded', 'true');
       details.setAttribute('data-page', data.page);
       var messages = data.messages.map(function (message) { return messageHtml(message, false); }).join('');

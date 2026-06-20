@@ -2777,7 +2777,12 @@ a.sidebar-nav-item:focus {
 
 .roleplay-avatar img {
   background: #fff;
+  border-radius: 0;
+  box-sizing: border-box;
+  display: block;
   height: 100%;
+  margin: 0;
+  max-width: none;
   object-fit: contain;
   object-position: center;
   padding: 1px;

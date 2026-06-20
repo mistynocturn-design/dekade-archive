@@ -1,4 +1,5 @@
 var ROLEPLAY = {
+  API_VERSION: '2026-06-20.3',
   AUTHORS_SHEET: 'Authors',
   THREADS_SHEET: 'Threads',
   MESSAGES_SHEET: 'Messages',
@@ -13,20 +14,22 @@ function doGet(e) {
     var action = String((e && e.parameter && e.parameter.action) || 'health').toLowerCase();
 
     if (action === 'health') {
-      return json_({ ok: true, service: 'dekade-roleplay', time: new Date() });
+      return json_({ ok: true, service: 'dekade-roleplay', api_version: ROLEPLAY.API_VERSION, time: new Date() });
     }
     if (action === 'authors') {
-      return json_({ ok: true, authors: getAuthors_() });
+      return json_({ ok: true, api_version: ROLEPLAY.API_VERSION, authors: getAuthors_() });
     }
     if (action === 'threads') {
       var status = String(e.parameter.status || 'active').toLowerCase();
-      return json_({ ok: true, threads: getThreads_(status) });
+      return json_({ ok: true, api_version: ROLEPLAY.API_VERSION, threads: getThreads_(status) });
     }
     if (action === 'messages') {
-      return json_(getMessages_(required_(e.parameter.thread_id, 'thread_id'), e.parameter.page));
+      var messageResult = getMessages_(required_(e.parameter.thread_id, 'thread_id'), e.parameter.page);
+      messageResult.api_version = ROLEPLAY.API_VERSION;
+      return json_(messageResult);
     }
     if (action === 'export') {
-      return json_({ ok: true, data: exportThread_(required_(e.parameter.thread_id, 'thread_id')) });
+      return json_({ ok: true, api_version: ROLEPLAY.API_VERSION, data: exportThread_(required_(e.parameter.thread_id, 'thread_id')) });
     }
 
     throw new Error('Unknown GET action: ' + action);
