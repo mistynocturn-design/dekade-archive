@@ -6,6 +6,7 @@
 
   var apiUrl = app.getAttribute('data-api-url');
   var storageKey = 'dekade-roleplay-passcode';
+  var draftStorageKey = 'dekade-roleplay-reply-drafts';
   var authors = {};
   var authorOptions = '';
   var threadList = app.querySelector('[data-roleplay-threads]');
@@ -14,6 +15,40 @@
   var keyForm = app.querySelector('[data-roleplay-key-form]');
   var passcodeInput = app.querySelector('[data-roleplay-passcode]');
   var refreshTimer = null;
+  var lastThreadSignature = '';
+  var replyDrafts = readReplyDrafts();
+
+  function readReplyDrafts() {
+    try {
+      return JSON.parse(localStorage.getItem(draftStorageKey) || '{}') || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function saveReplyDraft(threadId, form) {
+    replyDrafts[threadId] = {
+      author_id: form.elements.author_id.value,
+      content: form.elements.content.value
+    };
+    if (!replyDrafts[threadId].content) delete replyDrafts[threadId];
+    localStorage.setItem(draftStorageKey, JSON.stringify(replyDrafts));
+  }
+
+  function clearReplyDraft(threadId) {
+    delete replyDrafts[threadId];
+    localStorage.setItem(draftStorageKey, JSON.stringify(replyDrafts));
+  }
+
+  function hasActiveReplyDraft() {
+    var active = document.activeElement && document.activeElement.closest
+      ? document.activeElement.closest('[data-roleplay-reply-form]')
+      : null;
+    if (active) return true;
+    return Array.prototype.some.call(threadList.querySelectorAll('[data-roleplay-reply-form] textarea'), function (textarea) {
+      return Boolean(textarea.value.trim());
+    });
+  }
 
   function escapeHtml(value) {
     return String(value == null ? '' : value)
@@ -108,8 +143,10 @@
       : '<span>' + escapeHtml((author.name || '?').slice(0, 1)) + '</span>';
     return '<article class="roleplay-message' + (root ? ' root' : '') + '" style="' + authorStyle(author) + '">' +
       '<header><span class="roleplay-avatar">' + avatar + '</span><strong>' + escapeHtml(author.name || message.author_id) +
-      '</strong><time>' + escapeHtml(formatDate(message.created_at)) + '</time></header>' +
-      '<div class="roleplay-message-body"><div class="roleplay-message-text">' + escapeHtml(message.content) + '</div>' +
+      '</strong><time>' + escapeHtml(formatDate(message.created_at)) + '</time>' +
+      '<span class="roleplay-message-actions"><button type="button" data-roleplay-edit-message aria-label="Edit message" title="Edit message">✎</button>' +
+      '<button type="button" data-roleplay-delete-message data-root-message="' + (root ? 'true' : 'false') + '" aria-label="Delete message" title="Delete message">×</button></span></header>' +
+      '<div class="roleplay-message-body" data-message-id="' + escapeHtml(message.message_id) + '"><div class="roleplay-message-text">' + escapeHtml(message.content) + '</div>' +
       imageGrid(message.image_urls) + '</div></article>';
   }
 
@@ -138,6 +175,14 @@
     if (!quiet) setStatus('Loading...');
     try {
       var data = await readJson('threads', { status: 'active' });
+      var signature = JSON.stringify(data.threads.map(function (thread) {
+        return [thread.thread_id, thread.updated_at, thread.reply_count];
+      }));
+      if (signature === lastThreadSignature && threadList.children.length) {
+        setStatus('');
+        return;
+      }
+      lastThreadSignature = signature;
       threadList.innerHTML = data.threads.length
         ? data.threads.map(threadHtml).join('')
         : '<p class="roleplay-empty">No active threads.</p>';
@@ -182,12 +227,14 @@
         }).join('') + '</nav>';
       }
       var rootId = data.root_message ? data.root_message.message_id : '';
+      var draft = replyDrafts[threadId] || {};
       area.innerHTML = '<div class="roleplay-reply-list">' + (messages || '<p class="roleplay-empty">No replies yet.</p>') + '</div>' + pages +
         '<form class="roleplay-reply-form" data-roleplay-reply-form data-parent-id="' + escapeHtml(rootId) + '">' +
         '<div class="roleplay-reply-controls"><select name="author_id" data-roleplay-author required>' + authorOptions + '</select>' +
         '<label class="roleplay-file-button" title="Attach images">＋<input name="images" type="file" accept="image/*" multiple></label></div>' +
-        '<textarea name="content" rows="3" placeholder="Reply" required></textarea>' +
+        '<textarea name="content" rows="3" placeholder="Reply" required>' + escapeHtml(draft.content || '') + '</textarea>' +
         '<button type="submit">Post</button></form>';
+      if (draft.author_id) area.querySelector('[name="author_id"]').value = draft.author_id;
     } catch (error) {
       area.innerHTML = '<p class="roleplay-status error">' + escapeHtml(error.message) + '</p>';
     }
@@ -296,6 +343,25 @@
   });
 
   threadList.addEventListener('submit', async function (event) {
+    var editForm = event.target.closest('[data-roleplay-edit-form]');
+    if (editForm) {
+      event.preventDefault();
+      var editButton = editForm.querySelector('button[type="submit"]');
+      editButton.disabled = true;
+      try {
+        await writeJson({
+          action: 'update_message',
+          message_id: editForm.getAttribute('data-message-id'),
+          content: editForm.elements.content.value
+        });
+        lastThreadSignature = '';
+        await loadThreads(true);
+      } catch (error) {
+        editButton.disabled = false;
+        setStatus(error.message, true);
+      }
+      return;
+    }
     var form = event.target.closest('[data-roleplay-reply-form]');
     if (!form) return;
     event.preventDefault();
@@ -314,6 +380,8 @@
         content: data.get('content'),
         image_urls: imageUrls
       });
+      clearReplyDraft(thread.getAttribute('data-thread-id'));
+      lastThreadSignature = '';
       await loadThreads(true);
     } catch (error) {
       setStatus(error.message, true);
@@ -322,7 +390,65 @@
     }
   });
 
+  threadList.addEventListener('input', function (event) {
+    var form = event.target.closest('[data-roleplay-reply-form]');
+    if (!form) return;
+    saveReplyDraft(form.closest('[data-thread-id]').getAttribute('data-thread-id'), form);
+  });
+
+  threadList.addEventListener('change', function (event) {
+    var form = event.target.closest('[data-roleplay-reply-form]');
+    if (!form) return;
+    saveReplyDraft(form.closest('[data-thread-id]').getAttribute('data-thread-id'), form);
+  });
+
   threadList.addEventListener('click', async function (event) {
+    var editMessageButton = event.target.closest('[data-roleplay-edit-message]');
+    if (editMessageButton) {
+      var message = editMessageButton.closest('.roleplay-message');
+      var body = message.querySelector('.roleplay-message-body');
+      var text = body.querySelector('.roleplay-message-text');
+      if (body.querySelector('[data-roleplay-edit-form]')) return;
+      text.hidden = true;
+      var editForm = document.createElement('form');
+      editForm.className = 'roleplay-edit-form';
+      editForm.setAttribute('data-roleplay-edit-form', '');
+      editForm.setAttribute('data-message-id', body.getAttribute('data-message-id'));
+      editForm.innerHTML = '<textarea name="content" rows="4" required>' + escapeHtml(text.textContent) + '</textarea>' +
+        '<div><button type="button" data-roleplay-edit-cancel>Cancel</button><button type="submit">Save</button></div>';
+      body.insertBefore(editForm, text.nextSibling);
+      editForm.elements.content.focus();
+      return;
+    }
+    var cancelEditButton = event.target.closest('[data-roleplay-edit-cancel]');
+    if (cancelEditButton) {
+      var cancelForm = cancelEditButton.closest('[data-roleplay-edit-form]');
+      cancelForm.parentNode.querySelector('.roleplay-message-text').hidden = false;
+      cancelForm.remove();
+      return;
+    }
+    var deleteMessageButton = event.target.closest('[data-roleplay-delete-message]');
+    if (deleteMessageButton) {
+      var deleteThread = deleteMessageButton.getAttribute('data-root-message') === 'true';
+      var deleteContainer = deleteMessageButton.closest('[data-thread-id]');
+      var deleteBody = deleteMessageButton.closest('.roleplay-message').querySelector('.roleplay-message-body');
+      var question = deleteThread ? '원글과 타래 전체를 삭제할까요?' : '이 덧글을 삭제할까요?';
+      if (!window.confirm(question)) return;
+      deleteMessageButton.disabled = true;
+      try {
+        if (deleteThread) {
+          await writeJson({ action: 'delete_thread', thread_id: deleteContainer.getAttribute('data-thread-id') });
+        } else {
+          await writeJson({ action: 'delete_message', message_id: deleteBody.getAttribute('data-message-id') });
+        }
+        lastThreadSignature = '';
+        await loadThreads(true);
+      } catch (error) {
+        deleteMessageButton.disabled = false;
+        setStatus(error.message, true);
+      }
+      return;
+    }
     var pageButton = event.target.closest('[data-roleplay-page]');
     if (pageButton) {
       var details = pageButton.closest('[data-roleplay-replies]');
@@ -337,6 +463,7 @@
       completeButton.disabled = true;
       try {
         await writeJson({ action: 'set_thread_status', thread_id: thread.getAttribute('data-thread-id'), status: 'completed' });
+        lastThreadSignature = '';
         await loadThreads(false);
       } catch (error) {
         completeButton.disabled = false;
@@ -400,8 +527,8 @@
   }).then(function () {
     moveIndicator(app.querySelector('[data-roleplay-tab].active'));
     refreshTimer = window.setInterval(function () {
-      if (!document.hidden) loadThreads(true);
-    }, 30000);
+      if (!document.hidden && !hasActiveReplyDraft()) loadThreads(true);
+    }, 60000);
   }).catch(function (error) {
     setStatus(error.message, true);
   });

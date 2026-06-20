@@ -44,8 +44,10 @@ function doPost(e) {
 
     if (action === 'create_thread') result = withLock_(function () { return createThread_(body); });
     else if (action === 'add_message') result = withLock_(function () { return addMessage_(body); });
+    else if (action === 'update_message') result = withLock_(function () { return updateMessage_(body); });
     else if (action === 'set_thread_status') result = withLock_(function () { return setThreadStatus_(body); });
     else if (action === 'delete_message') result = withLock_(function () { return deleteMessage_(body); });
+    else if (action === 'delete_thread') result = withLock_(function () { return deleteThread_(body); });
     else if (action === 'upload_image') result = uploadImage_(body);
     else throw new Error('Unknown POST action: ' + action);
 
@@ -207,11 +209,33 @@ function setThreadStatus_(body) {
   return { thread_id: threadId, status: status };
 }
 
+function updateMessage_(body) {
+  var messageId = required_(body.message_id, 'message_id');
+  var message = findBy_(ROLEPLAY.MESSAGES_SHEET, 'message_id', messageId);
+  if (truthy_(message.deleted)) throw new Error('Deleted messages cannot be edited.');
+  updateObjectRow_(ROLEPLAY.MESSAGES_SHEET, message._row, {
+    content: required_(body.content, 'content')
+  });
+  var thread = findThread_(String(message.thread_id || ''));
+  updateObjectRow_(ROLEPLAY.THREADS_SHEET, thread._row, { updated_at: new Date() });
+  return { message_id: messageId, thread_id: String(message.thread_id || '') };
+}
+
 function deleteMessage_(body) {
   var messageId = required_(body.message_id, 'message_id');
   var message = findBy_(ROLEPLAY.MESSAGES_SHEET, 'message_id', messageId);
   updateObjectRow_(ROLEPLAY.MESSAGES_SHEET, message._row, { deleted: true });
   return { message_id: messageId, deleted: true };
+}
+
+function deleteThread_(body) {
+  var threadId = required_(body.thread_id, 'thread_id');
+  var thread = findThread_(threadId);
+  updateObjectRow_(ROLEPLAY.THREADS_SHEET, thread._row, {
+    status: 'deleted',
+    updated_at: new Date()
+  });
+  return { thread_id: threadId, status: 'deleted' };
 }
 
 function exportThread_(threadId) {
