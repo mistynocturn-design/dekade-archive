@@ -106,6 +106,7 @@ async function loadTwitterMonth() {
   try {
     var response = await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'read_twitter', read_key: document.getElementById('readKey').value, month: month }) });
     var data = await response.json();
+    if (!data.ok && !data.api_version) throw new Error('Apps Script가 이전 배포본입니다. Code.gs 상단 VERSION이 2026-06-21.1인지 확인하고 배포 관리에서 새 버전으로 다시 배포해주세요.');
     if (!data.ok) throw new Error(data.error || 'Load failed.');
     if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 최신 버전을 배포해주세요.');
     document.getElementById('input').value = data.rows.map(function (row) { return [row.date, row.author, row.profile_image, row.tags, row.content, row.image_urls, row.thread_id, row.thread_start_month].map(tsvCell).join('\t'); }).join('\n');

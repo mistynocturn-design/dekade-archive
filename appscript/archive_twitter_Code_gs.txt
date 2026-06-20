@@ -255,5 +255,5 @@ function json_(payload) {
 }
 
 function errorJson_(error) {
-  return json_({ ok: false, error: String(error && error.message ? error.message : error) });
+  return json_({ ok: false, api_version: BACKUP_API.VERSION, error: String(error && error.message ? error.message : error) });
 }

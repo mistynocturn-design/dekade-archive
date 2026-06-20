@@ -3270,9 +3270,10 @@ a.sidebar-nav-item:focus {
 .writings-kicker { color:#728178; font-size:.64rem; font-weight:800; letter-spacing:.08em; margin:0 0 .22rem; }
 .content .writings-tool-button { align-items:center; background:#29272e; border-radius:50%; color:#fff; display:inline-flex; font-size:.9rem; height:1.75rem; justify-content:center; line-height:1; text-decoration:none; width:1.75rem; }
 .content .writings-tool-button:hover,.content .writings-tool-button:focus { background:#685867; color:#fff; text-decoration:none; }
-.writings-tabs { border-bottom:1px solid #e7e4e6; display:flex; gap:1.25rem; margin-bottom:.9rem; overflow-x:auto; }
-.writings-tabs button { background:none; border:0; border-bottom:2px solid transparent; color:#8a868d; cursor:pointer; font-size:.67rem; font-weight:800; letter-spacing:.04em; padding:.55rem .05rem; }
-.writings-tabs button.active { border-bottom-color:#685867; color:#302e32; }
+.writings-tabs { border-bottom:1px solid #e7e4e6; display:flex; gap:1.25rem; margin-bottom:.9rem; overflow-x:auto; position:relative; }
+.writings-tabs button { background:none; border:0; color:#8a868d; cursor:pointer; flex:none; font-size:.67rem; font-weight:800; letter-spacing:.04em; padding:.55rem .05rem; }
+.writings-tabs button.active { color:#302e32; }
+.writings-tab-indicator { background:#685867; bottom:0; height:2px; left:0; pointer-events:none; position:absolute; transition:transform .28s ease,width .28s ease; width:0; }
 .writings-search { background:#faf9f9; border:1px solid #e8e5e7; border-radius:6px; margin:.8rem 0 1rem; padding:.65rem .75rem; }
 .writings-search summary { color:#77727a; cursor:pointer; font-size:.7rem; font-weight:750; list-style:none; }
 .writings-search summary::-webkit-details-marker { display:none; }
@@ -3312,7 +3313,7 @@ a.sidebar-nav-item:focus {
 .writing-series-toc ol { color:#8b858c; font-size:.7rem; line-height:1.75; margin:.65rem 0 0; padding-left:1.4rem; }
 .writing-series-toc li.current a { color:var(--writing-accent); font-weight:800; }
 .writing-series-toc a { color:#625d63; text-decoration:none; }
-.writing-body { color:#302e31; font-family:Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:clamp(.94rem,2vw,1rem); line-height:1.85; overflow-wrap:anywhere; }
+.writing-body { color:#302e31; font-family:Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:clamp(.86rem,1.7vw,.92rem); line-height:1.85; overflow-wrap:anywhere; }
 .writing-body p { margin:0 0 1.55em; }
 .writing-body h1,.writing-body h2,.writing-body h3,.writing-body h4 { color:#29262a; font-family:Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.45; margin:2.4em 0 .9em; }
 .writing-body h2 { font-size:1.25rem; }.writing-body h3 { font-size:1.08rem; }
