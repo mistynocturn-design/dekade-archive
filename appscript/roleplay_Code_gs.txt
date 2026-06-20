@@ -81,6 +81,7 @@ function getThreads_(status) {
   });
   var roots = {};
   var replyCounts = {};
+  var lastReplies = {};
 
   messages.forEach(function (message) {
     var threadId = String(message.thread_id || '');
@@ -89,6 +90,9 @@ function getThreads_(status) {
       if (!roots[threadId]) roots[threadId] = publicMessage_(message);
     } else {
       replyCounts[threadId] = (replyCounts[threadId] || 0) + 1;
+      if (!lastReplies[threadId] || dateNumber_(message.created_at) >= dateNumber_(lastReplies[threadId].created_at)) {
+        lastReplies[threadId] = message;
+      }
     }
   });
 
@@ -100,10 +104,12 @@ function getThreads_(status) {
       var item = publicThread_(thread);
       item.root_message = roots[item.thread_id] || null;
       item.reply_count = replyCounts[item.thread_id] || 0;
+      item.last_reply_message_id = lastReplies[item.thread_id] ? String(lastReplies[item.thread_id].message_id || '') : '';
+      item.last_reply_author_id = lastReplies[item.thread_id] ? String(lastReplies[item.thread_id].author_id || '') : '';
       return item;
     })
     .sort(function (a, b) {
-      return dateNumber_(b.updated_at || b.created_at) - dateNumber_(a.updated_at || a.created_at);
+      return dateNumber_(b.created_at) - dateNumber_(a.created_at);
     });
 }
 

@@ -2706,10 +2706,23 @@ a.sidebar-nav-item:focus {
 }
 
 .roleplay-thread-header h2 {
+  align-items: center;
   color: var(--roleplay-ink);
+  display: flex;
   font-size: .91rem;
+  gap: .38rem;
   line-height: 1.35;
   margin: .18rem 0 0;
+}
+
+.roleplay-unread-dot {
+  background: var(--roleplay-notice, #afa4cf);
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--roleplay-notice, #afa4cf) 32%, transparent);
+  flex: 0 0 .48rem;
+  height: .48rem;
+  width: .48rem;
 }
 
 .roleplay-category {

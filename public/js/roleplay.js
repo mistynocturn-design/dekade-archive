@@ -7,6 +7,7 @@
   var apiUrl = app.getAttribute('data-api-url');
   var storageKey = 'dekade-roleplay-passcode';
   var draftStorageKey = 'dekade-roleplay-reply-drafts';
+  var readStorageKey = 'dekade-roleplay-read-replies';
   var authors = {};
   var authorOptions = '';
   var threadList = app.querySelector('[data-roleplay-threads]');
@@ -17,6 +18,26 @@
   var refreshTimer = null;
   var lastThreadSignature = '';
   var replyDrafts = readReplyDrafts();
+  var readReplies = readReplyState();
+
+  function readReplyState() {
+    try {
+      return JSON.parse(localStorage.getItem(readStorageKey) || '{}') || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function markReplyRead(threadId, messageId) {
+    if (!threadId || !messageId) return;
+    readReplies[threadId] = messageId;
+    localStorage.setItem(readStorageKey, JSON.stringify(readReplies));
+    var thread = threadList.querySelector('[data-thread-id="' + threadId + '"]');
+    if (thread) {
+      var dot = thread.querySelector('.roleplay-unread-dot');
+      if (dot) dot.remove();
+    }
+  }
 
   function readReplyDrafts() {
     try {
@@ -152,12 +173,17 @@
 
   function threadHtml(thread) {
     var root = thread.root_message;
+    var lastAuthor = authors[thread.last_reply_author_id] || {};
+    var unread = thread.last_reply_message_id && readReplies[thread.thread_id] !== thread.last_reply_message_id;
+    var unreadDot = unread ? '<span class="roleplay-unread-dot" style="--roleplay-notice:' +
+      safeColor(lastAuthor.accent_color, '#afa4cf') + '" title="New reply" aria-label="New reply"></span>' : '';
+    var lastPage = Math.max(1, Math.ceil(Number(thread.reply_count || 0) / 10));
     return '<article class="roleplay-thread" data-thread-id="' + escapeHtml(thread.thread_id) + '">' +
       '<header class="roleplay-thread-header"><div><span class="roleplay-category">' + escapeHtml(thread.category || 'BASIC') +
-      '</span><h2>' + escapeHtml(thread.title) + '</h2></div>' +
+      '</span><h2>' + escapeHtml(thread.title) + unreadDot + '</h2></div>' +
       '<button class="roleplay-complete-button" type="button" data-roleplay-complete title="Complete thread" aria-label="Complete thread">✓</button></header>' +
       messageHtml(root, true) +
-      '<details class="roleplay-replies" data-roleplay-replies>' +
+      '<details class="roleplay-replies" data-roleplay-replies data-last-page="' + lastPage + '" data-last-reply-id="' + escapeHtml(thread.last_reply_message_id || '') + '">' +
       '<summary>Replies <span>' + Number(thread.reply_count || 0) + '</span></summary>' +
       '<div class="roleplay-reply-area" data-roleplay-reply-area><p class="roleplay-loading">Loading...</p></div>' +
       '</details></article>';
@@ -176,7 +202,7 @@
     try {
       var data = await readJson('threads', { status: 'active' });
       var signature = JSON.stringify(data.threads.map(function (thread) {
-        return [thread.thread_id, thread.updated_at, thread.reply_count];
+        return [thread.thread_id, thread.updated_at, thread.reply_count, thread.last_reply_message_id];
       }));
       if (signature === lastThreadSignature && threadList.children.length) {
         setStatus('');
@@ -206,7 +232,7 @@
       details.addEventListener('toggle', function () {
         if (!details.open || details.getAttribute('data-loaded') === 'true') return;
         var threadId = details.closest('[data-thread-id]').getAttribute('data-thread-id');
-        loadReplies(threadId, 1, details);
+        loadReplies(threadId, Number(details.getAttribute('data-last-page') || 1), details);
       });
     });
   }
@@ -235,6 +261,9 @@
         '<textarea name="content" rows="3" placeholder="Reply" required>' + escapeHtml(draft.content || '') + '</textarea>' +
         '<button type="submit">Post</button></form>';
       if (draft.author_id) area.querySelector('[name="author_id"]').value = draft.author_id;
+      if (data.page === data.total_pages && data.messages.length) {
+        markReplyRead(threadId, data.messages[data.messages.length - 1].message_id);
+      }
     } catch (error) {
       area.innerHTML = '<p class="roleplay-status error">' + escapeHtml(error.message) + '</p>';
     }
@@ -372,7 +401,7 @@
     try {
       var data = new FormData(form);
       var imageUrls = await uploadImages(form.elements.images.files);
-      await writeJson({
+      var posted = await writeJson({
         action: 'add_message',
         thread_id: thread.getAttribute('data-thread-id'),
         parent_id: form.getAttribute('data-parent-id'),
@@ -380,6 +409,7 @@
         content: data.get('content'),
         image_urls: imageUrls
       });
+      markReplyRead(thread.getAttribute('data-thread-id'), posted.message_id);
       clearReplyDraft(thread.getAttribute('data-thread-id'));
       lastThreadSignature = '';
       await loadThreads(true);
