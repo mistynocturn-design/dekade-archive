@@ -2,9 +2,10 @@
 layout: world_document
 title: "세계관 개요"
 subtitle: "세계관을 설명하는 짧은 안내서"
-number: "File number 01"
+number: "File 01"
 code: "OVERVIEW"
 file_status: "REFERENCE FILE"
+header_bg: "#d0cede"
 lead: "세계관의 핵심 전제를 빠르게 파악하기 위한 문서입니다. 추후 상의 및 변경될 수 있습니다. 함께 쓰는 세계관이니 함께 구상해도 좋을 것 같아요."
 sections:
   - code: "PREMISE"
