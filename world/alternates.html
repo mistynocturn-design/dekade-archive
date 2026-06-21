@@ -1,0 +1,41 @@
+---
+layout: default
+title: Alternate Registry
+---
+<main class="world-alternates" style="--world-accent:#685867;--world-soft:#eee8e5;--world-ink:#29272e;">
+  <a class="world-back" href="{{ site.baseurl }}/world/">← WORLD INDEX</a>
+  <header class="world-alternates-header">
+    <div><p>FILE 04 / ALTERNATES</p><h1>가능성의 분기</h1><span>본편과 다른 전제에서 시작된 두 사람의 세계를 모아둔 레지스트리.</span></div>
+    <strong>{{ site.world_aus | size | prepend: '0' | slice: -2, 2 }} UNIVERSES</strong>
+  </header>
+  <div class="world-au-filter" aria-label="Alternate universe filters">
+    <button class="active" type="button" data-world-filter="all">ALL</button>
+    <button type="button" data-world-filter="canon">CANON</button>
+    <button type="button" data-world-filter="modern">MODERN</button>
+    <button type="button" data-world-filter="fantasy">FANTASY</button>
+  </div>
+  <section class="world-au-grid">
+    {% assign aus = site.world_aus | sort: 'order' %}
+    {% for au in aus %}
+      <a class="world-au-card" href="{{ au.url | relative_url }}" data-world-category="{{ au.category | default: 'other' }}">
+        <figure>{% if au.cover %}<img src="{{ au.cover | relative_url }}" alt="">{% else %}<span>NO IMAGE</span>{% endif %}<figcaption>{{ au.universe_id }}</figcaption></figure>
+        <div><p>{{ au.status }} · {{ au.genre }}</p><h2>{{ au.title }}</h2><span>{{ au.hook }}</span><footer><small>{{ au.characters | join: ' · ' }}</small><b>OPEN ↗</b></footer></div>
+      </a>
+    {% endfor %}
+  </section>
+  <p class="world-au-empty" hidden>이 분류에 등록된 세계가 없습니다.</p>
+</main>
+<script>
+(function(){
+  var root=document.querySelector('.world-alternates');if(!root)return;
+  var buttons=Array.prototype.slice.call(root.querySelectorAll('[data-world-filter]'));
+  var cards=Array.prototype.slice.call(root.querySelectorAll('[data-world-category]'));
+  var empty=root.querySelector('.world-au-empty');
+  buttons.forEach(function(button){button.addEventListener('click',function(){
+    var value=button.getAttribute('data-world-filter'),visible=0;
+    buttons.forEach(function(item){item.classList.toggle('active',item===button)});
+    cards.forEach(function(card){var show=value==='all'||card.getAttribute('data-world-category')===value;card.hidden=!show;if(show)visible+=1});
+    empty.hidden=visible!==0;
+  })});
+})();
+</script>

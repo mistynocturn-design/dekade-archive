@@ -46,3 +46,6 @@ collections:
   trpg:
     output: true
     permalink: /trpg/:name/
+  world_aus:
+    output: true
+    permalink: /world/alternates/:name/

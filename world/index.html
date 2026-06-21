@@ -1,0 +1,38 @@
+---
+layout: default
+title: World
+---
+{% assign world = site.data.world %}
+<main class="world-index" style="--world-accent:{{ world.accent }};--world-soft:{{ world.soft }};--world-ink:{{ world.ink }};">
+  <section class="world-hero">
+    <div class="world-hero-copy">
+      <p class="world-eyebrow">{{ world.kicker }}</p>
+      <h1>{{ world.title }}</h1>
+      <p class="world-subtitle">{{ world.subtitle }}</p>
+      <blockquote>{{ world.quote }}</blockquote>
+      <p class="world-intro">{{ world.description }}</p>
+      <a class="world-hero-enter" href="{{ site.baseurl }}/world/foundation/">OPEN FIRST FILE <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="world-hero-visual">
+      <img src="{{ world.hero_image }}" style="object-position:{{ world.hero_position }}" alt="">
+      <figcaption>ARCHIVE IMAGE · 00</figcaption>
+    </figure>
+  </section>
+
+  <dl class="world-fact-strip">
+    {% for fact in world.facts %}<div><dt>{{ fact.label }}</dt><dd>{{ fact.value }}</dd></div>{% endfor %}
+  </dl>
+
+  <section class="world-file-index" aria-labelledby="world-file-heading">
+    <header><p>INDEX OF RECORDS</p><h2 id="world-file-heading">열람 가능한 문서</h2></header>
+    <div class="world-file-grid">
+      {% for item in world.sections %}
+        <a class="world-file-card" href="{{ item.url | relative_url }}">
+          <span class="world-file-number">{{ item.number }}</span>
+          <span class="world-file-copy"><small>{{ item.code }}</small><strong>{{ item.title }}</strong><em>{{ item.description }}</em></span>
+          <span class="world-file-open">OPEN <b aria-hidden="true">↗</b></span>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+</main>

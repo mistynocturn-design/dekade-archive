@@ -1,0 +1,42 @@
+---
+layout: default
+---
+<main class="world-document" style="--world-accent:{{ page.accent | default: '#685867' }};--world-soft:{{ page.soft | default: '#eee8e5' }};--world-ink:{{ page.ink | default: '#29272e' }};">
+  <a class="world-back" href="{{ site.baseurl }}/world/">← WORLD INDEX</a>
+  <header class="world-document-header">
+    <div><span>{{ page.number }} / {{ page.code }}</span><h1>{{ page.title }}</h1>{% if page.subtitle %}<p>{{ page.subtitle }}</p>{% endif %}</div>
+    <small>{{ page.file_status | default: 'OPEN FILE' }}</small>
+  </header>
+
+  {% if page.lead %}<p class="world-document-lead">{{ page.lead }}</p>{% endif %}
+
+  {% if page.timeline %}
+  <section class="world-timeline" aria-label="Chronology">
+    {% for item in page.timeline %}
+      <article class="world-timeline-entry world-timeline-{{ item.track | default: 'world' }}">
+        <div class="world-timeline-marker"><span>{{ item.track | default: 'WORLD' }}</span></div>
+        <div><time>{{ item.date }}</time><h2>{{ item.title }}</h2><p>{{ item.text }}</p>{% if item.note %}<small>{{ item.note }}</small>{% endif %}</div>
+      </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if page.sections %}
+  <section class="world-document-sections">
+    {% for section in page.sections %}
+      <article class="world-record-block">
+        <header><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><div><small>{{ section.code }}</small><h2>{{ section.title }}</h2></div></header>
+        {% if section.text %}<div class="world-record-text">{{ section.text | newline_to_br }}</div>{% endif %}
+        {% if section.items %}
+          <dl class="world-record-list">
+            {% for item in section.items %}<div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>{% endfor %}
+          </dl>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if content != blank %}<section class="world-document-body">{{ content }}</section>{% endif %}
+  <nav class="world-document-nav"><a href="{{ site.baseurl }}/world/">ALL FILES</a><a href="{{ site.baseurl }}/world/alternates/">ALTERNATE REGISTRY →</a></nav>
+</main>

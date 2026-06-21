@@ -1,0 +1,33 @@
+---
+layout: world_document
+title: "설정 문서고"
+subtitle: "장소와 조직, 존재와 생활을 분류한 색인"
+number: "03"
+code: "ARCHIVE"
+file_status: "6 CATEGORIES"
+lead: "설정이 늘어나도 길을 잃지 않도록 분야별로 분류하는 페이지입니다. 각 분류는 이후 개별 상세 문서로 확장할 수 있습니다."
+sections:
+  - code: "LOCATIONS"
+    title: "장소"
+    text: "국가, 도시, 거주지, 연구실과 반복해서 등장하는 공간."
+    items:
+      - label: "PRIMARY"
+        value: "주요 무대 정리 예정"
+      - label: "PRIVATE"
+        value: "두 사람의 생활 공간"
+  - code: "ORGANIZATIONS"
+    title: "조직과 제도"
+    text: "소속 기관, 사회 제도, 직업과 권력 관계에 관한 기록."
+  - code: "BEINGS"
+    title: "존재와 종족"
+    text: "인간과 인간이 아닌 존재, 수명과 신체적 특징에 관한 규칙."
+  - code: "SCIENCE"
+    title: "과학과 기술"
+    text: "연구 분야, 기술 수준, 의학과 초자연 현상을 설명하는 체계."
+  - code: "CULTURE"
+    title: "문화와 생활"
+    text: "언어, 의복, 음식, 관습처럼 이야기의 생활감을 만드는 세부 설정."
+  - code: "GLOSSARY"
+    title: "용어 사전"
+    text: "작품 안에서 반복되는 고유명사와 짧은 정의."
+---
