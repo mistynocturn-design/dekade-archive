@@ -1,37 +1,55 @@
 ---
-layout: default
+layout: home
 title: Home
 ---
+{% assign home = site.data.home %}
+<section class="home-page" data-home-page style="--home-accent:{{ home.accent | default: '#685867' }};--home-soft:{{ home.soft | default: '#eee8e5' }};--home-ink:{{ home.ink | default: '#29272e' }};">
+  <a class="home-editor-button" href="{{ site.baseurl }}/tools/home-editor.html" target="_blank" rel="noopener" aria-label="Open Home editor" title="Open Home editor">+</a>
+  <header class="home-hero">
+    {% if home.hero_image %}<img src="{{ home.hero_image }}" style="object-position:{{ home.hero_position | default: 'center' }}" alt="">{% endif %}
+    <span class="home-hero-shade"></span>
+    <div class="home-hero-copy"><p>{{ home.kicker | default: "PRIVATE ARCHIVE" }}</p><h1>{{ home.title | default: "DKade" }}</h1><strong>{{ home.subtitle }}</strong><small>{{ home.archive_since }}</small></div>
+  </header>
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <div class="post">
-    <h1 class="post-title">
-      <a href="{{ post.url }}">
-        {{ post.title }}
-      </a>
-    </h1>
+  <section class="home-section home-recent">
+    <header><p>RECENT TRACES</p><span>새로 남겨진 기록</span></header>
+    <div class="home-trace-list">
+      {% assign latest_writings = site.writings | sort: "date" | reverse %}{% assign latest_writing = latest_writings.first %}
+      {% if latest_writing %}<a href="{{ latest_writing.url | relative_url }}"><span>WRITING</span><strong>{{ latest_writing.title }}</strong><time>{{ latest_writing.date | date: "%Y.%m.%d" }}</time></a>{% endif %}
+      {% assign latest_gallery_items = site.gallery | sort: "date" | reverse %}{% assign latest_gallery = latest_gallery_items.first %}
+      {% if latest_gallery %}<a href="{{ site.baseurl }}/gallery/"><span>GALLERY</span><strong>{{ latest_gallery.title }}</strong><time>{{ latest_gallery.date | date: "%Y.%m.%d" }}</time></a>{% endif %}
+      {% assign latest_roleplays = site.roleplays | sort: "archive_date" | reverse %}{% assign latest_roleplay = latest_roleplays.first %}
+      {% if latest_roleplay %}<a href="{{ latest_roleplay.url | relative_url }}"><span>ROLEPLAY</span><strong>{{ latest_roleplay.title }}</strong><time>{{ latest_roleplay.archive_date | date: "%Y.%m.%d" }}</time></a>{% endif %}
+      {% assign latest_twitter_items = site.twitter | sort: "date" | reverse %}{% assign latest_twitter = latest_twitter_items.first %}
+      {% if latest_twitter %}<a href="{{ latest_twitter.url | relative_url }}"><span>TWITTER</span><strong>{{ latest_twitter.title }}</strong><time>{% if latest_twitter.date %}{{ latest_twitter.date | date: "%Y.%m" }}{% endif %}</time></a>{% endif %}
+    </div>
+  </section>
 
-    <span class="post-date">{{ post.date | date_to_string }}</span>
+  <section class="home-section home-pair">
+    <header><p>TWO PROFILES</p><span>두 사람</span></header>
+    <div class="home-pair-grid">
+      {% assign home_characters = site.characters | sort: "order" %}{% for character in home_characters %}
+        <a href="{{ character.url | relative_url }}" style="--pair-accent:{{ character.accent }};--pair-soft:{{ character.soft }};">
+          <img src="{{ character.card_image | relative_url }}" alt="" loading="lazy"><span><small>{{ character.role }}</small><strong>{{ character.title }}</strong><p>{% if character.title contains 'Dietrich' %}{{ home.dietrich_note }}{% else %}{{ home.katia_note }}{% endif %}</p></span>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
 
-    {{ post.content }}
-  </div>
-  {% endfor %}
-</div>
+  <section class="home-section home-index">
+    <header><p>ARCHIVE INDEX</p><span>기록의 목차</span></header>
+    <nav>
+      <a href="{{ site.baseurl }}/characters/"><b>01</b><strong>CHARACTERS</strong><span>두 사람의 인물 기록</span></a>
+      <a href="{{ site.baseurl }}/archive/"><b>02</b><strong>ARCHIVE</strong><span>대화와 메시지</span></a>
+      <a href="{{ site.baseurl }}/roleplay/"><b>03</b><strong>ROLEPLAY</strong><span>이어지는 장면들</span></a>
+      <a href="{{ site.baseurl }}/gallery/"><b>04</b><strong>GALLERY</strong><span>시각 기록 보관함</span></a>
+      <a href="{{ site.baseurl }}/writings/"><b>05</b><strong>WRITINGS</strong><span>짧은 글과 연작</span></a>
+      <a href="{{ site.baseurl }}/twitter/"><b>06</b><strong>TWITTER</strong><span>월별 타임라인</span></a>
+    </nav>
+  </section>
 
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="{{ site.baseurl }}page{{paginator.next_page}}">Older</a>
-  {% else %}
-    <span class="pagination-item older">Older</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}">Newer</a>
-    {% else %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}page{{paginator.previous_page}}">Newer</a>
-    {% endif %}
-  {% else %}
-    <span class="pagination-item newer">Newer</span>
-  {% endif %}
-</div>
+  <section class="home-random"><p>어느 날의 기록을 우연히 다시 만나보세요.</p><button type="button" data-home-random>RANDOM MEMORY <span aria-hidden="true">↗</span></button></section>
+  <div class="home-player-reserve" data-home-player-reserve hidden aria-hidden="true"></div>
+  <script type="application/json" data-home-random-data>[{% assign random_first = true %}{% for item in site.writings %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% for item in site.roleplays %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% for item in site.twitter %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% for item in site.characters %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% unless random_first %},{% endunless %}{{ site.baseurl | append: '/gallery/' | jsonify }}]</script>
+</section>
+<script>(function(){var button=document.querySelector('[data-home-random]'),source=document.querySelector('[data-home-random-data]');if(!button||!source)return;var urls=[];try{urls=JSON.parse(source.textContent||'[]')}catch(error){}button.addEventListener('click',function(){if(urls.length)location.href=urls[Math.floor(Math.random()*urls.length)]})})();</script>
