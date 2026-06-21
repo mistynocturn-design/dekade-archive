@@ -43,3 +43,6 @@ collections:
   writings:
     output: true
     permalink: /writings/:name/
+  trpg:
+    output: true
+    permalink: /trpg/:name/

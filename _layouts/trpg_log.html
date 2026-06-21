@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="ko">{% include head.html %}<body class="trpg-log-shell" style="--trpg-page-bg:{{ page.page_bg | default: '#17161a' }};--trpg-log-bg:{{ page.log_bg | default: '#211f24' }};--trpg-ink:{{ page.text_color | default: '#f2eff2' }};--trpg-accent:{{ page.accent | default: '#8ca7d8' }};">{% include sidebar.html %}
+<main class="content container trpg-log-content"><article class="trpg-log-page">
+  <a class="trpg-log-back" href="{{ site.baseurl }}/trpg/">← TRPG</a>
+  <header class="trpg-log-header">{% if page.cover %}<img src="{{ page.cover }}" alt="">{% endif %}<div><p>{{ page.system | default: "TRPG SESSION" }}</p><h1>{{ page.title }}</h1>{% if page.summary %}<span>{{ page.summary }}</span>{% endif %}<dl>{% if page.session_date %}<div><dt>DATE</dt><dd>{{ page.session_date }}{% if page.end_date %} – {{ page.end_date }}{% endif %}</dd></div>{% endif %}{% if page.duration %}<div><dt>TIME</dt><dd>{{ page.duration }}</dd></div>{% endif %}{% if page.players %}<div><dt>PLAYERS</dt><dd>{{ page.players | join: ", " }}</dd></div>{% endif %}</dl>{% if page.source_url %}<a class="trpg-source-link" href="{{ page.source_url }}" target="_blank" rel="noopener">세션 링크 바로가기 ↗</a>{% endif %}</div></header>
+  <details class="trpg-log-search"><summary>로그 내 검색</summary><input type="search" data-trpg-log-search placeholder="발화자 또는 본문 검색"><span data-trpg-log-count></span></details>
+  <div class="trpg-log-stream" data-trpg-log-stream>{{ content }}</div>
+</article></main>
+<script>(function(){var input=document.querySelector('[data-trpg-log-search]'),stream=document.querySelector('[data-trpg-log-stream]'),count=document.querySelector('[data-trpg-log-count]');if(!input||!stream)return;var entries=Array.prototype.slice.call(stream.querySelectorAll('.trpg-entry,.trpg-scene'));function filter(){var q=input.value.trim().toLocaleLowerCase(),shown=0;entries.forEach(function(item){var visible=!q||item.textContent.toLocaleLowerCase().indexOf(q)>=0;item.hidden=!visible;if(visible)shown++});count.textContent=q?shown+' / '+entries.length:''}input.addEventListener('input',filter)})();</script>
+</body></html>
