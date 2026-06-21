@@ -1,6 +1,6 @@
 ---
 layout: world_document
-title: "타임라"
+title: "타임라인"
 subtitle: "세계관을 설명하는 짧은 안내서"
 number: "File number 02"
 code: "CHRONICLE"
