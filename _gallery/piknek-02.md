@@ -3,7 +3,7 @@ title: "카디아"
 date: "2026-06-07"
 category: "Picrew & Neka"
 artist: "피크루/네카"
-characters: ["카디아"]
+characters: []
 tags: ["카디아","피크루"]
 description: ""
 images:
