@@ -14,6 +14,6 @@ layout: default
       {% for section in page.sections %}<article><small>{{ section.code }}</small><h2>{{ section.title }}</h2><div>{{ section.text | newline_to_br }}</div></article>{% endfor %}
       {% if content != blank %}<article class="world-document-body">{{ content }}</article>{% endif %}
     </section>
-    <aside class="world-au-people"><p>SUBJECTS</p>{% for person in page.people %}<article>{% if person.image %}<img src="{{ person.image }}" alt="">{% endif %}<div><small>{{ person.code }}</small><h2>{{ person.name }}</h2><span>{{ person.role }}</span></div></article>{% endfor %}<div class="world-au-link-box"><small>RELATED RECORDS</small><p>Gallery · Writings · Roleplay 연결 영역</p></div></aside>
+    <aside class="world-au-people"><p>SUBJECTS</p>{% for person in page.people %}<article>{% if person.image %}<img src="{{ person.image }}" alt="">{% endif %}<div><small>{{ person.name }}</small><h2>{{ person.role }}</h2></div></article>{% endfor %}</aside>
   </div>
 </main>
