@@ -1,5 +1,7 @@
 hero_image: "/dekade-archive/assets/gallery/Noctea/03.png"
 hero_position: "center"
+hero_gradient: true
+hero_gradient_color: "#121115"
 kicker: "PRIVATE ARCHIVE"
 title: "DKade"
 subtitle: "Dietrich Schwartz × Katia Feltroof"
