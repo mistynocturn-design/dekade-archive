@@ -3,7 +3,7 @@ title: "트위터"
 date: "2026-06-04"
 category: "Bini"
 artist: "비니"
-characters: 
+characters: []
 tags: ["디트리히","카디아","트위터","짧머"]
 description: ""
 images:
