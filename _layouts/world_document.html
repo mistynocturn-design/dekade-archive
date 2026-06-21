@@ -11,14 +11,14 @@ layout: default
     <small>{{ page.file_status | default: 'OPEN FILE' }}</small>
   </header>
 
-  {% if page.lead %}<p class="world-document-lead">{{ page.lead | newline_to_br }}</p>{% endif %}
+  {% if page.lead %}<p class="world-document-lead">{{ page.lead | replace: '\n', '<br>' | newline_to_br }}</p>{% endif %}
 
   {% if page.timeline %}
   <section class="world-timeline" aria-label="Chronology">
     {% for item in page.timeline %}
       <article class="world-timeline-entry world-timeline-{{ item.track | default: 'world' }}">
         <div class="world-timeline-marker"><span>{{ item.track | default: 'WORLD' }}</span></div>
-        <div><time>{{ item.date }}</time><h2>{{ item.title }}</h2><p>{{ item.text }}</p>{% if item.note %}<small>{{ item.note }}</small>{% endif %}</div>
+        <div><time>{{ item.date }}</time><h2>{{ item.title }}</h2><p>{{ item.text | replace: '\n', '<br>' | newline_to_br }}</p>{% if item.note %}<small>{{ item.note | replace: '\n', '<br>' | newline_to_br }}</small>{% endif %}</div>
       </article>
     {% endfor %}
   </section>
