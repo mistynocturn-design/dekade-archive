@@ -8,8 +8,8 @@ duration: ""
 summary: ""
 players: []
 tags: []
-source_url: ""
-cover: ""
+source_url: "https://ccfolia.com/rooms/y4aVAceNA"
+cover: "/dekade-archive/assets/trpg/grea-grrr/01/cover.png"
 page_bg: "#17161a"
 log_bg: "#211f24"
 text_color: "#f2eff2"
