@@ -3,7 +3,7 @@ title: "키스데이"
 date: "2026-06-14"
 category: "Noctea"
 artist: "녹티"
-characters: ["디트리히","카디아"]
+characters: []
 tags: ["디케이드"]
 description: ""
 images:
