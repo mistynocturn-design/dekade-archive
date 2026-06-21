@@ -2,6 +2,7 @@
 layout: default
 ---
 <main class="world-au-detail" style="--world-accent:{{ page.accent | default: '#685867' }};--world-soft:{{ page.soft | default: '#eee8e5' }};--world-ink:{{ page.ink | default: '#29272e' }};">
+  <a class="world-editor-link" href="{{ site.baseurl }}/tools/world-manager.html?mode=au" target="_blank" rel="noopener" aria-label="Open AU editor" title="Open AU editor">+</a>
   <a class="world-back" href="{{ site.baseurl }}/world/alternates/">← ALTERNATE REGISTRY</a>
   <header class="world-au-detail-hero">
     <figure>{% if page.cover %}<img src="{{ page.cover | relative_url }}" alt="">{% endif %}<figcaption>{{ page.universe_id }}</figcaption></figure>
