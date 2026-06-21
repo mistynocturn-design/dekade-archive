@@ -3112,7 +3112,7 @@ accent: "#8ca7d8"
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">……</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">백화점에서 했던 이야기, 기억하나요?</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
