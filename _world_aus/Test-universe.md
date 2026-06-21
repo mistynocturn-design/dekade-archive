@@ -3,10 +3,10 @@ layout: world_au
 title: "AU 세계관 예시"
 universe_id: "UNIVERSE A-01"
 order: 1
-category: "modern"
 status: "Example"
 genre: "MODERN · FANTASY"
 era: "CONTEMPORARY"
+tags: ["현대", "판타지"]
 cover: "/dekade-archive/assets/gallery/Pik-nek/01.jpg"
 hook: "이 AU를 한 문장으로 소개합니다."
 characters: ["Dietrich Schwartz", "Katia Feltroof"]

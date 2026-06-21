@@ -1,18 +1,19 @@
 ---
 layout: default
 ---
+{% assign alternate_record = site.data.world.sections | where: "code", "ALTERNATES" | first %}
 <main class="world-au-detail" style="--world-accent:{{ page.accent | default: '#685867' }};--world-soft:{{ page.soft | default: '#eee8e5' }};--world-ink:{{ page.ink | default: '#29272e' }};">
   <a class="world-editor-link" href="{{ site.baseurl }}/tools/world-manager.html?mode=au" target="_blank" rel="noopener" aria-label="Open AU editor" title="Open AU editor">+</a>
-  <a class="world-back" href="{{ site.baseurl }}/world/alternates/">← ALTERNATE REGISTRY</a>
+  <a class="world-back" href="{{ site.baseurl }}/world/alternates/">← {{ alternate_record.title | default: '또다른 세계들' }}</a>
   <header class="world-au-detail-hero">
-    <figure>{% if page.cover %}<img src="{{ page.cover | relative_url }}" alt="">{% endif %}<figcaption>{{ page.universe_id }}</figcaption></figure>
-    <div><p>{{ page.status }} · {{ page.genre }}</p><h1>{{ page.title }}</h1><blockquote>{{ page.hook }}</blockquote><dl><div><dt>UNIVERSE</dt><dd>{{ page.universe_id }}</dd></div><div><dt>ERA</dt><dd>{{ page.era }}</dd></div><div><dt>STATUS</dt><dd>{{ page.status }}</dd></div></dl></div>
+    <figure>{% if page.cover %}<img src="{{ page.cover }}" alt="">{% endif %}<figcaption>{{ page.universe_id }}</figcaption></figure>
+    <div><p>{{ page.status }} · {{ page.genre }}</p><h1>{{ page.title }}</h1>{% if page.tags %}<div class="world-au-detail-tags">{% for tag in page.tags %}<span>#{{ tag }}</span>{% endfor %}</div>{% endif %}<blockquote>{{ page.hook }}</blockquote><dl><div><dt>UNIVERSE</dt><dd>{{ page.universe_id }}</dd></div><div><dt>ERA</dt><dd>{{ page.era }}</dd></div><div><dt>STATUS</dt><dd>{{ page.status }}</dd></div></dl></div>
   </header>
   <div class="world-au-detail-grid">
     <section class="world-au-main">
       {% for section in page.sections %}<article><small>{{ section.code }}</small><h2>{{ section.title }}</h2><div>{{ section.text | newline_to_br }}</div></article>{% endfor %}
       {% if content != blank %}<article class="world-document-body">{{ content }}</article>{% endif %}
     </section>
-    <aside class="world-au-people"><p>SUBJECTS</p>{% for person in page.people %}<article>{% if person.image %}<img src="{{ person.image | relative_url }}" alt="">{% endif %}<div><small>{{ person.code }}</small><h2>{{ person.name }}</h2><span>{{ person.role }}</span></div></article>{% endfor %}<div class="world-au-link-box"><small>RELATED RECORDS</small><p>Gallery · Writings · Roleplay 연결 영역</p></div></aside>
+    <aside class="world-au-people"><p>SUBJECTS</p>{% for person in page.people %}<article>{% if person.image %}<img src="{{ person.image }}" alt="">{% endif %}<div><small>{{ person.code }}</small><h2>{{ person.name }}</h2><span>{{ person.role }}</span></div></article>{% endfor %}<div class="world-au-link-box"><small>RELATED RECORDS</small><p>Gallery · Writings · Roleplay 연결 영역</p></div></aside>
   </div>
 </main>

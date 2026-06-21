@@ -11,24 +11,6 @@ title: Home
     <div class="home-hero-copy"><p>{{ home.kicker | default: "PRIVATE ARCHIVE" }}</p><h1>{{ home.title | default: "DKade" }}</h1><strong>{{ home.subtitle }}</strong><small>{{ home.archive_since }}</small></div>
   </header>
 
-  <section class="home-section home-recent">
-    <header><p>RECENT TRACES</p><span>새로 남겨진 기록</span></header>
-    <div class="home-trace-list" data-home-trace-list>
-      {% assign latest_writings = site.writings | sort: "date" | reverse %}{% assign latest_writing = latest_writings.first %}
-      {% if latest_writing %}<a href="{{ latest_writing.url | relative_url }}" data-trace-date="{{ latest_writing.date | date: '%s' }}"><span>WRITING</span><strong>{{ latest_writing.title }}</strong><time>{{ latest_writing.date | date: "%Y.%m.%d" }}</time></a>{% endif %}
-      {% assign latest_gallery_items = site.gallery | sort: "date" | reverse %}{% assign latest_gallery = latest_gallery_items.first %}
-      {% if latest_gallery %}<a href="{{ site.baseurl }}/gallery/" data-trace-date="{{ latest_gallery.date | date: '%s' }}"><span>GALLERY</span><strong>{{ latest_gallery.title }}</strong><time>{{ latest_gallery.date | date: "%Y.%m.%d" }}</time></a>{% endif %}
-      {% assign latest_roleplays = site.roleplays | sort: "archive_date" | reverse %}{% assign latest_roleplay = latest_roleplays.first %}
-      {% if latest_roleplay %}<a href="{{ latest_roleplay.url | relative_url }}" data-trace-date="{{ latest_roleplay.archive_date | date: '%s' }}"><span>ROLEPLAY</span><strong>{{ latest_roleplay.title }}</strong><time>{{ latest_roleplay.archive_date | date: "%Y.%m.%d" }}</time></a>{% endif %}
-      {% assign latest_trpg_items = site.trpg | sort: "session_date" | reverse %}{% assign latest_trpg = latest_trpg_items.first %}
-      {% if latest_trpg %}<a href="{{ latest_trpg.url | relative_url }}" data-trace-date="{{ latest_trpg.session_date | date: '%s' }}"><span>TRPG</span><strong>{{ latest_trpg.title }}</strong><time>{{ latest_trpg.session_date | date: "%Y.%m.%d" }}</time></a>{% endif %}
-      {% assign latest_twitter_items = site.twitter | sort: "date" | reverse %}{% assign latest_twitter = latest_twitter_items.first %}
-      {% if latest_twitter %}<a href="{{ latest_twitter.url | relative_url }}" data-trace-date="{{ latest_twitter.date | date: '%s' }}"><span>TWITTER</span><strong>{{ latest_twitter.title }}</strong><time>{% if latest_twitter.date %}{{ latest_twitter.date | date: "%Y.%m" }}{% endif %}</time></a>{% endif %}
-      {% assign latest_archive_items = site.archive | sort: "date" | reverse %}{% assign latest_archive = latest_archive_items.first %}
-      {% if latest_archive %}<a href="{{ latest_archive.url | relative_url }}" data-trace-date="{{ latest_archive.date | date: '%s' }}"><span>ARCHIVE</span><strong>{{ latest_archive.title }}</strong><time>{{ latest_archive.date | date: "%Y.%m.%d" }}</time></a>{% endif %}
-    </div>
-  </section>
-
   <section class="home-section home-pair">
     <header><p>TWO PROFILES</p></header>
     <div class="home-pair-grid">
@@ -51,6 +33,5 @@ title: Home
   <div class="home-player-reserve" data-home-player-reserve hidden aria-hidden="true"></div>
   <script type="application/json" data-home-random-data>[{% assign random_first = true %}{% for item in site.writings %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% for item in site.roleplays %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% for item in site.twitter %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% for item in site.characters %}{% unless random_first %},{% endunless %}{{ item.url | relative_url | jsonify }}{% assign random_first = false %}{% endfor %}{% unless random_first %},{% endunless %}{{ site.baseurl | append: '/gallery/' | jsonify }}]</script>
 </section>
-<script>(function(){var list=document.querySelector('[data-home-trace-list]');if(!list)return;var items=Array.from(list.querySelectorAll('[data-trace-date]'));items.sort(function(a,b){return Number(b.dataset.traceDate||0)-Number(a.dataset.traceDate||0)});items.forEach(function(item,index){if(index<3)list.appendChild(item);else item.remove()})})();</script>
 <script>(function(){var button=document.querySelector('[data-home-random]'),source=document.querySelector('[data-home-random-data]');if(!button||!source)return;var urls=[];try{urls=JSON.parse(source.textContent||'[]')}catch(error){}button.addEventListener('click',function(){if(urls.length)location.href=urls[Math.floor(Math.random()*urls.length)]})})();</script>
 <script>(function(){var image=document.querySelector('[data-home-hero-image]');if(!image)return;function crop(){var box=image.parentElement,nw=image.naturalWidth,nh=image.naturalHeight,bw=box.clientWidth,bh=box.clientHeight;if(!nw||!nh||!bw||!bh)return;var ratio=bw/bh,maxW,maxH;if(nw/nh>ratio){maxH=nh;maxW=nh*ratio}else{maxW=nw;maxH=nw/ratio}var zoom=Math.max(1,Number(image.dataset.cropZoom)||1),w=maxW/zoom,h=maxH/zoom,x=(nw-w)*(Number(image.dataset.cropX)||0)/100,y=(nh-h)*(Number(image.dataset.cropY)||0)/100,scale=bw/w;image.style.width=nw*scale+'px';image.style.height=nh*scale+'px';image.style.left=-x*scale+'px';image.style.top=-y*scale+'px'}image.addEventListener('load',crop);window.addEventListener('resize',crop);if(image.complete)crop()})();</script>

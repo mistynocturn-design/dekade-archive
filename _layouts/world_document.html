@@ -1,11 +1,13 @@
 ---
 layout: default
 ---
+{% assign world_record = site.data.world.sections | where: "url", page.url | first %}
+{% unless world_record %}{% assign world_record = site.data.world.sections | where: "number", page.number | first %}{% endunless %}
 <main class="world-document" style="--world-accent:{{ page.accent | default: '#685867' }};--world-soft:{{ page.soft | default: '#eee8e5' }};--world-ink:{{ page.ink | default: '#29272e' }};">
   <a class="world-editor-link" href="{{ site.baseurl }}/tools/world-manager.html?mode=document" target="_blank" rel="noopener" aria-label="Open World document editor" title="Open World document editor">+</a>
   <a class="world-back" href="{{ site.baseurl }}/world/">← WORLD INDEX</a>
   <header class="world-document-header">
-    <div><span>{{ page.number }} / {{ page.code }}</span><h1>{{ page.title }}</h1>{% if page.subtitle %}<p>{{ page.subtitle }}</p>{% endif %}</div>
+    <div><span>{{ world_record.number | default: page.number }} / {{ world_record.code | default: page.code }}</span><h1>{{ world_record.title | default: page.title }}</h1>{% assign record_description = world_record.description | default: page.subtitle %}{% if record_description %}<p>{{ record_description }}</p>{% endif %}</div>
     <small>{{ page.file_status | default: 'OPEN FILE' }}</small>
   </header>
 
