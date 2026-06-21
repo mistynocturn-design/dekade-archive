@@ -20,6 +20,8 @@ title: Home
       {% if latest_gallery %}<a href="{{ site.baseurl }}/gallery/"><span>GALLERY</span><strong>{{ latest_gallery.title }}</strong><time>{{ latest_gallery.date | date: "%Y.%m.%d" }}</time></a>{% endif %}
       {% assign latest_roleplays = site.roleplays | sort: "archive_date" | reverse %}{% assign latest_roleplay = latest_roleplays.first %}
       {% if latest_roleplay %}<a href="{{ latest_roleplay.url | relative_url }}"><span>ROLEPLAY</span><strong>{{ latest_roleplay.title }}</strong><time>{{ latest_roleplay.archive_date | date: "%Y.%m.%d" }}</time></a>{% endif %}
+      {% assign latest_trpg_items = site.trpg | sort: "session_date" | reverse %}{% assign latest_trpg = latest_trpg_items.first %}
+      {% if latest_trpg %}<a href="{{ latest_trpg.url | relative_url }}"><span>TRPG</span><strong>{{ latest_trpg.title }}</strong><time>{{ latest_trpg.session_date | date: "%Y.%m.%d" }}</time></a>{% endif %}
       {% assign latest_twitter_items = site.twitter | sort: "date" | reverse %}{% assign latest_twitter = latest_twitter_items.first %}
       {% if latest_twitter %}<a href="{{ latest_twitter.url | relative_url }}"><span>TWITTER</span><strong>{{ latest_twitter.title }}</strong><time>{% if latest_twitter.date %}{{ latest_twitter.date | date: "%Y.%m" }}{% endif %}</time></a>{% endif %}
     </div>
