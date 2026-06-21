@@ -1,6 +1,6 @@
 ---
 layout: trpg_log
-title: "CREA-GRRR (디케이드)[all]"
+title: "CREA-GRRR 1"
 system: "Call of Cthulhu"
 session_date: "2026-06-13"
 end_date: "2026-06-14"
@@ -2667,7 +2667,7 @@ accent: "#8ca7d8"
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/gm.png" alt=""></span>
-  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">연구일지:<br>학회의 낯선 이는 자신이 외계에서 왔다고 주장했다. 그의 소지품 중 작은 금속 크리쳐의 암수 한 쌍을 손에 넣은 이후, 나는 다양한 연구를 할 수 있었다. 크리쳐의 무한한 재생 능력은 경이로웠으나, 핵이 제거되면 사망해버리는 단점이 있었다. 나는 이것을 보완할 방법을 찾기 위해 금속 크리처 핵의 중심 물질, C.V를 채취해 다양한 실험체에게 주입했다. 대부분이 견디지 못하고 흉하게 녹은 채 움직였으며, 핵이 제거되면 사망하는 성질은 유사했다. 종종 특수한 능력을 갖춘 채, 다른 녀석보다 지능 있는 개체가 나타나기도 했으나……. 이들도 역시, 핵의 제거와 동시에 죽음에 이르렀다.<br>그런데, 실험생물 5000마리 중 단 한 마리, 알파만이 원래의 모습을 유지하며 월등한 능력을 보였다. 알파에게서는 핵을 찾을 수 없었으며, 아주 작은 생체기관만 남아있어도 충분히 시간만 주어지면 신체를 재생해냈다. 그는 지구상에 존재하는 생물 중 가장 영생에 가깝다고 볼 수 있었다.<br>알파는 무리의 우두머리로 군림하던 녀석이었다. 나는 알파를 통해 실험체가 우수한 생물일수록 완전한 크리처 생성의 성공률이 높다는 사실을 깨달았다.<br>그러나 1년이 넘어갈 무렵, 잠시 자리를 비운 사이 &#39;그 사건&#39;이 일어나버렸다. 실험실로 돌아왔을 땐 알파가 실험체 대다수를 학살한 후였다. 그건 그야말로 &#39;폭주&#39;였다. 알파가 자신의 동족을 알아보지 못하고 저능한 크리쳐처럼 공격을 감행한 것이다. 이후 문제를 알아보기 위해 연구를 하던 중, 알파는 숨을 거두었다. 사인은 과다출혈. 마지막에 있던 폭주 이후 알파는 평범한 실험생물로 돌아갔고, 평범하게 죽음을 맞이했다. 그 전조는 거의 없었다. 사망 후 재생 속도가 차츰차츰 느려지기 시작했던 것 외에는…….<br>부작용 없이 인간에게 C.V를 쓸 수 있다면, 국내의 군사력은 기하급수적으로 상승하겠지.<br></div></div>
+  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">연구일지:<br>학회의 낯선 이는 자신이 외계에서 왔다고 주장했다. 그의 소지품 중 작은 금속 크리쳐의 암수 한 쌍을 손에 넣은 이후, 나는 다양한 연구를 할 수 있었다. 크리쳐의 무한한 재생 능력은 경이로웠으나, 핵이 제거되면 사망해버리는 단점이 있었다. 나는 이것을 보완할 방법을 찾기 위해 금속 크리처 핵의 중심 물질, C.V를 채취해 다양한 실험체에게 주입했다. 대부분이 견디지 못하고 흉하게 녹은 채 움직였으며, 핵이 제거되면 사망하는 성질은 유사했다. 종종 특수한 능력을 갖춘 채, 다른 녀석보다 지능 있는 개체가 나타나기도 했으나……. 이들도 역시, 핵의 제거와 동시에 죽음에 이르렀다.<br>그런데, 실험생물 5000마리 중 단 한 마리, 알파만이 원래의 모습을 유지하며 월등한 능력을 보였다. 알파에게서는 핵을 찾을 수 없었으며, 아주 작은 생체기관만 남아있어도 충분히 시간만 주어지면 신체를 재생해냈다. 그는 지구상에 존재하는 생물 중 가장 영생에 가깝다고 볼 수 있었다.<br>알파는 무리의 우두머리로 군림하던 녀석이었다. 나는 알파를 통해 실험체가 우수한 생물일수록 완전한 크리처 생성의 성공률이 높다는 사실을 깨달았다.<br>그러나 1년이 넘어갈 무렵, 잠시 자리를 비운 사이 &#39;그 사건&#39;이 일어나버렸다. 실험실로 돌아왔을 땐 알파가 실험체 대다수를 학살한 후였다. 그건 그야말로 &#39;폭주&#39;였다. 알파가 자신의 동족을 알아보지 못하고 저능한 크리쳐처럼 공격을 감행한 것이다. 이후 문제를 알아보기 위해 연구를 하던 중, 알파는 숨을 거두었다. 사인은 과다출혈. 마지막에 있던 폭주 이후 알파는 평범한 실험생물로 돌아갔고, 평범하게 죽음을 맞이했다. 그 전조는 거의 없었다. 사망 후 재생 속도가 차츰차츰 느려지기 시작했던 것 외에는…….<br>부작용 없이 인간에게 C.V를 쓸 수 있다면, 국내의 군사력은 기하급수적으로 상승하겠지.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="카디아" style="--speaker-color:rgb(156, 39, 176)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/katia.png" alt=""></span>
@@ -2811,11 +2811,11 @@ accent: "#8ca7d8"
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/gm.png" alt=""></span>
-  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">첫 번째 편지: <br><br>보내주신 새로운 C.V의 효과를 확인했습니다.<br>실패작은 늘 그렇듯 안전지대 밖으로 전부 폐기했습니다.<br>상급은 그나마 성공한 편이지만, 하급은 정말로 쓸 게 못 되는군요.<br>다음 달 중으로 인간을 대상으로 실험에 들어갈 예정입니다.<br>AOC에서 협조를 승낙했으니, C.V의 추가적 공급을 요청합니다.<br>해당 밀서는 확인 후 소각하십시오.<br></div></div>
+  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">첫 번째 편지: <br><br>보내주신 새로운 C.V의 효과를 확인했습니다.<br>실패작은 늘 그렇듯 안전지대 밖으로 전부 폐기했습니다.<br>상급은 그나마 성공한 편이지만, 하급은 정말로 쓸 게 못 되는군요.<br>다음 달 중으로 인간을 대상으로 실험에 들어갈 예정입니다.<br>AOC에서 협조를 승낙했으니, C.V의 추가적 공급을 요청합니다.<br>해당 밀서는 확인 후 소각하십시오.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/gm.png" alt=""></span>
-  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">두 번째 편지:<br><br>확인했습니다.<br>다만, 너무 위험한 게 아닌가 싶습니다.<br>요즘 들어 추가 공급 요청이 부쩍 늘었습니다.<br>이러다 도심지에 C.V가 유출되기라도 하면 얼마나 끔찍한 일이 일어날지….<br>부디 진행 속도를 늦춰주십시오.  <br>적당한 위기감을 조성해 민간인을 통제하는 정도로만 사용한다고 하셨잖습니까.<br>요즘은 연구 보고서도 거의 받지 못하고 있습니다.<br><br></div></div>
+  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">두 번째 편지:<br><br>확인했습니다.<br>다만, 너무 위험한 게 아닌가 싶습니다.<br>요즘 들어 추가 공급 요청이 부쩍 늘었습니다.<br>이러다 도심지에 C.V가 유출되기라도 하면 얼마나 끔찍한 일이 일어날지….<br>부디 진행 속도를 늦춰주십시오.  <br>적당한 위기감을 조성해 민간인을 통제하는 정도로만 사용한다고 하셨잖습니까.<br>요즘은 연구 보고서도 거의 받지 못하고 있습니다.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/gm.png" alt=""></span>
@@ -3088,7 +3088,7 @@ accent: "#8ca7d8"
   <div><header><strong>카디아</strong><small>main</small></header><div class="trpg-entry-text">디트리히, 제 말 들리십니까?</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">……미안해요, 카디. 지금은 가까이 오지 말아줘요</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="카디아" style="--speaker-color:rgb(156, 39, 176)">
@@ -3096,11 +3096,11 @@ accent: "#8ca7d8"
   <div><header><strong>카디아</strong><small>main</small></header><div class="trpg-entry-text">(움직이려던 발을 다시 멈춘다) 그럼 가까이 말고 여기서 얘기할까요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">……</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">...하고싶은 말이 있다면... 네, 거기서 하는 게 좋겠네요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="카디아" style="--speaker-color:rgb(156, 39, 176)">
@@ -3108,55 +3108,55 @@ accent: "#8ca7d8"
   <div><header><strong>카디아</strong><small>main</small></header><div class="trpg-entry-text">디트..는 저에게 할 얘기 없으십니까. 뭐든.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">……</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">백화점에서 했던 이야기, 기억하나요?</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">카디랑, 동료들이랑.. 매 해 함께했던 크리스마스 파티가 제 삶에서 유일한 낙이었어요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">웃기죠, 저는 신을 믿는 것도 아닌데 다함께 메시아의 탄생을 축하하는 일은 정말 즐거웠어요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">…동료들이 전장에서 하나 둘 사라지면서 파티는 더이상 북적거리지 않았지만, 그래도 좋았어요. 어쨌든 살아남은 사람들끼리 모여서 생존을 축하할 수는 있었으니까요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">그렇게 떠들다 보면 전사한 동료들도 잠시나마 잊을 수 있고, 무엇보다 쓸 데 없는 선물 주고받는 게 아이러니하게도 제겐 제일 의미 있었어요. 누군가를 기억할 수 있는 기념물을 받는 거니까요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">그런데 이젠 우리 둘만 남았고, 제 곁에 유일하게 남아있던 카디마저 크리쳐가 되어버려서 파티같은 건 없던 일이 되어버렸죠.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">카디가 언젠가 받고 싶다고 했던 스노우볼도 결국 전해주지 못한 채 방치된 지 오래예요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">…그거 알아요? 저는 사실 기억하는 사람보다는 기억되는 사람이 되고싶었어요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">그 생각을 고쳐준 카디를 이제서야 되찾았는데.. 이젠 모르겠네요. 그 재회마저 제 손으로 이렇게 망쳐버리고 싶지는 않았는데..</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">하하.. 미안해요. 여기까지가 제 이성의 한계인 것 같네요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-creature.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">무기 들어요.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-eye.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">다치고 싶지 않으면.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
@@ -3192,11 +3192,11 @@ accent: "#8ca7d8"
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">탄환을 고스란히 맞은 충격에 그 자리에서 무너집니다.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-eye.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">cc&lt;=75 근접전(격투) (1D100&lt;=75) 보너스, 패널티 주사위[0] ＞ 18 ＞ 18 ＞ 어려운 성공</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="디트리히 슈바르츠" style="--speaker-color:#d6ccae">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich-eye.png" alt=""></span>
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/01/profile/dietrich.png" alt=""></span>
   <div><header><strong>디트리히 슈바르츠</strong><small>main</small></header><div class="trpg-entry-text">1d3+1D4 피해(맨손) (1D3+1D4) ＞ 1[1]+4[4] ＞ 5</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
