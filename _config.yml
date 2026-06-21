@@ -49,3 +49,5 @@ collections:
   world_aus:
     output: true
     permalink: /world/alternates/:name/
+  checklists:
+    output: false

@@ -1,0 +1,47 @@
+---
+layout: default
+title: Checklist
+---
+<main class="checklist-page" data-checklist-page>
+  <header class="checklist-header">
+    <div><p>SHEET LIBRARY</p><h1>Checklist</h1><span>두 사람의 대화와 혼자만의 기록을 위한 PDF 시트 아카이브.</span></div>
+    <a class="checklist-tool-button" href="{{ site.baseurl }}/tools/checklist-editor.html" target="_blank" rel="noopener" aria-label="Open Checklist editor" title="Open Checklist editor">+</a>
+  </header>
+
+  <div class="checklist-notice"><strong>ARCHIVE NOTE</strong><span>원배포자의 사용·재배포 조건을 확인하고, 가능한 경우 원본 배포 링크를 함께 기록합니다.</span></div>
+
+  <nav class="checklist-tabs" aria-label="Checklist types">
+    <button class="active" type="button" data-checklist-type="all">ALL</button>
+    <button type="button" data-checklist-type="duo">2 PERSON</button>
+    <button type="button" data-checklist-type="solo">1 PERSON</button>
+    <span class="checklist-tab-indicator" aria-hidden="true"></span>
+  </nav>
+
+  <details class="checklist-search"><summary>SEARCH & FILTER</summary><div><label class="wide">Keyword<input type="search" data-checklist-query placeholder="제목, 배포자, 소개, 태그"></label><label>Creator<input type="search" data-checklist-creator placeholder="배포자"></label><label>Tag<input type="search" data-checklist-tag placeholder="관계, 일상, 서사..."></label></div><button type="button" data-checklist-reset>RESET</button></details>
+  <p class="checklist-count" data-checklist-count></p>
+
+  <section class="checklist-grid" data-checklist-grid>
+    {% assign items = site.checklists | sort: "date" | reverse %}
+    {% for item in items %}
+      <article class="checklist-card" data-checklist-card data-type="{{ item.type | default: 'duo' }}" data-creator="{{ item.creator | escape }}" data-tags="{{ item.tags | join: ' ' | escape }}" style="--sheet-accent:{{ item.accent | default: '#685867' }};--sheet-soft:{{ item.soft | default: '#f0ecee' }};">
+        <div class="checklist-cover">
+          {% if item.cover %}<img src="{{ item.cover }}" alt="" loading="lazy">{% else %}<span class="checklist-pdf-mark"><b>PDF</b><small>{{ item.type | default: 'duo' | upcase }}</small></span>{% endif %}
+          <em>{% if item.type == 'solo' %}1 PERSON{% else %}2 PERSON{% endif %}</em>
+        </div>
+        <div class="checklist-card-body">
+          <div class="checklist-card-top"><span>{{ item.creator | default: 'UNKNOWN CREATOR' }}</span>{% if item.date %}<time>{{ item.date | date: '%Y.%m.%d' }}</time>{% endif %}</div>
+          <h2>{{ item.title }}</h2>
+          {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+          <dl>{% if item.questions %}<div><dt>QUESTIONS</dt><dd>{{ item.questions }}</dd></div>{% endif %}{% if item.format %}<div><dt>FORMAT</dt><dd>{{ item.format }}</dd></div>{% endif %}</dl>
+          {% if item.tags %}<div class="checklist-tags">{% for tag in item.tags %}<span>#{{ tag }}</span>{% endfor %}</div>{% endif %}
+          <footer>{% if item.pdf %}<a class="checklist-pdf-link" href="{{ item.pdf }}" target="_blank" rel="noopener">VIEW PDF ↗</a>{% endif %}{% if item.source_url %}<a class="checklist-source-link" href="{{ item.source_url }}" target="_blank" rel="noopener">ORIGINAL ↗</a>{% endif %}</footer>
+        </div>
+        <script type="application/json" class="checklist-card-data">{"title":{{ item.title | jsonify }},"creator":{{ item.creator | default: '' | jsonify }},"description":{{ item.description | default: '' | jsonify }},"tags":{{ item.tags | jsonify }}}</script>
+      </article>
+    {% endfor %}
+  </section>
+  <div class="checklist-empty" data-checklist-empty hidden><strong>NO SHEETS FOUND</strong><p>이 조건에 맞는 체크리스트가 없습니다.</p></div>
+</main>
+<script>
+(function(){'use strict';var root=document.querySelector('[data-checklist-page]');if(!root)return;var cards=Array.prototype.slice.call(root.querySelectorAll('[data-checklist-card]')),active='all',query=root.querySelector('[data-checklist-query]'),creator=root.querySelector('[data-checklist-creator]'),tag=root.querySelector('[data-checklist-tag]'),count=root.querySelector('[data-checklist-count]'),empty=root.querySelector('[data-checklist-empty]'),tabs=root.querySelector('.checklist-tabs'),indicator=root.querySelector('.checklist-tab-indicator');function text(card){try{var data=JSON.parse(card.querySelector('.checklist-card-data').textContent);return[data.title,data.creator,data.description].concat(data.tags||[]).join(' ').toLocaleLowerCase()}catch(e){return card.textContent.toLocaleLowerCase()}}cards.forEach(function(card){card._search=text(card)});function move(button){if(!button)return;indicator.style.width=button.offsetWidth+'px';indicator.style.transform='translateX('+(button.offsetLeft-tabs.scrollLeft)+'px)'}function render(){var q=query.value.trim().toLocaleLowerCase(),c=creator.value.trim().toLocaleLowerCase(),t=tag.value.trim().toLocaleLowerCase(),visible=0;cards.forEach(function(card){var show=(active==='all'||card.dataset.type===active)&&(!q||card._search.indexOf(q)>=0)&&(!c||(card.dataset.creator||'').toLocaleLowerCase().indexOf(c)>=0)&&(!t||(card.dataset.tags||'').toLocaleLowerCase().indexOf(t)>=0);card.hidden=!show;if(show)visible+=1});count.textContent=visible+' SHEETS';empty.hidden=visible!==0}root.querySelectorAll('[data-checklist-type]').forEach(function(button){button.addEventListener('click',function(){active=button.dataset.checklistType;root.querySelectorAll('[data-checklist-type]').forEach(function(x){x.classList.toggle('active',x===button)});move(button);render()})});[query,creator,tag].forEach(function(input){input.addEventListener('input',render)});root.querySelector('[data-checklist-reset]').addEventListener('click',function(){query.value='';creator.value='';tag.value='';render()});tabs.addEventListener('scroll',function(){move(root.querySelector('[data-checklist-type].active'))});window.addEventListener('resize',function(){move(root.querySelector('[data-checklist-type].active'))});render();requestAnimationFrame(function(){move(root.querySelector('[data-checklist-type].active'))})})();
+</script>
