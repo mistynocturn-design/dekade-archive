@@ -5,6 +5,8 @@ hero_crop_y: 50
 hero_crop_zoom: 1.5
 hero_gradient: true
 hero_gradient_color: "#121115"
+hero_gradient_opacity: 86
+hero_text_position: "bottom-left"
 kicker_color: "#ffffff"
 title_color: "#ffffff"
 subtitle_color: "#ffffff"

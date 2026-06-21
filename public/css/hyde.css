@@ -3349,9 +3349,13 @@ a.sidebar-nav-item:focus {
 .content .home-editor-button:hover,.content .home-editor-button:focus { background:var(--home-accent); color:#fff; text-decoration:none; }
 .home-hero { aspect-ratio:16/9; background:var(--home-soft); border-radius:7px; display:grid; min-height:0; overflow:hidden; position:relative; }
 .home-hero > img { display:block; margin:0; max-width:none; object-fit:fill; position:absolute; z-index:0; }
-.home-hero-shade { background:linear-gradient(90deg,color-mix(in srgb,var(--home-gradient) 86%,transparent) 0%,color-mix(in srgb,var(--home-gradient) 52%,transparent) 42%,color-mix(in srgb,var(--home-gradient) 5%,transparent) 75%); inset:0; position:absolute; z-index:2; }
+.home-hero-shade { background:linear-gradient(90deg,color-mix(in srgb,var(--home-gradient) var(--home-gradient-opacity),transparent) 0%,transparent 78%); inset:0; position:absolute; z-index:2; }
 .home-hero-shade.is-off { display:none; }
 .home-hero-copy { bottom:0; box-sizing:border-box; display:block; left:0; max-width:min(620px,62%); padding:clamp(2rem,4vw,3.2rem); position:absolute; text-shadow:0 1px 12px rgba(0,0,0,.25); width:100%; z-index:4; }
+.home-hero.text-top-left .home-hero-copy { bottom:auto; top:0; }
+.home-hero.text-top-right .home-hero-copy { bottom:auto; left:auto; right:0; text-align:right; top:0; }
+.home-hero.text-bottom-right .home-hero-copy { left:auto; right:0; text-align:right; }
+.home-hero.text-top-right .home-hero-shade,.home-hero.text-bottom-right .home-hero-shade { background:linear-gradient(270deg,color-mix(in srgb,var(--home-gradient) var(--home-gradient-opacity),transparent) 0%,transparent 78%); }
 .home-hero-copy > p { color:var(--home-kicker); font-size:.61rem; font-weight:800; letter-spacing:.16em; margin:0 0 .5rem; }
 .home-hero-copy h1 { color:var(--home-title); font-family:Paperlogy,system-ui,sans-serif; font-size:clamp(2.2rem,6.5vw,5.4rem); letter-spacing:-.045em; line-height:1.04; margin:0 0 .75rem; overflow:visible; }
 .home-hero-copy strong { color:var(--home-subtitle); display:block; font-family:Paperlogy,system-ui,sans-serif; font-size:clamp(.62rem,1.5vw,.95rem); font-weight:500; letter-spacing:.035em; }
@@ -3372,7 +3376,7 @@ a.sidebar-nav-item:focus {
 .home-index nav { display:grid; grid-template-columns:1fr 1fr; }
 .home-index nav a { align-items:baseline; border-bottom:1px solid #e9e5e7; color:inherit; display:grid; gap:.65rem; grid-template-columns:2rem minmax(7rem,.75fr) minmax(0,1fr); padding:.85rem .3rem; text-decoration:none; }
 .home-index nav a:nth-child(odd) { margin-right:1rem; }.home-index nav a:nth-child(even) { margin-left:1rem; }.home-index nav a:hover,.home-index nav a:focus { background:var(--home-soft); padding-left:.7rem; text-decoration:none; }.home-index b { color:#aaa4aa; font-size:.57rem; font-weight:500; }.home-index strong { color:#3c373d; font-size:.7rem; letter-spacing:.045em; }.home-index nav span { color:#918b92; font-size:.62rem; }
-.home-random { align-items:center; background:var(--home-soft); border-radius:6px; display:flex; justify-content:space-between; margin-top:clamp(3.2rem,8vw,6rem); padding:1.2rem 1.35rem; }.home-random p { color:#6d676e; font-size:.69rem; margin:0; }.home-random button { background:var(--home-accent); border:0; border-radius:999px; color:#fff; cursor:pointer; font-size:.6rem; font-weight:800; letter-spacing:.06em; padding:.65rem .9rem; }.home-random button:hover,.home-random button:focus { filter:brightness(.92); }
+.home-random { align-items:center; background:var(--home-soft); border-radius:6px; display:flex; justify-content:flex-end; margin-top:clamp(3.2rem,8vw,6rem); padding:1.2rem 1.35rem; }.home-random button { background:var(--home-accent); border:0; border-radius:999px; color:#fff; cursor:pointer; font-size:.6rem; font-weight:800; letter-spacing:.06em; padding:.65rem .9rem; }.home-random button:hover,.home-random button:focus { filter:brightness(.92); }
 .home-player-reserve { min-height:0; }
 @media (min-width:48em) { .home-shell .home-content { margin-right:2rem; width:calc(100vw - 22rem); } }
 @media (min-width:64em) { .home-shell .home-content { margin-right:3rem; width:calc(100vw - 25rem); } }
