@@ -1,0 +1,9 @@
+.checklist-card{display:block;min-height:205px}
+.checklist-card-body{min-height:205px;padding:1rem}
+.checklist-card-top{gap:.6rem;justify-content:flex-start}
+.checklist-card-top time{margin-left:auto}
+.checklist-type-label{background:var(--sheet-accent);border-radius:2px;color:#fff!important;font-size:.44rem!important;font-weight:850;letter-spacing:.08em;padding:.28rem .42rem}
+.checklist-card h2{font-size:.9rem;margin-top:.65rem}
+.checklist-card-body>p{-webkit-line-clamp:2}
+.checklist-card footer{justify-content:flex-end}
+@media(max-width:600px){.checklist-card{display:block;min-height:0}.checklist-card-body{min-height:210px;padding:.85rem}}

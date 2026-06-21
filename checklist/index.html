@@ -2,6 +2,7 @@
 layout: default
 title: Checklist
 ---
+<link rel="stylesheet" href="{{ site.baseurl }}/public/css/checklist.css?v={{ site.time | date: '%s' }}">
 <main class="checklist-page" data-checklist-page>
   <header class="checklist-header">
     <div><p>SHEET LIBRARY</p><h1>Checklist</h1><span>두 사람의 대화와 혼자만의 기록을 위한 PDF 시트 아카이브.</span></div>
@@ -24,12 +25,8 @@ title: Checklist
     {% assign items = site.checklists | sort: "date" | reverse %}
     {% for item in items %}
       <article class="checklist-card" data-checklist-card data-type="{{ item.type | default: 'duo' }}" data-creator="{{ item.creator | escape }}" data-tags="{{ item.tags | join: ' ' | escape }}" style="--sheet-accent:{{ item.accent | default: '#685867' }};--sheet-soft:{{ item.soft | default: '#f0ecee' }};">
-        <div class="checklist-cover">
-          {% if item.cover %}<img src="{{ item.cover }}" alt="" loading="lazy">{% else %}<span class="checklist-pdf-mark"><b>PDF</b><small>{{ item.type | default: 'duo' | upcase }}</small></span>{% endif %}
-          <em>{% if item.type == 'solo' %}1 PERSON{% else %}2 PERSON{% endif %}</em>
-        </div>
         <div class="checklist-card-body">
-          <div class="checklist-card-top"><span>{{ item.creator | default: 'UNKNOWN CREATOR' }}</span>{% if item.date %}<time>{{ item.date | date: '%Y.%m.%d' }}</time>{% endif %}</div>
+          <div class="checklist-card-top"><span class="checklist-type-label">{% if item.type == 'solo' %}1 PERSON{% else %}2 PERSON{% endif %}</span><span>{{ item.creator | default: 'UNKNOWN CREATOR' }}</span>{% if item.date %}<time>{{ item.date | date: '%Y.%m.%d' }}</time>{% endif %}</div>
           <h2>{{ item.title }}</h2>
           {% if item.description %}<p>{{ item.description }}</p>{% endif %}
           <dl>{% if item.questions %}<div><dt>QUESTIONS</dt><dd>{{ item.questions }}</dd></div>{% endif %}{% if item.format %}<div><dt>FORMAT</dt><dd>{{ item.format }}</dd></div>{% endif %}</dl>
