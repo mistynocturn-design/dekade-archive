@@ -2,12 +2,12 @@
 layout: trpg_log
 title: "CREA-GRRR (디케이드)[all]"
 system: "Call of Cthulhu"
-session_date: ""
-end_date: ""
-duration: ""
+session_date: "2026-06-13"
+end_date: "2026-06-14"
+duration: "5시간"
 summary: ""
-players: []
-tags: []
+players: ["카디아","디트리히"]
+tags: ["크툴루","타이만"]
 source_url: "https://ccfolia.com/rooms/y4aVAceNA"
 cover: "/dekade-archive/assets/trpg/grea-grrr/01/cover.png"
 page_bg: "#17161a"
