@@ -32,10 +32,15 @@
 
   function patchOutput() {
     var output = document.getElementById('output');
-    var text = output.value.replace(/\nfeatured_characters:\n(?:  - .*\n)*/g, '').replace(/\narchive_index:\n(?:  - title:.*\n    url:.*\n    description:.*\n)*/g, '').replace(/\s+$/, '');
+    var text = output.value;
+    var featuredAt = text.indexOf('featured_characters:');
+    var indexAt = text.indexOf('archive_index:');
+    var cutAt = [featuredAt, indexAt].filter(function (at) { return at >= 0; }).sort(function (a, b) { return a - b; })[0];
+    if (cutAt != null) text = text.slice(0, cutAt);
+    text = text.replace(/\s+$/, '');
     text += '\nfeatured_characters:\n  - "katia-feltroof"\n  - "dietrich-schwartz"\narchive_index:\n';
     items.forEach(function (item) { text += '  - title: ' + yaml(item.title) + '\n    url: ' + yaml(item.url) + '\n    description: ' + yaml(item.description) + '\n'; });
-    output.value = text;
+    output.value = text + '\n';
     localStorage.setItem(KEY, JSON.stringify(items));
     return text;
   }
