@@ -8,14 +8,6 @@
     return document.getElementById(id);
   }
 
-  function sessionFolder() {
-    var raw = (byId('fileName').value || byId('title').value || 'trpg-session')
-      .replace(/\.md$/i, '')
-      .trim()
-      .toLowerCase();
-    return raw.replace(/[^a-z0-9가-힣_-]+/g, '-').replace(/^-+|-+$/g, '') || 'trpg-session';
-  }
-
   function safeFileName(name) {
     var dot = name.lastIndexOf('.');
     var ext = dot >= 0 ? name.slice(dot).toLowerCase() : '';
@@ -27,28 +19,27 @@
   }
 
   function generatedPath(file) {
-    return BASE + sessionFolder() + '/' + safeFileName(file.name);
+    return BASE + safeFileName(file.name);
   }
 
   async function copyIntoRepo(file) {
     if (!repoHandle) return;
     var assets = await repoHandle.getDirectoryHandle('assets', { create: true });
     var trpg = await assets.getDirectoryHandle('trpg', { create: true });
-    var session = await trpg.getDirectoryHandle(sessionFolder(), { create: true });
-    var target = await session.getFileHandle(safeFileName(file.name), { create: true });
+    var target = await trpg.getFileHandle(safeFileName(file.name), { create: true });
     var writable = await target.createWritable();
     await writable.write(file);
     await writable.close();
   }
 
-  async function useAsset(file, assign) {
+  async function useAsset(file, assign, existingRepoPath) {
     if (!file) return;
-    var path = generatedPath(file);
+    var path = existingRepoPath || generatedPath(file);
     assign(path);
     try {
-      await copyIntoRepo(file);
+      if (!existingRepoPath) await copyIntoRepo(file);
       showRepoStatus(repoHandle
-        ? '이미지를 Repo에 복사하고 경로를 자동 입력했습니다: ' + path
+        ? (existingRepoPath ? 'Repo 안의 기존 이미지 경로를 그대로 입력했습니다: ' : '이미지를 assets/trpg에 복사하고 경로를 자동 입력했습니다: ') + path
         : 'Repo 경로를 자동 입력했습니다: ' + path, !!repoHandle);
     } catch (error) {
       showRepoStatus('경로는 입력했지만 파일 복사에 실패했습니다: ' + error.message, false);
@@ -68,9 +59,29 @@
     var label = document.createElement('label');
     label.className = 'asset-pick';
     label.innerHTML = '<input id="' + id + '" type="file" accept="image/*"><span>' + text + '</span>';
-    label.querySelector('input').addEventListener('change', function () {
-      handler(this.files[0]);
+    var input = label.querySelector('input');
+    input.addEventListener('change', function () {
+      handler(this.files[0], '');
       this.value = '';
+    });
+    label.querySelector('span').addEventListener('click', async function (event) {
+      if (!repoHandle || !window.showOpenFilePicker || !repoHandle.resolve) return;
+      event.preventDefault();
+      try {
+        var handles = await window.showOpenFilePicker({
+          startIn: repoHandle,
+          multiple: false,
+          types: [{ description: 'Images', accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif'] } }]
+        });
+        var handle = handles[0];
+        var parts = await repoHandle.resolve(handle);
+        var repoPath = parts && parts.length && parts[0].toLowerCase() === 'assets'
+          ? '/dekade-archive/' + parts.join('/')
+          : '';
+        handler(await handle.getFile(), repoPath);
+      } catch (error) {
+        if (error.name !== 'AbortError') showRepoStatus(error.message, false);
+      }
     });
     return label;
   }
@@ -105,7 +116,7 @@
   var repoStatus = document.createElement('div');
   repoStatus.id = 'repoStatus';
   repoStatus.className = 'status';
-  repoStatus.textContent = '이미지를 고르면 Repo 경로가 자동 생성됩니다. Repo를 연결하면 파일도 assets/trpg에 복사됩니다.';
+  repoStatus.textContent = 'Repo를 연결한 뒤 내부 이미지를 고르면 기존 경로를 그대로 사용합니다. 외부 이미지는 assets/trpg에 복사됩니다.';
   importActions.parentElement.insertBefore(repoStatus, byId('importStatus'));
 
   chooseRepo.addEventListener('click', async function () {
@@ -122,20 +133,20 @@
   });
 
   var cover = byId('cover');
-  cover.insertAdjacentElement('afterend', filePicker('coverFile', '표지 이미지 선택', function (file) {
+  cover.insertAdjacentElement('afterend', filePicker('coverFile', '표지 이미지 선택', function (file, repoPath) {
     useAsset(file, function (path) {
       cover.value = path;
       cover.dispatchEvent(new Event('input', { bubbles: true }));
-    });
+    }, repoPath);
   }));
   enhancePathInput(cover);
 
   var image = byId('editImage');
-  image.insertAdjacentElement('afterend', filePicker('sceneFile', '삽입 이미지 선택', function (file) {
+  image.insertAdjacentElement('afterend', filePicker('sceneFile', '삽입 이미지 선택', function (file, repoPath) {
     useAsset(file, function (path) {
       image.value = path;
       image.dispatchEvent(new Event('input', { bubbles: true }));
-    });
+    }, repoPath);
   }));
   enhancePathInput(image);
 
@@ -144,11 +155,11 @@
       if (row.querySelector('.avatar-file-pick')) return;
       var avatar = row.querySelector('[data-field="avatar"]');
       if (!avatar) return;
-      var picker = filePicker('avatar-' + Math.random().toString(36).slice(2), '프로필 선택', function (file) {
+      var picker = filePicker('avatar-' + Math.random().toString(36).slice(2), '프로필 선택', function (file, repoPath) {
         useAsset(file, function (path) {
           avatar.value = path;
           avatar.dispatchEvent(new Event('input', { bubbles: true }));
-        });
+        }, repoPath);
       });
       picker.classList.add('avatar-file-pick');
       avatar.insertAdjacentElement('afterend', picker);
