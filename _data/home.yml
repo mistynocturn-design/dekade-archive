@@ -1,5 +1,8 @@
 hero_image: "/dekade-archive/assets/gallery/Noctea/03.png"
 hero_position: "center"
+hero_crop_x: 50
+hero_crop_y: 50
+hero_crop_zoom: 1.5
 hero_gradient: true
 hero_gradient_color: "#121115"
 kicker_color: "#ffffff"
