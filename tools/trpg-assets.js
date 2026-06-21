@@ -19,14 +19,13 @@
   }
 
   function generatedPath(file) {
-    return BASE + safeFileName(file.name);
+    if (!repoHandle) return '';
+    return BASE + safeFileName(repoHandle.name) + '/' + safeFileName(file.name);
   }
 
   async function copyIntoRepo(file) {
     if (!repoHandle) return;
-    var assets = await repoHandle.getDirectoryHandle('assets', { create: true });
-    var trpg = await assets.getDirectoryHandle('trpg', { create: true });
-    var target = await trpg.getFileHandle(safeFileName(file.name), { create: true });
+    var target = await repoHandle.getFileHandle(safeFileName(file.name), { create: true });
     var writable = await target.createWritable();
     await writable.write(file);
     await writable.close();
@@ -34,13 +33,17 @@
 
   async function useAsset(file, assign, existingRepoPath) {
     if (!file) return;
+    if (!repoHandle) {
+      showRepoStatus('먼저 ‘이미지 저장 폴더 연결’을 눌러 assets/trpg 안의 세션 폴더를 선택해주세요.', false);
+      return;
+    }
     var path = existingRepoPath || generatedPath(file);
     assign(path);
     try {
       if (!existingRepoPath) await copyIntoRepo(file);
       showRepoStatus(repoHandle
-        ? (existingRepoPath ? 'Repo 안의 기존 이미지 경로를 그대로 입력했습니다: ' : '이미지를 assets/trpg에 복사하고 경로를 자동 입력했습니다: ') + path
-        : 'Repo 경로를 자동 입력했습니다: ' + path, !!repoHandle);
+        ? (existingRepoPath ? '선택한 세션 폴더의 기존 이미지 경로를 입력했습니다: ' : '선택한 세션 폴더에 이미지를 복사하고 경로를 입력했습니다: ') + path
+        : path, !!repoHandle);
     } catch (error) {
       showRepoStatus('경로는 입력했지만 파일 복사에 실패했습니다: ' + error.message, false);
     }
@@ -75,8 +78,8 @@
         });
         var handle = handles[0];
         var parts = await repoHandle.resolve(handle);
-        var repoPath = parts && parts.length && parts[0].toLowerCase() === 'assets'
-          ? '/dekade-archive/' + parts.join('/')
+        var repoPath = parts && parts.length
+          ? BASE + safeFileName(repoHandle.name) + '/' + parts.map(safeFileName).join('/')
           : '';
         handler(await handle.getFile(), repoPath);
       } catch (error) {
@@ -110,13 +113,13 @@
   var chooseRepo = document.createElement('button');
   chooseRepo.type = 'button';
   chooseRepo.className = 'secondary';
-  chooseRepo.textContent = 'Repo 폴더 연결';
+  chooseRepo.textContent = '이미지 저장 폴더 연결';
   importActions.insertBefore(chooseRepo, importActions.firstChild);
 
   var repoStatus = document.createElement('div');
   repoStatus.id = 'repoStatus';
   repoStatus.className = 'status';
-  repoStatus.textContent = 'Repo를 연결한 뒤 내부 이미지를 고르면 기존 경로를 그대로 사용합니다. 외부 이미지는 assets/trpg에 복사됩니다.';
+  repoStatus.textContent = 'assets/trpg 안에 세션 폴더를 만든 뒤 그 폴더를 선택하세요. 이후 고른 이미지는 모두 그 폴더에 저장됩니다.';
   importActions.parentElement.insertBefore(repoStatus, byId('importStatus'));
 
   chooseRepo.addEventListener('click', async function () {
@@ -126,7 +129,7 @@
     }
     try {
       repoHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-      showRepoStatus('Repo 폴더가 연결되었습니다. 이제 고른 이미지는 assets/trpg에 자동 복사됩니다.', true);
+      showRepoStatus('이미지 저장 폴더를 연결했습니다: assets/trpg/' + safeFileName(repoHandle.name) + '/ — 이후 고른 이미지는 이곳에 저장됩니다.', true);
     } catch (error) {
       if (error.name !== 'AbortError') showRepoStatus(error.message, false);
     }
