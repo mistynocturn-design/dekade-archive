@@ -29,6 +29,22 @@ layout: default
 
 <script>
 (function () {
+  function repoImagePath(value) {
+    var path = String(value || '').trim().replace(/[\\₩]+/g, '/');
+    if (!path || /^(?:https?:)?\/\//i.test(path) || /^(?:data|blob):/i.test(path)) return path;
+    var marker = path.toLowerCase().indexOf('/assets/');
+    if (marker >= 0) path = path.slice(marker + 1);
+    else if (path.toLowerCase().indexOf('assets/') !== 0) return path;
+    return '{{ site.baseurl }}/' + path.replace(/^\/+/, '').replace(/\/{2,}/g, '/');
+  }
+
+  document.querySelectorAll('.twitter-note-body img').forEach(function (image) {
+    image.src = repoImagePath(image.getAttribute('src'));
+  });
+  document.querySelectorAll('[data-twitter-image]').forEach(function (button) {
+    button.setAttribute('data-twitter-image', repoImagePath(button.getAttribute('data-twitter-image')));
+  });
+
   var modal = document.querySelector('.twitter-image-modal');
   if (!modal) return;
   var modalImage = modal.querySelector('img');

@@ -22,6 +22,7 @@
     @media (max-width: 820px) { .grid, .swatches { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 560px) { .grid, .swatches { grid-template-columns: 1fr; } }
   </style>
+  <style>input[type="color"]{cursor:pointer;height:38px;padding:3px}</style>
 </head>
 <body>
 <main>
@@ -29,9 +30,9 @@
 
   <section class="panel">
     <div class="swatches">
-      <div><label for="accent">Accent</label><input id="accent" value="#4e4a65"></div>
-      <div><label for="soft">Soft</label><input id="soft" value="#e7e3d8"></div>
-      <div><label for="ink">Ink</label><input id="ink" value="#161732"></div>
+<div><label for="accent">Accent</label><input id="accent" type="color" value="#4e4a65"></div>
+<div><label for="soft">Soft</label><input id="soft" type="color" value="#e7e3d8"></div>
+<div><label for="ink">Ink</label><input id="ink" type="color" value="#161732"></div>
     </div>
     <p class="hint">Copy the style block into the top front matter of a character file when you want to change that character's colors.</p>
     <div class="actions">

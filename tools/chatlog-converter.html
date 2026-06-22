@@ -27,6 +27,7 @@
     .check input { margin: 0; width: auto; }
     @media (max-width: 760px) { .grid, .colors { grid-template-columns: 1fr; } }
   </style>
+  <style>input[type="color"]{cursor:pointer;height:38px;padding:3px}</style>
 </head>
 <body>
 <main>
@@ -64,11 +65,11 @@
       <div><label for="fontSize">Bubble font size</label><input id="fontSize" value="0.70rem"></div>
     </div>
     <div class="colors">
-      <div><label for="pageColor">Page</label><input id="pageColor" value="#ffffff"></div>
-      <div><label for="leftColor">Left bg</label><input id="leftColor" value="#4e4a65"></div>
-      <div><label for="leftText">Left text</label><input id="leftText" value="#e7e3d8"></div>
-      <div><label for="rightColor">Right bg</label><input id="rightColor" value="#e7e3d8"></div>
-      <div><label for="rightText">Right text</label><input id="rightText" value="#4e4a65"></div>
+<div><label for="pageColor">Page</label><input id="pageColor" type="color" value="#ffffff"></div>
+<div><label for="leftColor">Left bg</label><input id="leftColor" type="color" value="#4e4a65"></div>
+<div><label for="leftText">Left text</label><input id="leftText" type="color" value="#e7e3d8"></div>
+<div><label for="rightColor">Right bg</label><input id="rightColor" type="color" value="#e7e3d8"></div>
+<div><label for="rightText">Right text</label><input id="rightText" type="color" value="#4e4a65"></div>
     </div>
   </section>
 

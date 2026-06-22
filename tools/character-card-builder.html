@@ -19,6 +19,7 @@
     .hint, .status { color: #646b76; font-size: 13px; line-height: 1.55; }
     @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
   </style>
+  <style>input[type="color"]{cursor:pointer;height:38px;padding:3px}</style>
 </head>
 <body>
 <main>
@@ -32,9 +33,9 @@
       <div><label for="role">Small role text</label><input id="role" placeholder="Investigator"></div>
       <div><label for="cardImage">Card image</label><input id="cardImage" placeholder="/dekade-archive/assets/characters/name/card.jpg"></div>
       <div><label for="profileImage">Profile image</label><input id="profileImage" placeholder="/dekade-archive/assets/characters/name/profile.jpg"></div>
-      <div><label for="accent">Accent</label><input id="accent" value="#4e4a65"></div>
-      <div><label for="soft">Soft</label><input id="soft" value="#e7e3d8"></div>
-      <div><label for="ink">Ink</label><input id="ink" value="#161732"></div>
+<div><label for="accent">Accent</label><input id="accent" type="color" value="#4e4a65"></div>
+<div><label for="soft">Soft</label><input id="soft" type="color" value="#e7e3d8"></div>
+<div><label for="ink">Ink</label><input id="ink" type="color" value="#161732"></div>
     </div>
     <label for="facts">Card facts</label>
     <textarea id="facts" placeholder="Gender|Male&#10;Age|25&#10;Height|198cm"></textarea>
