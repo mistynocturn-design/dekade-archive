@@ -1,3 +1,7 @@
+.checklist-kind-tabs{border-bottom:1px solid #ddd8dc;display:flex;gap:1.7rem;margin:1.2rem 0 .35rem}
+.checklist-kind-tabs button{background:transparent;border:0;border-bottom:2px solid transparent;color:#999198;cursor:pointer;font:inherit;font-size:.6rem;font-weight:850;letter-spacing:.06em;padding:.55rem 0 .7rem}
+.checklist-kind-tabs button.active{border-color:var(--checklist-accent);color:var(--checklist-accent)}
+.checklist-tabs[hidden]{display:none}
 .checklist-grid{display:grid;gap:.65rem;grid-template-columns:1fr}
 .checklist-entry{background:#fff;border:1px solid #dfdade;border-left:3px solid var(--sheet-accent);border-radius:6px;min-width:0;overflow:hidden}
 .checklist-entry[hidden]{display:none}
