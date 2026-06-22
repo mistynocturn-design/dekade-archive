@@ -1,7 +1,13 @@
-.checklist-kind-tabs{border-bottom:1px solid #ddd8dc;display:flex;gap:1.7rem;margin:1.2rem 0 .35rem}
-.checklist-kind-tabs button{background:transparent;border:0;border-bottom:2px solid transparent;color:#999198;cursor:pointer;font:inherit;font-size:.6rem;font-weight:850;letter-spacing:.06em;padding:.55rem 0 .7rem}
-.checklist-kind-tabs button.active{border-color:var(--checklist-accent);color:var(--checklist-accent)}
-.checklist-tabs[hidden]{display:none}
+.checklist-page{max-width:1320px}
+.checklist-toolbar{align-items:flex-end;border-bottom:1px solid #ddd8dc;display:flex;margin:1.2rem 0;overflow-x:auto;scrollbar-width:none;white-space:nowrap}.checklist-toolbar::-webkit-scrollbar{display:none}
+.checklist-kind-tabs{display:flex;flex:0 0 auto;gap:1.7rem;margin:0;position:relative}
+.checklist-kind-tabs button{background:transparent;border:0;color:#999198;cursor:pointer;font:inherit;font-size:.6rem;font-weight:850;letter-spacing:.06em;padding:.55rem 0 .7rem;white-space:nowrap}
+.checklist-kind-tabs button.active{color:var(--checklist-accent)}
+.checklist-kind-indicator{background:var(--checklist-accent);bottom:-1px;height:2px;left:0;pointer-events:none;position:absolute;transition:transform .32s cubic-bezier(.22,.61,.36,1),width .32s cubic-bezier(.22,.61,.36,1)}
+.checklist-tabs{border:0;display:flex;flex:0 0 auto;gap:1rem;margin:0;max-width:0;opacity:0;overflow:hidden;padding:0;pointer-events:none;position:relative;transform:translateX(-.7rem);transition:max-width .42s cubic-bezier(.22,.61,.36,1),opacity .22s ease,transform .36s ease,padding-left .36s ease}
+.checklist-tabs.is-open{max-width:260px;opacity:1;padding-left:1.35rem;pointer-events:auto;transform:translateX(0)}
+.checklist-tabs.is-open:before{background:#ddd8dc;content:"";height:1rem;left:.65rem;position:absolute;top:50%;transform:translateY(-50%);width:1px}
+.checklist-tabs button{padding:.55rem 0 .7rem}.checklist-tab-indicator{bottom:-1px;transition:transform .28s ease,width .28s ease}
 .checklist-grid{display:grid;gap:.65rem;grid-template-columns:1fr}
 .checklist-entry{background:#fff;border:1px solid #dfdade;border-left:3px solid var(--sheet-accent);border-radius:6px;min-width:0;overflow:hidden}
 .checklist-entry[hidden]{display:none}
