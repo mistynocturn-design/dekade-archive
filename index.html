@@ -5,7 +5,8 @@ title: Home
 {% assign home = site.data.home %}
 <section class="home-page" data-home-page style="--home-accent:{{ home.accent | default: '#685867' }};--home-soft:{{ home.soft | default: '#eee8e5' }};--home-ink:{{ home.ink | default: '#29272e' }};--home-gradient:{{ home.hero_gradient_color | default: '#121115' }};--home-gradient-opacity:{{ home.hero_gradient_opacity | default: 86 }}%;--home-kicker:{{ home.kicker_color | default: '#ffffff' }};--home-title:{{ home.title_color | default: '#ffffff' }};--home-subtitle:{{ home.subtitle_color | default: '#ffffff' }};--home-archive:{{ home.archive_color | default: '#ffffff' }};">
   <a class="home-editor-button" href="{{ site.baseurl }}/tools/home-editor.html" target="_blank" rel="noopener" aria-label="Open Home editor" title="Open Home editor">+</a>
-  <header class="home-hero text-{{ home.hero_text_position | default: 'bottom-left' }}">
+{% assign home_copy_scale = home.hero_copy_scale | default: 100 | times: 0.01 %}
+<header class="home-hero text-{{ home.hero_text_position | default: 'bottom-left' }}" style="--home-copy-scale:{{ home_copy_scale }}">
     {% if home.hero_image %}<img src="{{ home.hero_image }}" data-home-hero-image data-crop-x="{{ home.hero_crop_x | default: 50 }}" data-crop-y="{{ home.hero_crop_y | default: 50 }}" data-crop-zoom="{{ home.hero_crop_zoom | default: 1 }}" alt="">{% endif %}
     <span class="home-hero-shade{% unless home.hero_gradient %} is-off{% endunless %}"></span>
     <div class="home-hero-copy"><p>{{ home.kicker | default: "PRIVATE ARCHIVE" }}</p><h1>{{ home.title | default: "DKade" }}</h1><strong>{{ home.subtitle }}</strong><small>{{ home.archive_since }}</small></div>
