@@ -1,11 +1,12 @@
 hero_image: "/dekade-archive/assets/gallery/Noctea/03.png"
-hero_position: "50% 8.51177373090521%"
+hero_position: "50% 9.99466346474551%"
 hero_crop_x: 50
-hero_crop_y: 8.51177373090521
+hero_crop_y: 9.99466346474551
 hero_crop_zoom: 1
 hero_gradient: true
-hero_gradient_color: "#454545"
-hero_gradient_opacity: 29
+hero_gradient_color: "#575757"
+hero_gradient_opacity: 57
+hero_copy_scale: 95
 hero_text_position: "top-left"
 kicker_color: "#ffffff"
 title_color: "#ffffff"
@@ -24,30 +25,31 @@ featured_characters:
   - "katia-feltroof"
   - "dietrich-schwartz"
 archive_index:
-  - title: "WORLD"
-    url: "/world/"
-    description: "세계관 설정"
   - title: "CHARACTERS"
     url: "/characters/"
-    description: "캐릭터 프로필"
-  - title: "CHECKLIST"
-    url: "/checklist/"
-    description: "체크리스트"
+    description: "두 사람의 인물 기록"
   - title: "ARCHIVE"
     url: "/archive/"
-    description: "썰 백업"
+    description: "대화와 메시지"
+  - title: "WORLD"
+    url: "/world/"
+    description: "세계와 설정"
   - title: "ROLEPLAY"
     url: "/roleplay/"
-    description: "한줄역극"
+    description: "이어지는 장면들"
   - title: "GALLERY"
     url: "/gallery/"
-    description: "그림연성 아카이브"
+    description: "시각 기록 보관함"
   - title: "WRITINGS"
     url: "/writings/"
-    description: "글연성 아카이브"
+    description: "짧은 글과 연작"
   - title: "TWITTER"
     url: "/twitter/"
-    description: "트위터 타임라인"
+    description: "월별 타임라인"
   - title: "TRPG"
     url: "/trpg/"
     description: "세션 로그 아카이브"
+  - title: "CHECKLIST"
+    url: "/checklist/"
+    description: "함께 채워갈 목록"
+
