@@ -19,4 +19,11 @@
 .checklist-pdf-page{aspect-ratio:1/1.414;background:#fff;line-height:0;margin:0;overflow:hidden;padding:0;position:relative;width:100%}
 .checklist-pdf-page iframe{border:0;display:block;height:100%;inset:0;margin:0;padding:0;position:absolute;width:100%}
 .checklist-no-pdf{color:#aaa2a8;font-size:.6rem;line-height:1.5;margin:0;padding:3rem;text-align:center}
+.pair-template-image-stack{background:#f4f1f2;display:grid;gap:1px;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden}
+.pair-template-image-stack>button{background:#fff;border:0;cursor:zoom-in;display:block;margin:0;min-width:0;padding:0}
+.pair-template-image-stack img{display:block;height:auto;margin:0;width:100%}
+.pair-template-image-stack>.checklist-no-pdf{grid-column:1/-1}
+.pair-template-lightbox figure{grid-template-columns:minmax(0,1fr)}
+.pair-template-lightbox figcaption{margin:0 auto;max-width:1120px;width:100%}
 @media(max-width:700px){.checklist-entry-summary{gap:.45rem;grid-template-columns:auto minmax(0,1fr) 1rem;min-height:92px;padding:.8rem}.checklist-entry-meta,.checklist-entry-summary time{display:none}.checklist-entry-main small{white-space:normal}.checklist-entry-info{align-items:flex-start;gap:.5rem}.checklist-tags{max-width:75%}}
+@media(max-width:520px){.pair-template-image-stack{grid-template-columns:1fr}}
