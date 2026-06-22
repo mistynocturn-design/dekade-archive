@@ -1,11 +1,13 @@
 ---
-layout: page
+layout: default
 title: Twitter
 ---
 
-<div class="twitter-page-tools">
+<section class="page archive-section-page">
+<header class="archive-section-header">
+  <div><p class="archive-section-kicker">SOCIAL ARCHIVE</p><h1>Twitter</h1></div>
   <a class="twitter-tool-button" href="{{ site.baseurl }}/tools/twitter-converter.html" target="_blank" rel="noopener" aria-label="Open Twitter converter" title="Open Twitter converter">+</a>
-</div>
+</header>
 
 <details class="twitter-search-panel archive-inline-search"><summary>Search</summary>
   <div class="archive-search-grid">
@@ -133,3 +135,4 @@ title: Twitter
   resetButton.addEventListener('click', function () { keywordInput.value = ''; authorInput.value = ''; fromInput.value = ''; toInput.value = ''; summary.textContent = ''; resultsBox.innerHTML = ''; resultsBox.hidden = true; });
 })();
 </script>
+</section>

@@ -3551,3 +3551,20 @@ a[href*="/tools/"][target="_blank"]:hover,a[href*="/tools/"][target="_blank"]:fo
 .roleplay-archive-content{font-family:Paperlogy,system-ui,sans-serif}
 .roleplay-static-image-grid{display:grid;gap:2px;grid-template-columns:repeat(2,minmax(0,1fr));margin:.65rem 0;max-width:760px;overflow:hidden}
 .roleplay-static-image-grid.count-1{grid-template-columns:minmax(0,1fr);max-width:560px}.roleplay-static-image-grid.count-3 button:first-child{grid-row:span 2}.content .roleplay-static-image-grid button{background:transparent;border:0;cursor:pointer;min-height:9rem;padding:0}.roleplay-static-image-grid img{display:block;height:100%;margin:0;max-height:22rem;object-fit:cover;width:100%}.roleplay-static-image-grid.count-1 img{object-fit:contain}
+
+/* Detail pages use the same centered reading measure as Writings. */
+.chatlog-page,.twitter-month-page,.character-page,.roleplay-archive-page{box-sizing:border-box;margin-left:auto;margin-right:auto;max-width:700px;width:100%}
+
+/* Shared archive section header: Gallery/Writings are the visual reference. */
+.archive-section-page{--archive-header-line:#dedbe0;--archive-title:#161732;--archive-muted:#6f6872;position:relative}
+.archive-section-header{align-items:flex-end;border-bottom:1px solid var(--archive-header-line);display:flex;justify-content:space-between;margin-bottom:1.15rem;padding-bottom:.85rem}
+.archive-section-header h1{color:var(--archive-title);font-family:Paperlogy,system-ui,sans-serif;font-size:2.05rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin:0}
+.archive-section-kicker{color:var(--archive-muted);font-size:.62rem;font-weight:800;letter-spacing:.13em;margin:0 0 .28rem;text-transform:uppercase}
+.archive-section-header>a{margin:0;position:absolute;right:0;top:.65rem}
+.archive-section-page .roleplay-live-tools{top:7.7rem}
+.checklist-page,.trpg-index{padding-top:0}
+.checklist-toolbar{margin:.15rem 0 1.35rem;padding-bottom:.58rem}
+
+@media(min-width:48em){
+  .sidebar-sticky{transition:left .42s cubic-bezier(.22,.61,.36,1),right .42s cubic-bezier(.22,.61,.36,1)}
+}

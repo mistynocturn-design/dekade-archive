@@ -1,11 +1,13 @@
 ---
-layout: page
+layout: default
 title: Archive
 ---
 
-<div class="archive-page-tools">
+<section class="page archive-section-page">
+<header class="archive-section-header">
+  <div><p class="archive-section-kicker">CHAT ARCHIVE</p><h1>Archive</h1></div>
   <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener" aria-label="Open converter" title="Open converter">+</a>
-</div>
+</header>
 <nav class="archive-tabs" aria-label="Archive categories">
   {% for category in site.data.archive_categories %}
     <button class="archive-tab{% if forloop.first %} active{% endif %}" type="button" data-archive-tab="{{ category | slugify }}">{{ category }}</button>
@@ -66,6 +68,7 @@ title: Archive
 {% endfor %}
 ]
 </script>
+</section>
 <script>
 (function () {
   var dataElement = document.getElementById('archiveSearchData');

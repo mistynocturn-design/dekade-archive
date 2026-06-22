@@ -1,8 +1,13 @@
 ---
-layout: page
+layout: default
 title: Roleplay
 ---
 
+<section class="page archive-section-page">
+<header class="archive-section-header">
+  <div><p class="archive-section-kicker">THREAD ARCHIVE</p><h1>Roleplay</h1></div>
+  <a class="roleplay-icon-button" href="{{ site.baseurl }}/tools/roleplay-converter.html" target="_blank" rel="noopener" aria-label="Open completed thread converter" title="Open completed thread converter">+</a>
+</header>
 <div class="roleplay-app" data-roleplay-app data-api-url="https://script.google.com/macros/s/AKfycbwF7InylwgPXBUWCUBSwSCi4dhzql6lMwtCc64RpZ2cBH2OvKxlUF2lt_qwHzxRE4Y/exec">
   <nav class="roleplay-tabs" aria-label="Roleplay categories">
     <button class="roleplay-tab active" type="button" data-roleplay-tab="live">LIVE</button>
@@ -16,7 +21,6 @@ title: Roleplay
 
   <section class="roleplay-panel active" data-roleplay-panel="live">
     <div class="roleplay-live-tools">
-      <a class="roleplay-icon-button" href="{{ site.baseurl }}/tools/roleplay-converter.html" target="_blank" rel="noopener" aria-label="Open completed thread converter" title="Open completed thread converter">↓</a>
       <button class="roleplay-icon-button" type="button" data-roleplay-new aria-label="New roleplay thread" title="New roleplay thread">+</button>
       <button class="roleplay-icon-button" type="button" data-roleplay-refresh aria-label="Refresh threads" title="Refresh threads">↻</button>
       <button class="roleplay-icon-button roleplay-key-button" type="button" data-roleplay-key aria-label="Set access key" title="Set access key">●</button>
@@ -75,5 +79,6 @@ title: Roleplay
     <img src="" alt="">
   </div>
 </div>
+</section>
 
 <script src="{{ site.baseurl }}/public/js/roleplay.js?v={{ site.time | date: '%s' }}"></script>
