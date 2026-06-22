@@ -24,6 +24,49 @@ layout: default
   var modal = document.querySelector('[data-roleplay-static-modal]');
   if (!modal) return;
   var image = modal.querySelector('img');
+  var content = document.querySelector('.roleplay-archive-content');
+  function isImageOnly(node) {
+    return node && node.tagName === 'P' && node.children.length === 1 && node.children[0].tagName === 'IMG' && !node.textContent.trim();
+  }
+  function makeButton(img) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.setAttribute('data-roleplay-static-image', img.currentSrc || img.src);
+    button.setAttribute('aria-label', 'Open image');
+    img.loading = img.loading || 'lazy';
+    img.parentNode.insertBefore(button, img);
+    button.appendChild(img);
+    return button;
+  }
+  function enhanceStaticImages() {
+    if (!content) return;
+    var nodes = Array.prototype.slice.call(content.children);
+    var group = [];
+    function flush() {
+      if (!group.length) return;
+      var wrapper = document.createElement('div');
+      wrapper.className = 'roleplay-static-image-grid count-' + Math.min(group.length, 4);
+      group[0].parentNode.insertBefore(wrapper, group[0]);
+      group.forEach(function (paragraph) {
+        wrapper.appendChild(makeButton(paragraph.querySelector('img')));
+        paragraph.remove();
+      });
+      group = [];
+    }
+    nodes.forEach(function (node) {
+      if (isImageOnly(node)) {
+        group.push(node);
+      } else {
+        flush();
+        Array.prototype.slice.call(node.querySelectorAll('img:not([data-roleplay-static-ready])')).forEach(function (img) {
+          img.setAttribute('data-roleplay-static-ready', 'true');
+          makeButton(img);
+        });
+      }
+    });
+    flush();
+  }
+  enhanceStaticImages();
   document.addEventListener('click', function (event) {
     var trigger = event.target.closest('[data-roleplay-static-image]');
     if (trigger) {
