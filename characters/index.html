@@ -3,10 +3,6 @@ layout: page
 title: Characters
 ---
 
-<div class="character-page-tools">
-  <a class="character-tool-button" href="{{ site.baseurl }}/tools/character-manager.html" target="_blank" rel="noopener" aria-label="Open character manager" title="Open character manager">+</a>
-</div>
-
 <div class="character-index">
   {% assign characters = site.characters | sort: "order" %}
   {% for character in characters %}

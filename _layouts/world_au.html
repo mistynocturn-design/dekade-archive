@@ -7,13 +7,12 @@ layout: default
   <a class="world-back" href="{{ site.baseurl }}/world/alternates/">← {{ alternate_record.title | default: '또다른 세계들' }}</a>
   <header class="world-au-detail-hero">
     <figure>{% if page.cover %}<img src="{{ page.cover }}" alt="">{% endif %}<figcaption>{{ page.universe_id }}</figcaption></figure>
-    <div><p>{{ page.status }} · {{ page.genre }}</p><h1>{{ page.title }}</h1>{% if page.tags %}<div class="world-au-detail-tags">{% for tag in page.tags %}<span>#{{ tag }}</span>{% endfor %}</div>{% endif %}<blockquote>{{ page.hook }}</blockquote><dl><div><dt>UNIVERSE</dt><dd>{{ page.universe_id }}</dd></div><div><dt>ERA</dt><dd>{{ page.era }}</dd></div><div><dt>STATUS</dt><dd>{{ page.status }}</dd></div></dl></div>
+    <div class="world-au-hero-copy"><p>{{ page.status }} · {{ page.genre }}</p><h1>{{ page.title }}</h1>{% if page.tags %}<div class="world-au-detail-tags">{% for tag in page.tags %}<span>#{{ tag }}</span>{% endfor %}</div>{% endif %}<blockquote>{{ page.hook }}</blockquote><dl><div><dt>UNIVERSE</dt><dd>{{ page.universe_id }}</dd></div><div><dt>ERA</dt><dd>{{ page.era }}</dd></div><div><dt>STATUS</dt><dd>{{ page.status }}</dd></div></dl>
+      {% if page.people %}<section class="world-au-people"><p>SUBJECTS</p><div class="world-au-people-list">{% for person in page.people %}<article>{% if person.image %}<img src="{{ person.image }}" alt="">{% endif %}<div><strong>{{ person.name }}</strong><span>{{ person.role }}</span></div></article>{% endfor %}</div></section>{% endif %}
+    </div>
   </header>
-  <div class="world-au-detail-grid">
-    <section class="world-au-main">
-      {% for section in page.sections %}<article><small>{{ section.code }}</small><h2>{{ section.title }}</h2><div>{{ section.text | newline_to_br }}</div></article>{% endfor %}
-      {% if content != blank %}<article class="world-document-body">{{ content }}</article>{% endif %}
-    </section>
-    <aside class="world-au-people"><p>SUBJECTS</p>{% for person in page.people %}<article>{% if person.image %}<img src="{{ person.image }}" alt="">{% endif %}<div><small>{{ person.name }}</small><h2>{{ person.role }}</h2></div></article>{% endfor %}</aside>
-  </div>
+  <section class="world-au-main">
+    {% for section in page.sections %}<article><small>{{ section.code }}</small><h2>{{ section.title }}</h2><div>{{ section.text | newline_to_br }}</div></article>{% endfor %}
+    {% if content != blank %}<article class="world-document-body">{{ content }}</article>{% endif %}
+  </section>
 </main>
