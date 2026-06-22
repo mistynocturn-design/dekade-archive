@@ -8,7 +8,6 @@ summary: "카디아 퇴사하던 날."
 characters: ["카디아"]
 tags: ["퇴사"]
 original_url: "https://www.postype.com/@dekade-k/post/22508410"
-cover: "assets/writings/short/01.png"
 accent: "#5b3e65"
 soft: "#f7ebff"
 ---
