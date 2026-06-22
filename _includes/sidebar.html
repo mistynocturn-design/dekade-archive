@@ -1,15 +1,15 @@
+{% assign current_path = page.url | default: '/' %}
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
       <h1>
-        <a href="{{ site.baseurl }}">
+        <a class="sidebar-home-link{% if current_path == '/' %} active{% endif %}" href="{{ site.baseurl }}">
           {{ site.title }}
         </a>
       </h1>
       <p class="lead">{{ site.description }}</p>
     </div>
 
-    {% assign current_path = page.url | default: '/' %}
     <nav class="sidebar-nav">
       <a class="sidebar-nav-item{% if current_path contains '/world/' %} active{% endif %}" href="{{ site.baseurl }}/world/">World</a>
       <a class="sidebar-nav-item{% if current_path contains '/characters/' or current_path contains '/character-au/' %} active{% endif %}" href="{{ site.baseurl }}/characters/">Characters</a>

@@ -3571,9 +3571,10 @@ a[href*="/tools/"][target="_blank"]:hover,a[href*="/tools/"][target="_blank"]:fo
 
 /* Unified sidebar size and navigation state */
 .sidebar-nav-item{position:relative;transition:color .16s ease,transform .16s ease}
-a.sidebar-nav-item:hover,a.sidebar-nav-item:focus{color:#d9b9c8;text-decoration:none;transform:translateX(.18rem)}
+a.sidebar-nav-item:hover,a.sidebar-nav-item:focus{color:#baa7bf;text-decoration:none;transform:translateX(.18rem)}
 .sidebar-nav-item.active{color:#e4bfd0;font-weight:800;padding-left:.65rem}
 .sidebar-nav-item.active::before{content:"›";left:0;position:absolute}
+.sidebar-about .sidebar-home-link:hover,.sidebar-about .sidebar-home-link:focus,.sidebar-about .sidebar-home-link.active{color:#c5aa70;text-decoration:none}
 @media(min-width:48em){
   .sidebar,.content,.sidebar-sticky{transition:none!important}
   body:has(.home-page) .sidebar{padding-left:1.15rem;padding-right:1.15rem;width:14rem}
