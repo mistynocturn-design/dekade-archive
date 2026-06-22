@@ -5,6 +5,7 @@
     {% include sidebar.html %}
     <main class="content container writing-content" style="--writing-accent:{{ page.accent | default: '#685867' }};--writing-soft:{{ page.soft | default: '#f2eeeb' }};">
       <article class="writing-article">
+        <a class="detail-back-link" href="{{ site.baseurl }}/writings/">← Writings</a>
         {% if page.original_url %}<a class="writing-original-link" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">원문 보기 <span aria-hidden="true">↗</span></a>{% endif %}
         <header class="writing-article-header">
           <p class="writing-type">{{ page.type | default: "ETC" }}</p>
@@ -29,9 +30,9 @@
         <div class="writing-body">{{ content }}</div>
 
         {% if page.series %}<nav class="writing-series-nav" data-writing-series-nav aria-label="시리즈 이전 및 다음 글" hidden><a class="previous" data-writing-previous><small>이전 글</small><strong></strong></a><a class="next" data-writing-next><small>다음 글</small><strong></strong></a></nav>{% endif %}
-        <a class="writing-back" href="{{ site.baseurl }}/writings/">← Writings</a>
       </article>
+      <nav class="writing-remote" aria-label="Writings page controls"><button type="button" data-writing-top aria-label="맨 위로 이동" title="맨 위로">↑</button>{% if page.series %}<a data-writing-remote-previous hidden aria-label="이전화" title="이전화">‹</a><a data-writing-remote-next hidden aria-label="다음화" title="다음화">›</a>{% endif %}<button type="button" data-writing-bottom aria-label="맨 아래로 이동" title="맨 아래로">↓</button></nav>
     </main>
-    {% if page.series %}<script>(function(){var items=Array.prototype.slice.call(document.querySelectorAll('.writing-series-toc li')),current=items.findIndex(function(item){return item.classList.contains('current')}),nav=document.querySelector('[data-writing-series-nav]'),previous=document.querySelector('[data-writing-previous]'),next=document.querySelector('[data-writing-next]');function setLink(link,item){var source=item&&item.querySelector('a');link.hidden=!source;if(source){link.href=source.href;link.querySelector('strong').textContent=source.textContent.trim()}}setLink(previous,items[current-1]);setLink(next,items[current+1]);nav.hidden=previous.hidden&&next.hidden})();</script>{% endif %}
+    <script>(function(){var topButton=document.querySelector('[data-writing-top]'),bottomButton=document.querySelector('[data-writing-bottom]');topButton.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});bottomButton.addEventListener('click',function(){window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'})});{% if page.series %}var items=Array.prototype.slice.call(document.querySelectorAll('.writing-series-toc li')),current=items.findIndex(function(item){return item.classList.contains('current')}),nav=document.querySelector('[data-writing-series-nav]'),previous=document.querySelector('[data-writing-previous]'),next=document.querySelector('[data-writing-next]'),remotePrevious=document.querySelector('[data-writing-remote-previous]'),remoteNext=document.querySelector('[data-writing-remote-next]');function setLink(link,item,remote){var source=item&&item.querySelector('a');link.hidden=!source;remote.hidden=!source;if(source){link.href=source.href;remote.href=source.href;link.querySelector('strong').textContent=source.textContent.trim()}}setLink(previous,items[current-1],remotePrevious);setLink(next,items[current+1],remoteNext);nav.hidden=previous.hidden&&next.hidden;{% endif %}})();</script>
   </body>
 </html>
