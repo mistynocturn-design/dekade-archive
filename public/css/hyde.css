@@ -3568,3 +3568,14 @@ a[href*="/tools/"][target="_blank"]:hover,a[href*="/tools/"][target="_blank"]:fo
 @media(min-width:48em){
   .sidebar-sticky{transition:left .42s cubic-bezier(.22,.61,.36,1),right .42s cubic-bezier(.22,.61,.36,1)}
 }
+
+/* Unified sidebar size and navigation state */
+.sidebar-nav-item{position:relative;transition:color .16s ease,transform .16s ease}
+a.sidebar-nav-item:hover,a.sidebar-nav-item:focus{color:#d9b9c8;text-decoration:none;transform:translateX(.18rem)}
+.sidebar-nav-item.active{color:#e4bfd0;font-weight:800;padding-left:.65rem}
+.sidebar-nav-item.active::before{content:"›";left:0;position:absolute}
+@media(min-width:48em){
+  .sidebar,.content,.sidebar-sticky{transition:none!important}
+  body:has(.home-page) .sidebar{padding-left:1.15rem;padding-right:1.15rem;width:14rem}
+  body:has(.home-page) .sidebar-sticky{left:1.15rem;right:1.15rem}
+}
