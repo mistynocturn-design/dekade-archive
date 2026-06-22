@@ -8,8 +8,8 @@ summary: "카디아 퇴사하던 날."
 characters: ["카디아"]
 tags: ["퇴사"]
 original_url: "https://www.postype.com/@dekade-k/post/22508410"
-accent: "#685867"
-soft: "#f2eeeb"
+accent: "#5b3e65"
+soft: "#f7ebff"
 ---
 
 푸르스름한 새벽은 적막하고 고요하다. 
