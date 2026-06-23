@@ -1,18 +1,18 @@
 ---
 layout: writing
 title: "2화 테스트"
-author: "비니"
+author: "녹티"
 date: "2026-06-22"
 type: "SERIES"
 summary: ""
 characters: []
-tags: ["카디아","편지"]
+tags: ["디트리히","편지"]
 original_url: "https://www.postype.com/@dekade-k/post/22549035"
 cover: "/dekade-archive/assets/writings/series/1/01.png"
 series: "편지"
 episode: 2
-accent: "#685867"
-soft: "#f2eeeb"
+accent: "#6c5e51"
+soft: "#f7edd4"
 ---
 
 디트리히.
