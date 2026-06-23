@@ -3306,7 +3306,7 @@ a.sidebar-nav-item:focus {
 .writings-series-episodes { border-top:1px solid #ece8ea; display:grid; padding:.35rem .8rem .55rem 104px; }
 .writings-series-episodes a { align-items:baseline; border-bottom:1px solid #f0edef; color:#4d484e; display:grid; gap:.35rem .7rem; grid-template-columns:2.5rem minmax(7rem,.8fr) minmax(8rem,1.3fr) auto; padding:.55rem .3rem; text-decoration:none; }
 .writings-series-episodes a:last-child { border-bottom:0; }
-.writings-series-episodes a:hover,.writings-series-episodes a:focus { background:var(--writing-soft); text-decoration:none; }
+.writings-series-episodes a:hover,.writings-series-episodes a:focus { background:var(--episode-soft,var(--writing-soft)); text-decoration:none; }
 .writings-series-episodes span,.writings-series-episodes time { color:#918b92; font-size:.61rem; }
 .writings-series-episodes strong { font-size:.7rem; }.writings-series-episodes small { color:#777178; font-size:.65rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .writings-pagination { display:flex; gap:.3rem; justify-content:center; margin-top:1.4rem; }
@@ -3323,7 +3323,7 @@ a.sidebar-nav-item:focus {
 .writing-deck { color:#69646b; font-size:.88rem; line-height:1.75; margin:1rem 0 0; }
 .writing-meta { color:#8b868d; display:flex; flex-wrap:wrap; font-family:Paperlogy,system-ui,sans-serif; font-size:.67rem; gap:.45rem 1rem; margin-top:1rem; }
 .writing-labels { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.75rem; }
-.writing-labels span { background:var(--writing-soft); border-radius:999px; color:var(--writing-accent); font-size:.61rem; padding:.2rem .48rem; }
+.writing-labels span { background:var(--writing-soft,#f2eeeb); border-radius:999px; color:var(--writing-accent); font-size:.61rem; padding:.2rem .48rem; }
 .writing-series-toc { background:#faf9f9; border:1px solid #e6e1e4; border-left:3px solid var(--writing-accent); border-radius:5px; margin:0 0 2.5rem; padding:.75rem 1rem; }
 .writing-series-toc summary { color:#4e484e; cursor:pointer; font-family:Paperlogy,system-ui,sans-serif; font-size:.72rem; font-weight:700; }
 .writing-series-toc ol { color:#8b858c; font-size:.7rem; line-height:1.75; margin:.65rem 0 0; padding-left:1.4rem; }
