@@ -12,7 +12,7 @@ cover: "/dekade-archive/assets/writings/series/1/01.png"
 series: "편지"
 episode: 1
 accent: "#685867"
-soft: "#f2eeeb"
+soft: "#f7ebff"
 ---
 
 디트리히.
