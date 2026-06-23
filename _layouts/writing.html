@@ -23,7 +23,7 @@
           {% assign series_items = site.writings | where: "series", page.series | sort: "episode" %}
           <details class="writing-series-toc" open>
             <summary>{{ page.series }} 목차</summary>
-            <ol>{% for item in series_items %}<li{% if item.url == page.url %} class="current"{% endif %}><a href="{{ item.url | relative_url }}">{% if item.episode %}{{ item.episode }}. {% endif %}{{ item.title }}</a></li>{% endfor %}</ol>
+            <ol>{% for item in series_items %}<li{% if item.url == page.url %} class="current"{% endif %}><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>{% endfor %}</ol>
           </details>
         {% endif %}
 
