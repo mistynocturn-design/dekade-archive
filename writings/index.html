@@ -22,15 +22,15 @@ title: Writings
     {% assign series_items = site.writings | where: "type", "SERIES" %}
     {% assign series_groups = series_items | group_by: "series" %}
     {% for group in series_groups %}
-      {% assign dated_episodes = group.items | sort: "date" | reverse %}{% assign representative = dated_episodes.first %}{% assign episodes = group.items | sort: "episode" %}
+      {% assign dated_episodes = group.items | sort: "date" | reverse %}{% assign latest_episode = dated_episodes.first %}{% assign episodes = group.items | sort: "episode" %}{% assign first_episode = episodes.first %}{% assign series_authors = episodes | map: "author" | compact | uniq %}
       {% capture series_search %}{{ group.name }} {% for episode in episodes %}{{ episode.title }} {{ episode.author }} {{ episode.summary }} {{ episode.content }} {% for character in episode.characters %}{{ character }} {% endfor %}{% for tag in episode.tags %}{{ tag }} {% endfor %}{% endfor %}{% endcapture %}
-      <details class="writings-card writings-series-group" data-writing-card data-type="series" data-date="{{ representative.date | date: '%Y-%m-%d' }}" style="--writing-accent:{{ representative.accent | default: '#685867' }};--writing-soft:{{ representative.soft | default: '#f2eeeb' }};">
+      <details class="writings-card writings-series-group" data-writing-card data-type="series" data-date="{{ latest_episode.date | date: '%Y-%m-%d' }}" style="--writing-accent:{{ first_episode.accent | default: '#685867' }};--writing-soft:{{ first_episode.soft | default: '#f2eeeb' }};">
         <summary>
-          {% if representative.cover %}<img class="writings-card-cover" src="{{ representative.cover }}" alt="" loading="lazy">{% else %}<span class="writings-card-cover writings-card-placeholder" aria-hidden="true">{{ representative.title | slice: 0 }}</span>{% endif %}
-          <span class="writings-card-main"><span class="writings-card-top"><span>SERIES · {{ group.name }}</span><time>{{ representative.date | date: "%Y.%m.%d" }}</time></span><strong>{{ group.name }}</strong><span class="writings-card-summary">{{ episodes.size }}개의 회차</span><span class="writings-card-meta">{% if representative.author %}{{ representative.author }}{% endif %}</span></span>
+          {% if first_episode.cover %}<img class="writings-card-cover" src="{{ first_episode.cover }}" alt="" loading="lazy">{% else %}<span class="writings-card-cover writings-card-placeholder" aria-hidden="true">{{ group.name | slice: 0 }}</span>{% endif %}
+          <span class="writings-card-main"><span class="writings-card-top"><span>SERIES · {{ group.name }}</span><time>{{ latest_episode.date | date: "%Y.%m.%d" }}</time></span><strong>{{ group.name }}</strong><span class="writings-card-summary">{{ episodes.size }}개의 회차</span><span class="writings-card-meta">{{ series_authors | join: ", " }}</span></span>
         </summary>
         <div class="writings-series-episodes">{% for episode in episodes %}<a href="{{ episode.url | relative_url }}"><span>{% if episode.episode %}{{ episode.episode }}화{% else %}{{ forloop.index }}화{% endif %}</span><strong>{{ episode.title }}</strong>{% if episode.summary %}<small>{{ episode.summary }}</small>{% endif %}<time>{{ episode.date | date: "%Y.%m.%d" }}</time></a>{% endfor %}</div>
-        <script type="application/json" class="writings-card-data">{"title":{{ group.name | jsonify }},"author":{{ representative.author | default: '' | jsonify }},"body":{{ series_search | strip_html | strip_newlines | jsonify }},"characters":[],"tags":[]}</script>
+        <script type="application/json" class="writings-card-data">{"title":{{ group.name | jsonify }},"author":{{ series_authors | join: ", " | jsonify }},"body":{{ series_search | strip_html | strip_newlines | jsonify }},"characters":[],"tags":[]}</script>
       </details>
     {% endfor %}
     {% for item in writing_items %}
