@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chat Log Converter</title>
+  <title>Chat Log Converter - Archive Theme</title>
   <style>
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; background: #f6f7f9; color: #222; }
     main { max-width: 1100px; margin: 0 auto; padding: 28px 18px 48px; }
     h1 { font-size: 24px; margin: 0 0 18px; }
+    h2 { font-size: 18px; margin: 0 0 12px; }
     label { display: block; font-size: 13px; font-weight: 700; margin: 14px 0 6px; }
     input, textarea, select { box-sizing: border-box; width: 100%; border: 1px solid #ccd1d8; border-radius: 8px; padding: 10px 12px; font: inherit; background: #fff; }
+    input[type="color"] { cursor: pointer; height: 38px; padding: 3px; }
     textarea { min-height: 220px; resize: vertical; white-space: pre; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .colors { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
@@ -22,27 +24,20 @@
     .guide { margin: 0 0 16px; color: #596273; font-size: 13px; }
     .guide summary { cursor: pointer; font-weight: 700; }
     .guide ol { line-height: 1.7; margin-bottom: 0; }
-    .source-actions { align-items: end; display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
-    .check { align-items: center; display: flex; gap: 7px; font-size: 13px; margin-top: 10px; }
-    .check input { margin: 0; width: auto; }
     @media (max-width: 760px) { .grid, .colors { grid-template-columns: 1fr; } }
   </style>
-  <style>input[type="color"]{cursor:pointer;height:38px;padding:3px}</style>
 </head>
 <body>
 <main>
   <h1>Chat Log Converter</h1>
 
   <details class="guide">
-    <summary>사용방법</summary>
+    <summary>사용 방법</summary>
     <ol>
-      <li><strong>최초 1회:</strong> 스프레드시트의 확장 프로그램 → Apps Script에서 repo의 <code>appscript/archive_twitter_Code_gs.txt</code> 내용을 붙여넣습니다.</li>
-      <li>Apps Script의 스크립트 속성에 <code>BACKUP_READ_KEY</code>를 만들고 원하는 비밀 문자를 저장한 뒤, 웹 앱을 '나로 실행 / 모든 사용자'로 배포합니다.</li>
-      <li>배포된 <code>/exec</code> URL과 방금 정한 Read key를 아래에 입력합니다. 같은 값은 Twitter 컨버터에서도 사용하며 이 브라우저가 기억합니다.</li>
-      <li><a href="https://docs.google.com/spreadsheets/d/1LKhVkxpyAEMXRmGpF_HNi27CD5SrezMgpioASLQrFVw/edit?usp=sharing" target="_blank" rel="noopener">스프레드시트</a>의 Archive 탭에 대화를 정리합니다.</li>
-      <li>Load title list를 누른 뒤 B열의 제목을 선택하고 Load conversation을 누릅니다. 시트에서 같은 제목을 가진 행을 위치와 개수에 관계없이 모두 가져옵니다.</li>
-      <li>색상과 제목을 확인한 뒤 Convert를 누르고, 결과물을 <code>_archive/파일명.html</code>에 저장합니다.</li>
-      <li>이미지는 미리 repo의 <code>assets/archive/...</code>에 넣고 시트의 이미지 열에 같은 경로를 적습니다.</li>
+      <li>Apps Script에는 이 버전과 함께 제공된 <code>archive_theme_Code.gs</code> 내용을 붙여넣고 새 버전으로 배포합니다.</li>
+      <li>기본 활성 탭은 <code>Archive</code>입니다. 추가로 읽고 싶은 주제 탭은 <code>Archive_일상</code>처럼 <code>Archive_</code>로 시작하게 만듭니다.</li>
+      <li>에디터에서 <code>Load themes</code>를 누른 뒤 <code>Archive Theme</code>를 고르고 <code>Load title list</code>를 누릅니다.</li>
+      <li>백업용으로만 보관할 탭은 <code>Backup_...</code>, <code>보관_...</code>처럼 <code>Archive_</code>로 시작하지 않게 만들면 이 에디터가 읽지 않습니다.</li>
     </ol>
   </details>
 
@@ -51,9 +46,14 @@
     <div class="grid">
       <div><label for="sourceUrl">Apps Script URL</label><input id="sourceUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
       <div><label for="readKey">Read key</label><input id="readKey" type="password"></div>
-      <div style="grid-column:1/-1"><label for="archiveTitle">Archive title (column B)</label><select id="archiveTitle"><option value="">Load the title list first</option></select></div>
+      <div><label for="archiveTheme">Archive Theme</label><select id="archiveTheme"><option value="Archive">Archive</option></select></div>
+      <div><label for="archiveTitle">Archive title (column B)</label><select id="archiveTitle"><option value="">Load the title list first</option></select></div>
     </div>
-    <div class="actions"><button class="secondary" id="loadTitlesBtn" type="button">Load title list</button><button id="loadConversationBtn" type="button">Load conversation</button></div>
+    <div class="actions">
+      <button class="secondary" id="loadThemesBtn" type="button">Load themes</button>
+      <button class="secondary" id="loadTitlesBtn" type="button">Load title list</button>
+      <button id="loadConversationBtn" type="button">Load conversation</button>
+    </div>
     <div class="status" id="sourceStatus"></div>
   </section>
 
@@ -65,18 +65,18 @@
       <div><label for="fontSize">Bubble font size</label><input id="fontSize" value="0.70rem"></div>
     </div>
     <div class="colors">
-<div><label for="pageColor">Page</label><input id="pageColor" type="color" value="#ffffff"></div>
-<div><label for="leftColor">Left bg</label><input id="leftColor" type="color" value="#4e4a65"></div>
-<div><label for="leftText">Left text</label><input id="leftText" type="color" value="#e7e3d8"></div>
-<div><label for="rightColor">Right bg</label><input id="rightColor" type="color" value="#e7e3d8"></div>
-<div><label for="rightText">Right text</label><input id="rightText" type="color" value="#4e4a65"></div>
+      <div><label for="pageColor">Page</label><input id="pageColor" type="color" value="#ffffff"></div>
+      <div><label for="leftColor">Left bg</label><input id="leftColor" type="color" value="#4e4a65"></div>
+      <div><label for="leftText">Left text</label><input id="leftText" type="color" value="#e7e3d8"></div>
+      <div><label for="rightColor">Right bg</label><input id="rightColor" type="color" value="#e7e3d8"></div>
+      <div><label for="rightText">Right text</label><input id="rightText" type="color" value="#4e4a65"></div>
     </div>
   </section>
 
   <section class="panel">
     <label for="input">Loaded rows / manual paste fallback</label>
     <textarea id="input" placeholder="Copy columns A:E from Google Sheets, then paste here."></textarea>
-    <p class="hint">Expected columns: date, title, text, image, side. This converter outputs finished bubble HTML, so multiline text and spreadsheet quotes do not need to be parsed by the site.</p>
+    <p class="hint">Expected columns: date, title, text, image, side.</p>
     <div class="actions">
       <button id="convertBtn" type="button">Convert</button>
       <button class="secondary" id="copyBtn" type="button">Copy output</button>
@@ -91,64 +91,104 @@
 </main>
 
 <script>
-var BACKUP_API_VERSION = '2026-06-21.1';
-var BACKUP_SOURCE_STORAGE = 'dekade-archive-sheet-source';
+var BACKUP_API_VERSION = '2026-06-25.2';
+var BACKUP_SOURCE_STORAGE = 'dekade-archive-theme-sheet-source';
 
 function loadSourceSettings() {
   try {
     var saved = JSON.parse(localStorage.getItem(BACKUP_SOURCE_STORAGE) || '{}');
-    ['sourceUrl', 'readKey'].forEach(function (id) { if (saved[id] != null) document.getElementById(id).value = saved[id]; });
+    ['sourceUrl', 'readKey', 'archiveTheme'].forEach(function (id) {
+      if (saved[id] != null && document.getElementById(id)) document.getElementById(id).value = saved[id];
+    });
     window.savedArchiveTitle = saved.archiveTitle || '';
   } catch (error) {}
 }
+
 function saveSourceSettings() {
   localStorage.setItem(BACKUP_SOURCE_STORAGE, JSON.stringify({
-    sourceUrl: document.getElementById('sourceUrl').value.trim(), readKey: document.getElementById('readKey').value,
+    sourceUrl: document.getElementById('sourceUrl').value.trim(),
+    readKey: document.getElementById('readKey').value,
+    archiveTheme: document.getElementById('archiveTheme').value,
     archiveTitle: document.getElementById('archiveTitle').value
   }));
 }
+
 function tsvCell(value) {
   var text = String(value == null ? '' : value);
   return /["\t\r\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
 }
+
 async function callArchiveApi(action, extra) {
   var url = document.getElementById('sourceUrl').value.trim();
   if (!url) throw new Error('Apps Script URL을 입력해주세요.');
   var payload = Object.assign({ action: action, read_key: document.getElementById('readKey').value }, extra || {});
   var response = await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
   var data = await response.json();
-  if (!data.ok && !data.api_version) throw new Error('Apps Script가 이전 배포본입니다. Code.gs 상단 VERSION이 2026-06-21.1인지 확인하고 배포 관리에서 새 버전으로 다시 배포해주세요.');
+  if (!data.ok && !data.api_version) throw new Error('Apps Script가 이전 배포본입니다. 새 Code.gs를 붙여넣고 새 버전으로 배포해주세요.');
   if (!data.ok) throw new Error(data.error || 'Load failed.');
-  if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 최신 버전을 배포해주세요.');
+  if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 최신 버전을 배포해주세요. Expected ' + BACKUP_API_VERSION + ', got ' + data.api_version + '.');
   return data;
 }
+
+async function loadArchiveThemes() {
+  var sourceStatus = document.getElementById('sourceStatus');
+  saveSourceSettings();
+  sourceStatus.textContent = 'Loading themes...';
+  try {
+    var data = await callArchiveApi('list_archive_themes');
+    var select = document.getElementById('archiveTheme');
+    var savedTheme = select.value || 'Archive';
+    select.innerHTML = data.themes.map(function (item) {
+      return '<option value="' + escapeAttr(item.sheet) + '">' + escapeHtml(item.label) + ' (' + escapeHtml(item.sheet) + ')</option>';
+    }).join('');
+    if (data.themes.some(function (item) { return item.sheet === savedTheme; })) select.value = savedTheme;
+    saveSourceSettings();
+    sourceStatus.textContent = data.themes.length + '개 테마를 불러왔습니다.';
+  } catch (error) {
+    sourceStatus.textContent = error.message;
+  }
+}
+
 async function loadArchiveTitles() {
   var sourceStatus = document.getElementById('sourceStatus');
-  saveSourceSettings(); sourceStatus.textContent = 'Loading title list...';
+  saveSourceSettings();
+  sourceStatus.textContent = 'Loading title list...';
   try {
-    var data = await callArchiveApi('list_archive_titles');
+    var sheet = document.getElementById('archiveTheme').value || 'Archive';
+    var data = await callArchiveApi('list_archive_titles', { sheet: sheet });
     var select = document.getElementById('archiveTitle');
-    select.innerHTML = data.titles.map(function (item) { return '<option value="' + escapeAttr(item.title) + '">' + escapeHtml(item.title) + ' (' + item.count + ')</option>'; }).join('');
+    select.innerHTML = data.titles.length
+      ? data.titles.map(function (item) { return '<option value="' + escapeAttr(item.title) + '">' + escapeHtml(item.title) + ' (' + item.count + ')</option>'; }).join('')
+      : '<option value="">No titles found</option>';
     if (window.savedArchiveTitle && data.titles.some(function (item) { return item.title === window.savedArchiveTitle; })) select.value = window.savedArchiveTitle;
     saveSourceSettings();
-    sourceStatus.textContent = data.titles.length + '개 제목을 불러왔습니다.';
-  } catch (error) { sourceStatus.textContent = error.message; }
+    sourceStatus.textContent = escapePlain(data.sheet) + '에서 ' + data.titles.length + '개 제목을 불러왔습니다.';
+  } catch (error) {
+    sourceStatus.textContent = error.message;
+  }
 }
+
 async function loadArchiveConversation() {
   var sourceStatus = document.getElementById('sourceStatus');
   var selectedTitle = document.getElementById('archiveTitle').value;
+  var selectedSheet = document.getElementById('archiveTheme').value || 'Archive';
   if (!selectedTitle) { sourceStatus.textContent = '먼저 제목 목록을 불러와 선택해주세요.'; return; }
-  saveSourceSettings(); sourceStatus.textContent = 'Loading conversation...';
+  saveSourceSettings();
+  sourceStatus.textContent = 'Loading conversation...';
   try {
-    var data = await callArchiveApi('read_archive', { title: selectedTitle });
-    document.getElementById('input').value = data.rows.map(function (row) { return [row.date, row.title, row.content, row.image, row.side].map(tsvCell).join('\t'); }).join('\n');
+    var data = await callArchiveApi('read_archive', { sheet: selectedSheet, title: selectedTitle });
+    document.getElementById('input').value = data.rows.map(function (row) {
+      return [row.date, row.title, row.content, row.image, row.side].map(tsvCell).join('\t');
+    }).join('\n');
     if (data.rows.length) {
       document.getElementById('title').value = data.rows[0].title || document.getElementById('title').value;
       document.getElementById('date').value = data.rows[0].date || document.getElementById('date').value;
     }
     buildOutput();
-    sourceStatus.textContent = data.rows.length + '개 메시지를 불러왔습니다.';
-  } catch (error) { sourceStatus.textContent = error.message; }
+    sourceStatus.textContent = data.sheet + '에서 ' + data.rows.length + '개 메시지를 불러왔습니다.';
+  } catch (error) {
+    sourceStatus.textContent = error.message;
+  }
 }
 
 function parseTsv(text) {
@@ -156,29 +196,20 @@ function parseTsv(text) {
   var row = [];
   var cell = '';
   var quoted = false;
-
   for (var i = 0; i < text.length; i++) {
     var ch = text[i];
     var next = text[i + 1];
-
     if (quoted) {
-      if (ch === '"' && next === '"') {
-        cell += '"';
-        i++;
-      } else if (ch === '"') {
-        quoted = false;
-      } else {
-        cell += ch;
-      }
+      if (ch === '"' && next === '"') { cell += '"'; i++; }
+      else if (ch === '"') quoted = false;
+      else cell += ch;
       continue;
     }
-
     if (ch === '"' && cell === '') quoted = true;
     else if (ch === '\t') { row.push(cell); cell = ''; }
     else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
     else if (ch !== '\r') cell += ch;
   }
-
   if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
   return rows.filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); });
 }
@@ -193,6 +224,10 @@ function escapeHtml(value) {
 
 function escapeAttr(value) {
   return escapeHtml(value).replace(/'/g, '&#39;');
+}
+
+function escapePlain(value) {
+  return String(value || '');
 }
 
 function normalizeDate(value) {
@@ -220,12 +255,8 @@ function buildBubble(side, text, image) {
   var html = [];
   html.push('<div class="chat-line ' + side + '">');
   html.push('  <div class="chat-bubble">');
-  if (text) {
-    html.push('    <div class="chat-text">' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>');
-  }
-  if (image) {
-    html.push('    <img class="chat-image" src="' + escapeAttr(image) + '" alt="">');
-  }
+  if (text) html.push('    <div class="chat-text">' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>');
+  if (image) html.push('    <img class="chat-image" src="' + escapeAttr(image) + '" alt="">');
   html.push('  </div>');
   html.push('</div>');
   return html.join('\n');
@@ -235,21 +266,18 @@ function buildOutput() {
   var rows = parseTsv(document.getElementById('input').value);
   var lines = [];
   var lastDate = '';
-
   rows.forEach(function (row) {
     var date = normalizeDate(row[0]);
     var text = cleanText(row[2]);
     var image = String(row[3] || '').trim();
     var side = normalizeSide(row[4]);
     if (!text && !image) return;
-
     if (date && date !== lastDate) {
       if (lines.length) lines.push('');
       lines.push('<div class="chat-date-divider">' + escapeHtml(date) + '</div>');
       lines.push('');
       lastDate = date;
     }
-
     lines.push(buildBubble(side, text, image));
     lines.push('');
   });
@@ -276,8 +304,7 @@ function buildOutput() {
   document.getElementById('status').textContent = rows.length + ' rows converted.';
 }
 
-
-var STORAGE_KEY = 'dekade-chatlog-converter-settings';
+var STORAGE_KEY = 'dekade-chatlog-converter-theme-settings';
 var REMEMBERED_FIELDS = ['title', 'category', 'date', 'fontSize', 'pageColor', 'leftColor', 'leftText', 'rightColor', 'rightText'];
 
 function loadRememberedFields() {
@@ -301,8 +328,13 @@ function saveRememberedFields() {
 
 loadRememberedFields();
 loadSourceSettings();
+document.getElementById('loadThemesBtn').addEventListener('click', loadArchiveThemes);
 document.getElementById('loadTitlesBtn').addEventListener('click', loadArchiveTitles);
 document.getElementById('loadConversationBtn').addEventListener('click', loadArchiveConversation);
+document.getElementById('archiveTheme').addEventListener('change', function () {
+  document.getElementById('archiveTitle').innerHTML = '<option value="">Load the title list first</option>';
+  saveSourceSettings();
+});
 document.getElementById('archiveTitle').addEventListener('change', saveSourceSettings);
 REMEMBERED_FIELDS.forEach(function (id) {
   var element = document.getElementById(id);
