@@ -122,13 +122,13 @@ function tsvCell(value) {
 
 async function callArchiveApi(action, extra) {
   var url = document.getElementById('sourceUrl').value.trim();
-  if (!url) throw new Error('Apps Script URL???낅젰?댁＜?몄슂.');
+  if (!url) throw new Error('Apps Script URL을 입력해주세요.');
   var payload = Object.assign({ action: action, read_key: document.getElementById('readKey').value }, extra || {});
   var response = await fetch(url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
   var data = await response.json();
-  if (!data.ok && !data.api_version) throw new Error('Apps Script媛 ?댁쟾 諛고룷蹂몄엯?덈떎. ??Code.gs瑜?遺숈뿬?ｊ퀬 ??踰꾩쟾?쇰줈 諛고룷?댁＜?몄슂.');
+  if (!data.ok && !data.api_version) throw new Error('Apps Script가 이전 배포본입니다. 최신 Code.gs를 붙여 넣고 새 버전으로 배포해주세요.');
   if (!data.ok) throw new Error(data.error || 'Load failed.');
-  if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 理쒖떊 踰꾩쟾??諛고룷?댁＜?몄슂. Expected ' + BACKUP_API_VERSION + ', got ' + data.api_version + '.');
+  if (data.api_version !== BACKUP_API_VERSION) throw new Error('Apps Script 최신 버전을 배포해주세요. Expected ' + BACKUP_API_VERSION + ', got ' + data.api_version + '.');
   return data;
 }
 
@@ -145,7 +145,7 @@ async function loadArchiveThemes() {
     }).join('');
     if (data.themes.some(function (item) { return item.sheet === savedTheme; })) select.value = savedTheme;
     saveSourceSettings();
-    sourceStatus.textContent = data.themes.length + '媛??뚮쭏瑜?遺덈윭?붿뒿?덈떎.';
+    sourceStatus.textContent = data.themes.length + '개 테마를 불러왔습니다.';
   } catch (error) {
     sourceStatus.textContent = error.message;
   }
@@ -164,7 +164,7 @@ async function loadArchiveTitles() {
       : '<option value="">No titles found</option>';
     if (window.savedArchiveTitle && data.titles.some(function (item) { return item.title === window.savedArchiveTitle; })) select.value = window.savedArchiveTitle;
     saveSourceSettings();
-    sourceStatus.textContent = escapePlain(data.sheet) + '?먯꽌 ' + data.titles.length + '媛??쒕ぉ??遺덈윭?붿뒿?덈떎.';
+    sourceStatus.textContent = escapePlain(data.sheet) + '에서 ' + data.titles.length + '개 제목을 불러왔습니다.';
   } catch (error) {
     sourceStatus.textContent = error.message;
   }
@@ -174,7 +174,7 @@ async function loadArchiveConversation() {
   var sourceStatus = document.getElementById('sourceStatus');
   var selectedTitle = document.getElementById('archiveTitle').value;
   var selectedSheet = document.getElementById('archiveTheme').value || 'Archive';
-  if (!selectedTitle) { sourceStatus.textContent = '癒쇱? ?쒕ぉ 紐⑸줉??遺덈윭? ?좏깮?댁＜?몄슂.'; return; }
+  if (!selectedTitle) { sourceStatus.textContent = '먼저 제목 목록을 불러온 뒤 선택해주세요.'; return; }
   saveSourceSettings();
   sourceStatus.textContent = 'Loading conversation...';
   try {
@@ -187,7 +187,7 @@ async function loadArchiveConversation() {
       document.getElementById('date').value = data.rows[0].date || document.getElementById('date').value;
     }
     buildOutput();
-    sourceStatus.textContent = data.sheet + '?먯꽌 ' + data.rows.length + '媛?硫붿떆吏瑜?遺덈윭?붿뒿?덈떎.';
+    sourceStatus.textContent = data.sheet + '에서 ' + data.rows.length + '개 메시지를 불러왔습니다.';
   } catch (error) {
     sourceStatus.textContent = error.message;
   }
@@ -356,4 +356,5 @@ document.getElementById('copyBtn').addEventListener('click', function () {
 </script>
 </body>
 </html>
+
 
