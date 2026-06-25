@@ -1,0 +1,1139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DM Ledger Editor</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --line: #dfe4ea;
+      --text: #20242a;
+      --muted: #667085;
+      --blue: #2457a6;
+      --blue-soft: #eaf1ff;
+      --green: #1d7f5f;
+      --red: #b42318;
+      --left: #4e4a65;
+      --left-text: #e7e3d8;
+      --right: #e7e3d8;
+      --right-text: #4e4a65;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+    }
+    main {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 24px 18px 42px;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0 0 6px;
+    }
+    h2 {
+      font-size: 16px;
+      margin: 0 0 12px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+    input, select, textarea, button {
+      font: inherit;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      padding: 9px 10px;
+    }
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+      white-space: pre-wrap;
+    }
+    button {
+      border: 0;
+      border-radius: 6px;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      min-height: 36px;
+      padding: 8px 12px;
+    }
+    button.secondary { background: #5d6675; }
+    button.ghost {
+      background: #eef2f6;
+      color: #1f2937;
+    }
+    button.danger { background: var(--red); }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+    .subhead {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 18px;
+      max-width: 980px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 14px;
+      padding: 16px;
+    }
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .status {
+      color: var(--blue);
+      font-size: 13px;
+      min-height: 18px;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      margin: 7px 0 0;
+    }
+    .bookmarklet {
+      align-items: center;
+      background: var(--blue-soft);
+      border: 1px solid #bdd2ff;
+      border-radius: 8px;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      padding: 12px;
+    }
+    .bookmarklet a {
+      background: var(--blue);
+      border-radius: 6px;
+      color: #fff;
+      display: inline-block;
+      font-weight: 800;
+      padding: 9px 12px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .capture-code {
+      min-height: 120px;
+      white-space: pre;
+    }
+    .summary {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      margin-bottom: 12px;
+    }
+    .metric {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .metric strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .toolbar {
+      align-items: end;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 140px 140px 180px 180px 150px;
+    }
+    .table-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      max-height: 68vh;
+      overflow: auto;
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 1380px;
+      width: 100%;
+    }
+    th, td {
+      border-bottom: 1px solid #e7ecf2;
+      border-right: 1px solid #edf1f5;
+      padding: 7px;
+      vertical-align: top;
+    }
+    th {
+      background: #f8fafc;
+      color: #344054;
+      font-size: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tr.excluded td {
+      background: #fff7f7;
+      color: #7a271a;
+    }
+    tr.new-row td:first-child {
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+    td.center { text-align: center; }
+    .cell-check {
+      height: 18px;
+      width: 18px;
+    }
+    .mini {
+      font-size: 12px;
+      padding: 6px 7px;
+    }
+    .row-text {
+      min-height: 86px;
+      width: 360px;
+    }
+    .row-paths {
+      min-height: 70px;
+      width: 300px;
+    }
+    .row-input { min-width: 150px; }
+    .order-input { width: 74px; }
+    .side-select { width: 88px; }
+    .output-select {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: 240px 1fr;
+    }
+    .preview {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .preview-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 460px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .chat-date-divider {
+      align-items: center;
+      color: #8a8a8a;
+      display: flex;
+      font-size: .72rem;
+      gap: .75rem;
+      justify-content: center;
+      margin: .5rem 0;
+    }
+    .chat-date-divider::before,
+    .chat-date-divider::after {
+      background: #e8e8e8;
+      content: "";
+      flex: 1;
+      height: 1px;
+    }
+    .chat-line {
+      display: flex;
+      width: 100%;
+    }
+    .chat-line.left { justify-content: flex-start; }
+    .chat-line.right { justify-content: flex-end; }
+    .chat-bubble {
+      border-radius: 8px;
+      font-size: .78rem;
+      line-height: 1.58;
+      max-width: 76%;
+      padding: .62rem .78rem;
+      white-space: normal;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+    .chat-line.left .chat-bubble {
+      background: var(--left);
+      border-top-left-radius: 2px;
+      color: var(--left-text);
+    }
+    .chat-line.right .chat-bubble {
+      background: var(--right);
+      border-top-right-radius: 2px;
+      color: var(--right-text);
+    }
+    .chat-image {
+      border-radius: 6px;
+      display: block;
+      margin-top: .65rem;
+      max-width: 100%;
+    }
+    .fake-image {
+      align-items: center;
+      border: 1px dashed currentColor;
+      border-radius: 6px;
+      display: flex;
+      font-size: 12px;
+      height: 64px;
+      justify-content: center;
+      margin-top: .65rem;
+      opacity: .7;
+    }
+    .output {
+      min-height: 360px;
+      white-space: pre;
+    }
+    .download-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .download-list a {
+      background: #eef2f6;
+      border-radius: 6px;
+      color: #1f2937;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 10px;
+      text-decoration: none;
+    }
+    @media (max-width: 980px) {
+      .grid.two, .grid.three, .grid.four, .summary, .toolbar, .output-select {
+        grid-template-columns: 1fr;
+      }
+      main { padding: 18px 12px 34px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>DM Ledger Editor</h1>
+  <p class="subhead">X DM 화면에서 현재 로드된 말풍선을 구간별로 캡처하고, 누적 원장처럼 병합한 뒤 표에서 제외/수정/분할/이미지 경로를 관리해 기존 <code>chatlog_direct</code> HTML로 내보냅니다.</p>
+
+  <section class="panel">
+    <h2>1. Capture from X DM</h2>
+    <div class="bookmarklet">
+      <div>
+        <strong>북마클릿</strong>
+        <p class="hint">링크를 북마크바에 끌어놓고 X DM 화면에서 실행하세요. 현재 화면 근처에 로드된 말풍선의 더보기 버튼을 먼저 펼친 뒤 JSON을 클립보드에 복사합니다.</p>
+      </div>
+      <a id="bookmarkletLink" href="#">Capture DM</a>
+    </div>
+    <details style="margin-top:12px">
+      <summary><strong>콘솔용 캡처 코드 보기</strong></summary>
+      <p class="hint">북마클릿이 막히면 X DM 화면의 개발자 콘솔에서 아래 코드를 실행한 뒤 복사된 JSON을 가져오세요.</p>
+      <textarea id="captureCode" class="capture-code" spellcheck="false"></textarea>
+    </details>
+  </section>
+
+  <section class="panel">
+    <h2>2. Import / Ledger</h2>
+    <div class="grid two">
+      <div>
+        <label for="captureInput">Captured JSON, ledger JSON, or TSV</label>
+        <textarea id="captureInput" placeholder="Paste captured JSON or TSV here."></textarea>
+      </div>
+      <div>
+        <label for="ledgerFile">Load saved ledger JSON</label>
+        <input id="ledgerFile" type="file" accept=".json,application/json">
+        <p class="hint">브라우저 localStorage에도 자동 저장됩니다. GitHub에 보관하려면 Export ledger JSON을 내려받아 함께 보관하세요.</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="importBtn" type="button">Import / Merge</button>
+      <button class="secondary" id="pasteBtn" type="button">Paste from Clipboard</button>
+      <button class="ghost" id="exportLedgerBtn" type="button">Export ledger JSON</button>
+      <button class="ghost" id="exportTsvBtn" type="button">Export TSV</button>
+      <button class="danger" id="clearBtn" type="button">Clear Local Ledger</button>
+      <span class="status" id="importStatus"></span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>3. Edit Like a Sheet</h2>
+    <div class="summary" id="summary"></div>
+    <div class="toolbar">
+      <div>
+        <label for="filterText">Search</label>
+        <input id="filterText" type="search" placeholder="text, title, path, file">
+      </div>
+      <div>
+        <label for="filterState">State</label>
+        <select id="filterState">
+          <option value="">All</option>
+          <option value="included">Included</option>
+          <option value="excluded">Excluded</option>
+          <option value="new">New</option>
+          <option value="unassigned">No file</option>
+          <option value="image">Has image</option>
+        </select>
+      </div>
+      <div>
+        <label for="filterSide">Side</label>
+        <select id="filterSide">
+          <option value="">All</option>
+          <option value="right">Right</option>
+          <option value="left">Left</option>
+        </select>
+      </div>
+      <div>
+        <label for="batchFile">Batch file</label>
+        <input id="batchFile" placeholder="dm-start-1-100.html">
+      </div>
+      <div>
+        <label for="batchTitle">Batch title</label>
+        <input id="batchTitle" placeholder="[26.05.15] START >> 1~100">
+      </div>
+      <div class="actions" style="margin:0">
+        <button class="mini" id="applyBatchBtn" type="button">Apply Visible</button>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="selectVisibleBtn" type="button">Include Visible</button>
+      <button class="ghost" id="excludeVisibleBtn" type="button">Exclude Visible</button>
+      <button class="ghost" id="renumberBtn" type="button">Renumber</button>
+      <button class="ghost" id="imagePathBtn" type="button">Generate Image Paths</button>
+      <span class="status" id="editStatus"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Use</th>
+            <th>#</th>
+            <th>Date</th>
+            <th>Side</th>
+            <th>Text / Edited Text</th>
+            <th>Images / Paths</th>
+            <th>Output File</th>
+            <th>Title</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>4. Export HTML</h2>
+    <div class="grid four">
+      <div>
+        <label for="category">Category</label>
+        <input id="category" value="DM">
+      </div>
+      <div>
+        <label for="fontSize">Bubble font size</label>
+        <input id="fontSize" value="0.70rem">
+      </div>
+      <div>
+        <label for="baseUrl">Base URL</label>
+        <input id="baseUrl" value="/dekade-archive">
+      </div>
+      <div>
+        <label for="exportFile">Preview file</label>
+        <select id="exportFile"></select>
+      </div>
+    </div>
+    <div class="grid four" style="margin-top:12px">
+      <div><label for="pageColor">Page</label><input id="pageColor" type="color" value="#ffffff"></div>
+      <div><label for="leftColor">Left bg</label><input id="leftColor" type="color" value="#4e4a65"></div>
+      <div><label for="leftText">Left text</label><input id="leftText" type="color" value="#e7e3d8"></div>
+      <div><label for="rightColor">Right bg</label><input id="rightColor" type="color" value="#e7e3d8"></div>
+    </div>
+    <div class="grid two" style="margin-top:12px">
+      <div><label for="rightText">Right text</label><input id="rightText" type="color" value="#4e4a65"></div>
+      <div><label for="sortDateFallback">Date fallback</label><input id="sortDateFallback" placeholder="2026-05-15"></div>
+    </div>
+    <div class="actions">
+      <button id="buildBtn" type="button">Build Selected HTML</button>
+      <button class="secondary" id="copyOutputBtn" type="button">Copy HTML</button>
+      <button class="ghost" id="downloadSelectedBtn" type="button">Download Selected</button>
+      <button class="ghost" id="buildAllBtn" type="button">Build All Files</button>
+      <span class="status" id="exportStatus"></span>
+    </div>
+    <div class="grid two">
+      <div>
+        <label for="output">Output</label>
+        <textarea id="output" class="output" spellcheck="false"></textarea>
+        <div class="download-list" id="downloadList"></div>
+      </div>
+      <div class="preview">
+        <label>Preview</label>
+        <div class="preview-body" id="previewBody"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'dekade-dm-ledger-editor-v1';
+  var SETTINGS_KEY = 'dekade-dm-ledger-settings-v1';
+  var ledger = [];
+  var visibleKeys = [];
+  var lastBuilt = { filename: '', html: '' };
+
+  var captureScript = String.raw`(async function(){
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const clickMoreButtons = async () => {
+    const labels = /^(더보기|Show more|See more|もっと見る|さらに表示|자세히 보기)$/i;
+    const controls = Array.from(document.querySelectorAll('button, [role="button"]')).filter((node) => {
+      const text = (node.innerText || node.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!text || text.length > 40) return false;
+      return labels.test(text);
+    });
+    for (const node of controls) {
+      try { node.click(); await sleep(120); } catch (error) {}
+    }
+    return controls.length;
+  };
+  const visible = (node) => {
+    const rect = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    return rect.width > 8 && rect.height > 8 && style.visibility !== 'hidden' && style.display !== 'none';
+  };
+  const textOf = (node) => (node.innerText || node.textContent || '').replace(/\u00a0/g, ' ').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  const bgVisible = (node) => {
+    const bg = getComputedStyle(node).backgroundColor;
+    return bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
+  };
+  const scoreBubble = (node, mainWidth) => {
+    const rect = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    let score = 0;
+    if (bgVisible(node)) score += 3;
+    if (parseFloat(style.borderRadius) >= 8) score += 2;
+    if (rect.width < mainWidth * 0.88) score += 2;
+    if (rect.height >= 22) score += 1;
+    if (node.querySelector('img')) score += 1;
+    return score;
+  };
+  const findBubble = (leaf, mainWidth) => {
+    let best = null;
+    let node = leaf;
+    for (let depth = 0; node && depth < 8; depth += 1, node = node.parentElement) {
+      if (!visible(node)) continue;
+      const text = textOf(node);
+      const images = node.querySelectorAll ? node.querySelectorAll('img').length : 0;
+      if (!text && !images) continue;
+      const score = scoreBubble(node, mainWidth);
+      if (score >= 4) best = node;
+    }
+    return best;
+  };
+  const expanded = await clickMoreButtons();
+  if (expanded) await sleep(350);
+  const main = document.querySelector('main') || document.body;
+  const mainRect = main.getBoundingClientRect();
+  const leaves = Array.from(main.querySelectorAll('div[dir="auto"], span[dir="auto"], img')).filter(visible);
+  const bubbles = [];
+  const seen = new Set();
+  leaves.forEach((leaf) => {
+    const bubble = findBubble(leaf, mainRect.width || window.innerWidth);
+    if (!bubble || seen.has(bubble)) return;
+    const text = textOf(bubble);
+    const images = Array.from(bubble.querySelectorAll('img')).filter(visible);
+    if (!text && !images.length) return;
+    if (/^(Messages|Search Direct Messages|쪽지|메시지|Home|Explore|Notifications)$/i.test(text)) return;
+    seen.add(bubble);
+    bubbles.push(bubble);
+  });
+  bubbles.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+  const messages = bubbles.map((bubble, index) => {
+    const rect = bubble.getBoundingClientRect();
+    const side = rect.left + rect.width / 2 > mainRect.left + mainRect.width / 2 ? 'right' : 'left';
+    const text = textOf(bubble);
+    const imageCount = Array.from(bubble.querySelectorAll('img')).filter(visible).length;
+    return {
+      capture_index: index + 1,
+      side,
+      text,
+      image_count: imageCount,
+      date: '',
+      captured_at: new Date().toISOString()
+    };
+  });
+  const payload = {
+    type: 'dekade_dm_capture_v1',
+    captured_at: new Date().toISOString(),
+    url: location.href,
+    expanded_more_buttons: expanded,
+    still_has_more_buttons: Array.from(document.querySelectorAll('button, [role="button"]')).filter((node) => /더보기|Show more|See more|もっと見る|さらに表示|자세히 보기/i.test((node.innerText || node.textContent || '').trim())).length,
+    count: messages.length,
+    messages
+  };
+  const json = JSON.stringify(payload, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    alert('Captured ' + messages.length + ' messages. More buttons expanded: ' + expanded + '. JSON copied to clipboard.');
+  } catch (error) {
+    prompt('Copy captured JSON', json);
+  }
+})();`;
+
+  function byId(id) { return document.getElementById(id); }
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function escapeAttr(value) {
+    return escapeHtml(value).replace(/'/g, '&#39;');
+  }
+  function yamlQuote(value) {
+    return '"' + String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+  }
+  function normalizeText(value) {
+    return String(value || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  }
+  function normalizeFile(value) {
+    var text = String(value || '').trim();
+    if (!text) return '';
+    return /\.html?$/i.test(text) ? text : text + '.html';
+  }
+  function assetFolder(outputFile) {
+    return normalizeFile(outputFile).replace(/\.html?$/i, '').replace(/^_archive[\\/]/, '').replace(/[^a-zA-Z0-9가-힣._-]+/g, '-').replace(/^-+|-+$/g, '') || 'dm-archive';
+  }
+  function compactDate(value) {
+    var text = String(value || '').trim().replace(/\./g, '-').replace(/\//g, '-');
+    var match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    return match ? match[1] + '-' + ('0' + match[2]).slice(-2) + '-' + ('0' + match[3]).slice(-2) : text;
+  }
+  function hashString(value) {
+    var hash = 2166136261;
+    for (var i = 0; i < value.length; i += 1) {
+      hash ^= value.charCodeAt(i);
+      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+    }
+    return (hash >>> 0).toString(36);
+  }
+  function makeKey(item) {
+    return item.key || hashString([item.date || '', item.side || '', normalizeText(item.text || item.content || ''), item.image_count || item.imageCount || 0].join('\n---\n'));
+  }
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ledger));
+    saveSettings();
+  }
+  function load() {
+    try { ledger = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch (error) { ledger = []; }
+    loadSettings();
+    render();
+  }
+  function saveSettings() {
+    var ids = ['category', 'fontSize', 'baseUrl', 'pageColor', 'leftColor', 'leftText', 'rightColor', 'rightText', 'sortDateFallback'];
+    var data = {};
+    ids.forEach(function (id) { data[id] = byId(id).value; });
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+  }
+  function loadSettings() {
+    try {
+      var data = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      Object.keys(data).forEach(function (id) { if (byId(id)) byId(id).value = data[id]; });
+    } catch (error) {}
+  }
+  function rowText(row) {
+    return normalizeText(row.edited_text || row.text || '');
+  }
+  function imagePaths(row) {
+    return normalizeText(row.image_paths || row.image_path || '').split('\n').map(function (path) { return path.trim(); }).filter(Boolean);
+  }
+  function parseJsonInput(text) {
+    var data = JSON.parse(text);
+    if (Array.isArray(data)) return data;
+    if (data.type === 'dekade_dm_capture_v1') {
+      return (data.messages || []).map(function (item) {
+        return {
+          key: makeKey(item),
+          include: true,
+          is_new: true,
+          order: ledger.length + item.capture_index,
+          date: item.date || '',
+          side: item.side === 'right' ? 'right' : 'left',
+          text: item.text || '',
+          edited_text: '',
+          image_count: Number(item.image_count || 0),
+          image_paths: '',
+          output_file: '',
+          title: '',
+          note: '',
+          captured_at: item.captured_at || data.captured_at || ''
+        };
+      });
+    }
+    if (data.ledger && Array.isArray(data.ledger)) return data.ledger;
+    throw new Error('Unknown JSON format.');
+  }
+  function parseTsv(text) {
+    var rows = [];
+    var row = [];
+    var cell = '';
+    var quoted = false;
+    for (var i = 0; i < text.length; i += 1) {
+      var ch = text[i];
+      var next = text[i + 1];
+      if (quoted) {
+        if (ch === '"' && next === '"') { cell += '"'; i += 1; }
+        else if (ch === '"') quoted = false;
+        else cell += ch;
+        continue;
+      }
+      if (ch === '"' && cell === '') quoted = true;
+      else if (ch === '\t') { row.push(cell); cell = ''; }
+      else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (ch !== '\r') cell += ch;
+    }
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    if (!rows.length) return [];
+    var headers = rows.shift().map(function (h) { return h.toLowerCase().replace(/[\s_-]/g, ''); });
+    function col(names) {
+      var normalized = names.map(function (name) { return name.toLowerCase().replace(/[\s_-]/g, ''); });
+      for (var i = 0; i < headers.length; i += 1) if (normalized.indexOf(headers[i]) !== -1) return i;
+      return -1;
+    }
+    var c = {
+      include: col(['include', 'use']),
+      order: col(['order', 'index', 'no']),
+      date: col(['date', '작성일']),
+      side: col(['side', '작성자', 'direction']),
+      text: col(['text', 'content', '내용']),
+      edited: col(['editedtext', 'edited', '수정문']),
+      images: col(['imagecount', 'images']),
+      paths: col(['imagepaths', 'imagepath', '이미지']),
+      file: col(['outputfile', 'file', 'filename']),
+      title: col(['title', '제목']),
+      note: col(['note', 'memo'])
+    };
+    return rows.filter(function (r) { return r.some(function (v) { return String(v).trim(); }); }).map(function (r, index) {
+      var item = {
+        include: c.include === -1 ? true : !/^(false|0|no|n|exclude)$/i.test(String(r[c.include] || '').trim()),
+        order: c.order === -1 ? ledger.length + index + 1 : Number(r[c.order]) || ledger.length + index + 1,
+        date: c.date === -1 ? '' : r[c.date],
+        side: c.side === -1 ? 'left' : (/right|r/i.test(r[c.side]) ? 'right' : 'left'),
+        text: c.text === -1 ? '' : r[c.text],
+        edited_text: c.edited === -1 ? '' : r[c.edited],
+        image_count: c.images === -1 ? 0 : Number(r[c.images] || 0),
+        image_paths: c.paths === -1 ? '' : r[c.paths],
+        output_file: c.file === -1 ? '' : normalizeFile(r[c.file]),
+        title: c.title === -1 ? '' : r[c.title],
+        note: c.note === -1 ? '' : r[c.note],
+        is_new: true
+      };
+      item.key = makeKey(item);
+      return item;
+    });
+  }
+  function normalizeRow(row, index) {
+    var text = normalizeText(row.text || row.content || '');
+    var item = {
+      key: row.key || makeKey(row),
+      include: row.include !== false,
+      is_new: row.is_new !== false,
+      order: Number(row.order || index + 1),
+      date: compactDate(row.date || ''),
+      side: row.side === 'right' ? 'right' : 'left',
+      text: text,
+      edited_text: normalizeText(row.edited_text || ''),
+      image_count: Number(row.image_count || row.imageCount || imagePaths(row).length || 0),
+      image_paths: normalizeText(row.image_paths || row.image_path || ''),
+      output_file: normalizeFile(row.output_file || row.file || ''),
+      title: row.title || '',
+      note: row.note || '',
+      captured_at: row.captured_at || ''
+    };
+    item.key = item.key || makeKey(item);
+    return item;
+  }
+  function mergeRows(rows) {
+    var existing = {};
+    ledger.forEach(function (row) { existing[row.key] = row; });
+    var added = 0;
+    var updated = 0;
+    rows.map(normalizeRow).forEach(function (incoming) {
+      if (existing[incoming.key]) {
+        var target = existing[incoming.key];
+        ['date', 'side', 'text', 'image_count', 'captured_at'].forEach(function (field) {
+          if (!target[field] && incoming[field]) target[field] = incoming[field];
+        });
+        target.is_new = target.is_new || incoming.is_new;
+        updated += 1;
+      } else {
+        incoming.order = ledger.length + 1;
+        ledger.push(incoming);
+        existing[incoming.key] = incoming;
+        added += 1;
+      }
+    });
+    save();
+    render();
+    byId('importStatus').textContent = added + ' added, ' + updated + ' duplicate/updated.';
+  }
+  function parseInput(text) {
+    var trimmed = text.trim();
+    if (!trimmed) return [];
+    if (trimmed[0] === '{' || trimmed[0] === '[') return parseJsonInput(trimmed);
+    return parseTsv(trimmed);
+  }
+  function filteredRows() {
+    var query = byId('filterText').value.trim().toLowerCase();
+    var state = byId('filterState').value;
+    var side = byId('filterSide').value;
+    return ledger.filter(function (row) {
+      if (side && row.side !== side) return false;
+      if (state === 'included' && !row.include) return false;
+      if (state === 'excluded' && row.include) return false;
+      if (state === 'new' && !row.is_new) return false;
+      if (state === 'unassigned' && row.output_file) return false;
+      if (state === 'image' && !row.image_count && !imagePaths(row).length) return false;
+      if (!query) return true;
+      return [row.text, row.edited_text, row.image_paths, row.output_file, row.title, row.note].join('\n').toLowerCase().indexOf(query) !== -1;
+    }).sort(function (a, b) { return Number(a.order || 0) - Number(b.order || 0); });
+  }
+  function renderSummary() {
+    var included = ledger.filter(function (row) { return row.include; });
+    var files = uniqueFiles();
+    var imageRows = ledger.filter(function (row) { return row.image_count || imagePaths(row).length; });
+    var unassigned = ledger.filter(function (row) { return !row.output_file; });
+    var metrics = [
+      ['Total', ledger.length],
+      ['Included', included.length],
+      ['New', ledger.filter(function (row) { return row.is_new; }).length],
+      ['No file', unassigned.length],
+      ['Image rows', imageRows.length],
+      ['Files', files.length]
+    ];
+    byId('summary').innerHTML = metrics.map(function (item) {
+      return '<div class="metric"><strong>' + item[1] + '</strong><span>' + item[0] + '</span></div>';
+    }).join('');
+  }
+  function renderTable() {
+    var rows = filteredRows();
+    visibleKeys = rows.map(function (row) { return row.key; });
+    byId('ledgerBody').innerHTML = rows.map(function (row) {
+      return '<tr data-key="' + escapeAttr(row.key) + '" class="' + (row.include ? '' : 'excluded ') + (row.is_new ? 'new-row' : '') + '">' +
+        '<td class="center"><input class="cell-check row-field" data-field="include" type="checkbox" ' + (row.include ? 'checked' : '') + '></td>' +
+        '<td><input class="order-input row-field" data-field="order" type="number" value="' + escapeAttr(row.order) + '"></td>' +
+        '<td><input class="row-input row-field" data-field="date" value="' + escapeAttr(row.date) + '" placeholder="YYYY-MM-DD"></td>' +
+        '<td><select class="side-select row-field" data-field="side"><option value="left"' + (row.side === 'left' ? ' selected' : '') + '>left</option><option value="right"' + (row.side === 'right' ? ' selected' : '') + '>right</option></select></td>' +
+        '<td><textarea class="row-text row-field" data-field="edited_text" placeholder="' + escapeAttr(row.text || 'edited text') + '">' + escapeHtml(row.edited_text) + '</textarea><p class="hint">Original: ' + escapeHtml((row.text || '').slice(0, 220)) + (row.text && row.text.length > 220 ? '...' : '') + '</p></td>' +
+        '<td><input class="row-input row-field" data-field="image_count" type="number" min="0" value="' + escapeAttr(row.image_count) + '"><textarea class="row-paths row-field" data-field="image_paths" placeholder="/dekade-archive/assets/archive/...">' + escapeHtml(row.image_paths) + '</textarea></td>' +
+        '<td><input class="row-input row-field" data-field="output_file" value="' + escapeAttr(row.output_file) + '" placeholder="dm-start-1-100.html"></td>' +
+        '<td><input class="row-input row-field" data-field="title" value="' + escapeAttr(row.title) + '" placeholder="page title"></td>' +
+        '<td><textarea class="row-paths row-field" data-field="note">' + escapeHtml(row.note) + '</textarea><button class="mini ghost mark-read" type="button">Mark done</button></td>' +
+      '</tr>';
+    }).join('');
+    byId('editStatus').textContent = rows.length + ' visible.';
+  }
+  function uniqueFiles() {
+    var files = {};
+    ledger.forEach(function (row) {
+      if (row.include && row.output_file) files[normalizeFile(row.output_file)] = true;
+    });
+    return Object.keys(files).sort();
+  }
+  function renderExportFiles() {
+    var select = byId('exportFile');
+    var previous = select.value;
+    var files = uniqueFiles();
+    select.innerHTML = files.map(function (file) { return '<option value="' + escapeAttr(file) + '">' + escapeHtml(file) + '</option>'; }).join('');
+    if (files.indexOf(previous) !== -1) select.value = previous;
+  }
+  function render() {
+    renderSummary();
+    renderTable();
+    renderExportFiles();
+  }
+  function findRow(key) {
+    return ledger.find(function (row) { return row.key === key; });
+  }
+  function tsvCell(value) {
+    var text = String(value == null ? '' : value);
+    return /["\t\r\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+  }
+  function buildBubble(row) {
+    var text = rowText(row);
+    var paths = imagePaths(row);
+    var html = [];
+    html.push('<div class="chat-line ' + row.side + '">');
+    html.push('  <div class="chat-bubble">');
+    if (text) html.push('    <div class="chat-text">' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>');
+    paths.forEach(function (path) {
+      html.push('    <img class="chat-image" src="' + escapeAttr(path) + '" alt="">');
+    });
+    html.push('  </div>');
+    html.push('</div>');
+    return html.join('\n');
+  }
+  function rowsForFile(file) {
+    var normalized = normalizeFile(file);
+    return ledger.filter(function (row) {
+      return row.include && normalizeFile(row.output_file) === normalized && rowText(row);
+    }).sort(function (a, b) { return Number(a.order || 0) - Number(b.order || 0); });
+  }
+  function frontMatter(file, rows) {
+    var first = rows[0] || {};
+    var date = compactDate(first.date || byId('sortDateFallback').value || new Date().toISOString().slice(0, 10));
+    var title = first.title || file.replace(/\.html?$/i, '');
+    return [
+      '---',
+      'layout: chatlog_direct',
+      'title: ' + yamlQuote(title),
+      'category: ' + yamlQuote(byId('category').value || 'DM'),
+      'date: ' + date,
+      'bubble_font_size: ' + yamlQuote(byId('fontSize').value || '0.70rem'),
+      'colors:',
+      '  page: ' + yamlQuote(byId('pageColor').value),
+      '  left: ' + yamlQuote(byId('leftColor').value),
+      '  left_text: ' + yamlQuote(byId('leftText').value),
+      '  right: ' + yamlQuote(byId('rightColor').value),
+      '  right_text: ' + yamlQuote(byId('rightText').value),
+      '  meta: "#8a8a8a"',
+      '---',
+      ''
+    ];
+  }
+  function buildHtml(file) {
+    var rows = rowsForFile(file);
+    var lines = [];
+    var lastDate = '';
+    rows.forEach(function (row) {
+      var date = compactDate(row.date || '');
+      if (date && date !== lastDate) {
+        if (lines.length) lines.push('');
+        lines.push('<div class="chat-date-divider">' + escapeHtml(date) + '</div>');
+        lines.push('');
+        lastDate = date;
+      }
+      lines.push(buildBubble(row));
+      lines.push('');
+      row.is_new = false;
+    });
+    return frontMatter(file, rows).concat(lines).join('\n').trim() + '\n';
+  }
+  function renderPreview(file) {
+    var rows = rowsForFile(file);
+    var box = byId('previewBody');
+    var html = [];
+    var lastDate = '';
+    rows.forEach(function (row) {
+      var date = compactDate(row.date || '');
+      if (date && date !== lastDate) {
+        html.push('<div class="chat-date-divider">' + escapeHtml(date) + '</div>');
+        lastDate = date;
+      }
+      html.push('<div class="chat-line ' + row.side + '"><div class="chat-bubble">');
+      if (rowText(row)) html.push('<div class="chat-text">' + escapeHtml(rowText(row)).replace(/\n/g, '<br>') + '</div>');
+      imagePaths(row).forEach(function (path) { html.push('<div class="fake-image">' + escapeHtml(path.split('/').pop()) + '</div>'); });
+      html.push('</div></div>');
+    });
+    box.innerHTML = html.join('');
+  }
+  function downloadText(filename, text) {
+    var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+  function generateImagePaths() {
+    var counters = {};
+    ledger.sort(function (a, b) { return Number(a.order || 0) - Number(b.order || 0); }).forEach(function (row) {
+      if (!row.include || !row.output_file) return;
+      var count = Number(row.image_count || imagePaths(row).length || 0);
+      if (!count) return;
+      if (row.image_paths) return;
+      var folder = assetFolder(row.output_file);
+      counters[folder] = counters[folder] || 0;
+      var paths = [];
+      for (var i = 0; i < count; i += 1) {
+        counters[folder] += 1;
+        paths.push((byId('baseUrl').value || '/dekade-archive').replace(/\/$/, '') + '/assets/archive/' + folder + '/image-' + String(counters[folder]).padStart(2, '0') + '.jpg');
+      }
+      row.image_paths = paths.join('\n');
+    });
+    save();
+    render();
+  }
+
+  byId('captureCode').value = captureScript;
+  byId('bookmarkletLink').href = 'javascript:' + encodeURIComponent(captureScript);
+
+  byId('importBtn').addEventListener('click', function () {
+    try { mergeRows(parseInput(byId('captureInput').value)); }
+    catch (error) { byId('importStatus').textContent = error.message; }
+  });
+  byId('pasteBtn').addEventListener('click', async function () {
+    try {
+      byId('captureInput').value = await navigator.clipboard.readText();
+      byId('importStatus').textContent = 'Clipboard pasted.';
+    } catch (error) {
+      byId('importStatus').textContent = 'Clipboard permission denied.';
+    }
+  });
+  byId('ledgerFile').addEventListener('change', async function (event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    byId('captureInput').value = await file.text();
+    byId('importStatus').textContent = 'Loaded ' + file.name + '. Click Import / Merge.';
+  });
+  byId('exportLedgerBtn').addEventListener('click', function () {
+    downloadText('dm-ledger.json', JSON.stringify({ type: 'dekade_dm_ledger_v1', exported_at: new Date().toISOString(), ledger: ledger }, null, 2));
+  });
+  byId('exportTsvBtn').addEventListener('click', function () {
+    var headers = ['include', 'order', 'date', 'side', 'text', 'edited_text', 'image_count', 'image_paths', 'output_file', 'title', 'note', 'key'];
+    var lines = [headers.join('\t')].concat(ledger.map(function (row) {
+      return headers.map(function (field) { return tsvCell(row[field]); }).join('\t');
+    }));
+    downloadText('dm-ledger.tsv', lines.join('\n'));
+  });
+  byId('clearBtn').addEventListener('click', function () {
+    if (!confirm('Clear the local ledger stored in this browser?')) return;
+    ledger = [];
+    save();
+    render();
+    byId('importStatus').textContent = 'Local ledger cleared.';
+  });
+  ['filterText', 'filterState', 'filterSide'].forEach(function (id) {
+    byId(id).addEventListener('input', render);
+    byId(id).addEventListener('change', render);
+  });
+  byId('ledgerBody').addEventListener('input', function (event) {
+    var rowEl = event.target.closest('tr[data-key]');
+    if (!rowEl || !event.target.classList.contains('row-field')) return;
+    var row = findRow(rowEl.getAttribute('data-key'));
+    var field = event.target.getAttribute('data-field');
+    if (!row || !field) return;
+    if (event.target.type === 'checkbox') row[field] = event.target.checked;
+    else if (event.target.type === 'number') row[field] = Number(event.target.value || 0);
+    else row[field] = field === 'output_file' ? normalizeFile(event.target.value) : event.target.value;
+    save();
+    rowEl.classList.toggle('excluded', !row.include);
+    renderSummary();
+    renderExportFiles();
+  });
+  byId('ledgerBody').addEventListener('click', function (event) {
+    if (!event.target.classList.contains('mark-read')) return;
+    var row = findRow(event.target.closest('tr[data-key]').getAttribute('data-key'));
+    if (row) {
+      row.is_new = false;
+      save();
+      render();
+    }
+  });
+  byId('applyBatchBtn').addEventListener('click', function () {
+    var file = normalizeFile(byId('batchFile').value);
+    var title = byId('batchTitle').value;
+    visibleKeys.forEach(function (key) {
+      var row = findRow(key);
+      if (!row) return;
+      if (file) row.output_file = file;
+      if (title) row.title = title;
+    });
+    save();
+    render();
+  });
+  byId('selectVisibleBtn').addEventListener('click', function () {
+    visibleKeys.forEach(function (key) { var row = findRow(key); if (row) row.include = true; });
+    save();
+    render();
+  });
+  byId('excludeVisibleBtn').addEventListener('click', function () {
+    visibleKeys.forEach(function (key) { var row = findRow(key); if (row) row.include = false; });
+    save();
+    render();
+  });
+  byId('renumberBtn').addEventListener('click', function () {
+    ledger.sort(function (a, b) { return Number(a.order || 0) - Number(b.order || 0); }).forEach(function (row, index) { row.order = index + 1; });
+    save();
+    render();
+  });
+  byId('imagePathBtn').addEventListener('click', generateImagePaths);
+  ['category', 'fontSize', 'baseUrl', 'pageColor', 'leftColor', 'leftText', 'rightColor', 'rightText', 'sortDateFallback'].forEach(function (id) {
+    byId(id).addEventListener('input', saveSettings);
+  });
+  byId('buildBtn').addEventListener('click', function () {
+    var file = byId('exportFile').value;
+    if (!file) { byId('exportStatus').textContent = 'No output file selected.'; return; }
+    var html = buildHtml(file);
+    byId('output').value = html;
+    lastBuilt = { filename: file, html: html };
+    renderPreview(file);
+    save();
+    renderSummary();
+    byId('exportStatus').textContent = rowsForFile(file).length + ' messages built for ' + file + '.';
+  });
+  byId('copyOutputBtn').addEventListener('click', async function () {
+    try {
+      await navigator.clipboard.writeText(byId('output').value);
+      byId('exportStatus').textContent = 'HTML copied.';
+    } catch (error) {
+      byId('output').focus();
+      byId('output').select();
+      document.execCommand('copy');
+      byId('exportStatus').textContent = 'HTML selected/copied.';
+    }
+  });
+  byId('downloadSelectedBtn').addEventListener('click', function () {
+    var file = lastBuilt.filename || byId('exportFile').value;
+    var html = lastBuilt.html || buildHtml(file);
+    if (file && html) downloadText(file, html);
+  });
+  byId('buildAllBtn').addEventListener('click', function () {
+    generateImagePaths();
+    var list = byId('downloadList');
+    list.innerHTML = '';
+    uniqueFiles().forEach(function (file) {
+      var html = buildHtml(file);
+      var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = file;
+      link.textContent = file;
+      list.appendChild(link);
+    });
+    save();
+    renderSummary();
+    byId('exportStatus').textContent = uniqueFiles().length + ' files ready below.';
+  });
+  byId('exportFile').addEventListener('change', function () {
+    renderPreview(byId('exportFile').value);
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
