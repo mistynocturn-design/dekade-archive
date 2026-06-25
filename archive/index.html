@@ -9,8 +9,10 @@ title: Archive
   <a class="archive-tool-button" href="{{ site.baseurl }}/tools/chatlog-converter.html" target="_blank" rel="noopener" aria-label="Open converter" title="Open converter">+</a>
 </header>
 <nav class="archive-tabs" aria-label="Archive categories">
+  <button class="archive-tab active" type="button" data-archive-tab="all">ALL</button>
+  <span class="archive-tab-divider" aria-hidden="true">|</span>
   {% for category in site.data.archive_categories %}
-    <button class="archive-tab{% if forloop.first %} active{% endif %}" type="button" data-archive-tab="{{ category | slugify }}">{{ category }}</button>
+    <button class="archive-tab" type="button" data-archive-tab="{{ category | slugify }}">{{ category }}</button>
     {% unless forloop.last %}<span class="archive-tab-divider" aria-hidden="true">|</span>{% endunless %}
   {% endfor %}
   <span class="archive-tab-indicator" aria-hidden="true"></span>
@@ -31,9 +33,28 @@ title: Archive
 </details>
 
 <div class="archive-tree">
+  {% assign all_chats = site.archive | sort: "date" | reverse %}
+  <section class="archive-category-panel active" data-archive-panel="all">
+    {% if all_chats.size > 0 %}
+      <ul class="archive-chat-list">
+        {% for chat in all_chats %}
+          <li>
+            <a class="archive-chat-link" href="{{ chat.url | relative_url }}">
+              <span class="archive-chat-title">{{ chat.title }}</span>
+              {% if chat.date %}
+                <span class="archive-date">{{ chat.date | date: "%Y-%m-%d" }}</span>
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="archive-empty">No logs yet.</p>
+    {% endif %}
+  </section>
   {% for category in site.data.archive_categories %}
     {% assign chats = site.archive | where: "category", category | sort: "date" | reverse %}
-    <section class="archive-category-panel{% if forloop.first %} active{% endif %}" data-archive-panel="{{ category | slugify }}">
+    <section class="archive-category-panel" data-archive-panel="{{ category | slugify }}">
       {% if chats.size > 0 %}
         <ul class="archive-chat-list">
           {% for chat in chats %}
