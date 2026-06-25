@@ -1,7 +1,7 @@
 ---
 layout: character
 title: "Dietrich Schwartz"
-subtitle: ""
+subtitle: "\"한마디\""
 order: 1
 role: "police officer"
 accent: "#4f362a"
