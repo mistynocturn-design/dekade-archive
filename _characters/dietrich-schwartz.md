@@ -1,8 +1,8 @@
 ---
 layout: character
 title: "Dietrich Schwartz"
-subtitle: "\"한마디\""
-order: 1
+subtitle: ""
+order: 2
 role: "police officer"
 accent: "#4f362a"
 soft: "#f9f5f2"
@@ -10,7 +10,7 @@ ink: "#341515"
 tab_color: "#4f362a"
 section_text: "#aca494"
 keyword_bg: "#e7e3d8"
-card_image: "assets/characters/dietrich/nanabear/02.png"
+card_image: "assets/characters/dietrich/card.png"
 profile_image: "assets/characters/dietrich/profile.png"
 card_facts:
   - label: "Gender"
