@@ -1,0 +1,59 @@
+---
+layout: chatlog_direct
+title: "잠입"
+category: "IF"
+date: 2026-06-25
+bubble_font_size: "0.70rem"
+colors:
+  page: "#ffffff"
+  left: "#4e4a65"
+  left_text: "#e7e3d8"
+  right: "#e7e3d8"
+  right_text: "#4e4a65"
+  meta: "#8a8a8a"
+---
+
+<div class="chat-date-divider">2026-06-25</div>
+
+<div class="chat-line left">
+  <div class="chat-bubble">
+    <div class="chat-text">경찰복 보고 또 망상회로 핑글핑글 .. 우헤헤..</div>
+  </div>
+</div>
+
+<div class="chat-line left">
+  <div class="chat-bubble">
+    <div class="chat-text">안히 들어보십셔 디트가 경찰인데요 카디가 경찰로 조직 스파이 같은 거인데 그거 모르고 만나는 그런 거 뭔지알지</div>
+    <img class="chat-image" src="/dekade-archive/assets/archive/spy/01.jpg" alt="">
+  </div>
+</div>
+
+<div class="chat-line right">
+  <div class="chat-bubble">
+    <div class="chat-text">아 스파이 최고죠^^b 속이고 만나서 죄책감도 느끼고 배신감도 느끼고</div>
+  </div>
+</div>
+
+<div class="chat-line right">
+  <div class="chat-bubble">
+    <div class="chat-text">디트는 신입한테 관심 별로 안 주는 타입인데 이때 카디 반응도 궁금쓰..</div>
+  </div>
+</div>
+
+<div class="chat-line left">
+  <div class="chat-bubble">
+    <div class="chat-text">아 카디 신입이라 디트가 관심 없으면?? 카디는 주목 덜 받아서 좋지롱 럭키비키// 하면서 겁도 없이 이런저런 정보 다 캘거고 뭔가 수상하게 특이한 선임이 있다는 것도 퍼나를 거 같아요ㅋㅋ 이제 진짜 정말로 손 대면 안되는 극비사항 건드리다가 당연히(??) 디트한테 걸려서.. 어쩌고..</div>
+  </div>
+</div>
+
+<div class="chat-line left">
+  <div class="chat-bubble">
+    <div class="chat-text">아 약점잡혀서 이런 저런 거(?) 당하는 거 뭔지 알죠 (그만해</div>
+  </div>
+</div>
+
+<div class="chat-line right">
+  <div class="chat-bubble">
+    <div class="chat-text">ㅋㅋㅋ퍼날당한 디트ㅠㅠ 극비사항 캐는 중이면 아무래도 아무도 없는 한밤중~새벽일텐데, 뭐가 이상하다는 거 진작 깨달은 디트가 당직 서다가 완전 뻔뻔하게 다가와서 &quot;바빠 보이네요?&quot;하면서 미소짓고 있을 것 같아요. 속은 약간 열받은 상태로ㅋㅋㅠㅠㅠ</div>
+  </div>
+</div>
