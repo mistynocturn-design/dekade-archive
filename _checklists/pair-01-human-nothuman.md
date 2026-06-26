@@ -4,7 +4,7 @@ kind: "checklist"
 type: "duo"
 creator: "@myeong_milk"
 date: "2026-06-26"
-questions: "64"
+questions: "60+"
 format: "PDF"
 description: ""
 tags: ["관계","서사"]
