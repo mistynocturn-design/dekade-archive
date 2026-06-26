@@ -11,11 +11,11 @@ title: Pair/Check
 
   <div class="checklist-toolbar" role="navigation" aria-label="Pair and checklist categories">
     <div class="checklist-kind-tabs">
-      <button type="button" data-checklist-kind="pair-template">Pair template</button>
-      <button class="active" type="button" data-checklist-kind="checklist">Checklist</button>
+      <button class="active" type="button" data-checklist-kind="pair-template">Pair template</button>
+      <button type="button" data-checklist-kind="checklist">Checklist</button>
       <span class="checklist-kind-indicator" aria-hidden="true"></span>
     </div>
-    <div class="checklist-tabs is-open" aria-label="Checklist types" data-checklist-filters aria-hidden="false">
+    <div class="checklist-tabs" aria-label="Checklist types" data-checklist-filters aria-hidden="true">
       <button class="active" type="button" data-checklist-type="all">all</button>
       <button type="button" data-checklist-type="duo">pair</button>
       <button type="button" data-checklist-type="solo">personal</button>
@@ -68,9 +68,13 @@ title: Pair/Check
 (function(){
   'use strict';
   var root=document.querySelector('[data-checklist-page]');if(!root)return;
-  var cards=Array.prototype.slice.call(root.querySelectorAll('[data-checklist-card]')),activeKind='checklist',active='all',query=root.querySelector('[data-checklist-query]'),creator=root.querySelector('[data-checklist-creator]'),tag=root.querySelector('[data-checklist-tag]'),count=root.querySelector('[data-checklist-count]'),empty=root.querySelector('[data-checklist-empty]'),kindTabs=root.querySelector('.checklist-kind-tabs'),kindIndicator=root.querySelector('.checklist-kind-indicator'),tabs=root.querySelector('.checklist-tabs'),filters=root.querySelector('[data-checklist-filters]'),indicator=root.querySelector('.checklist-tab-indicator');
+  var cards=Array.prototype.slice.call(root.querySelectorAll('[data-checklist-card]')),activeKind='pair-template',active='all',query=root.querySelector('[data-checklist-query]'),creator=root.querySelector('[data-checklist-creator]'),tag=root.querySelector('[data-checklist-tag]'),count=root.querySelector('[data-checklist-count]'),empty=root.querySelector('[data-checklist-empty]'),kindTabs=root.querySelector('.checklist-kind-tabs'),kindIndicator=root.querySelector('.checklist-kind-indicator'),tabs=root.querySelector('.checklist-tabs'),filters=root.querySelector('[data-checklist-filters]'),indicator=root.querySelector('.checklist-tab-indicator'),pdfRatioCache={};
   function text(card){try{var data=JSON.parse(card.querySelector('.checklist-card-data').textContent);return[data.title,data.creator,data.description].concat(data.tags||[]).join(' ').toLocaleLowerCase()}catch(e){return card.textContent.toLocaleLowerCase()}}
-  function loadPdfs(card){card.querySelectorAll('iframe[data-pdf-src]').forEach(function(frame){if(!frame.src)frame.src=frame.dataset.pdfSrc})}
+  function pdfUrl(value){return String(value||'').split('#')[0]}
+  function textFromBuffer(buffer){var bytes=new Uint8Array(buffer),chunk=0x8000,text='';for(var i=0;i<bytes.length;i+=chunk){text+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk))}return text}
+  function ratioFromPdfText(text){var boxes=[],match,pattern=/(?:\/CropBox|\/MediaBox)\s*\[\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\]/g;while((match=pattern.exec(text))){boxes.push(match)}for(var i=0;i<boxes.length;i+=1){var box=boxes[i],width=Math.abs(parseFloat(box[3])-parseFloat(box[1])),height=Math.abs(parseFloat(box[4])-parseFloat(box[2]));if(width>0&&height>0)return width+'/'+height}return''}
+  function applyPdfRatio(frame){var url=pdfUrl(frame.dataset.pdfSrc),page=frame.closest('.checklist-pdf-page');if(!url||!page)return;if(pdfRatioCache[url]){page.style.setProperty('aspect-ratio',pdfRatioCache[url]);return}fetch(url).then(function(response){return response.ok?response.arrayBuffer():null}).then(function(buffer){if(!buffer)return;var ratio=ratioFromPdfText(textFromBuffer(buffer));if(ratio){pdfRatioCache[url]=ratio;page.style.setProperty('aspect-ratio',ratio)}}).catch(function(){})}
+  function loadPdfs(card){card.querySelectorAll('iframe[data-pdf-src]').forEach(function(frame){applyPdfRatio(frame);if(!frame.src)frame.src=frame.dataset.pdfSrc})}
   cards.forEach(function(card){card._search=text(card);card.addEventListener('toggle',function(){if(card.open)loadPdfs(card)})});
   function move(button){if(!button)return;indicator.style.width=button.offsetWidth+'px';indicator.style.transform='translateX('+(button.offsetLeft-tabs.scrollLeft)+'px)'}
   function moveKind(button){if(!button)return;kindIndicator.style.width=button.offsetWidth+'px';kindIndicator.style.transform='translateX('+button.offsetLeft+'px)'}

@@ -22,7 +22,7 @@
 .checklist-tags{display:flex;flex-wrap:wrap;gap:.25rem}.checklist-tags i{background:var(--sheet-soft);border-radius:999px;color:var(--sheet-accent);font-size:.47rem;font-style:normal;padding:.24rem .4rem}
 .checklist-source-link{color:var(--sheet-accent);font-size:.49rem;font-weight:850;letter-spacing:.08em;text-decoration:none}
 .checklist-pdf-stack{background:#252327;display:block;line-height:0;margin:0;overflow:hidden;padding:0}
-.checklist-pdf-page{aspect-ratio:1/1.414;background:#fff;line-height:0;margin:0;overflow:hidden;padding:0;position:relative;width:100%}
+.checklist-pdf-page{aspect-ratio:var(--pdf-ratio,1/1.414);background:#fff;line-height:0;margin:0;overflow:hidden;padding:0;position:relative;width:100%}
 .checklist-pdf-page iframe{border:0;display:block;height:100%;inset:0;margin:0;padding:0;position:absolute;width:100%}
 .checklist-no-pdf{color:#aaa2a8;font-size:.6rem;line-height:1.5;margin:0;padding:3rem;text-align:center}
 .pair-template-image-stack{background:#f4f1f2;display:grid;gap:1px;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden}
