@@ -10,6 +10,6 @@ description: ""
 tags: ["관계","일상"]
 source_url: "https://docs.google.com/spreadsheets/d/1lWRNwTPVhkBWLpGi35mPqWQprj82T6ClXfeb8l8ujWA/edit?usp=sharing"
 pdfs: ["/dekade-archive/assets/checklists/2/3.pdf"]
-accent: "#707070"
-soft: "#d6d6d6"
+accent: "#ffa4a4"
+soft: "#badfdb"
 ---
