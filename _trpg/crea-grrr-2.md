@@ -16,6 +16,7 @@ text_color: "#f2eff2"
 accent: "#8ca7d8"
 ---
 
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/01.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">안전지대의 한복판, 대형 스크린에서 반짝이던 광고가 멎습니다.</div></div>
@@ -68,6 +69,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">「w. 청서」</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/02.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">긴급 속보로 어수선한 거리 한가운데, 술렁이는 분위기 속에서, 당신은.</div></div>
@@ -152,10 +154,12 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">■ HANDOUT. 잘 지냈어?</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/pannel/22.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">그때, 카디아는 &#39;어떤 위협&#39;을 느끼고 다섯 걸음 물러섭니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/03.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">민첩한 반사 신경은 어떤 아르바이트 생활을 했더라도 조금도 녹슬지 않았습니다.</div></div>
@@ -280,6 +284,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">지금 당장 가기엔 추레한 몰골일 테니까요.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/04.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">헐리우드 영화의 한 장면처럼 비장한 분위기를 연출해도 좋겠네요. 왜, 그런 거 있잖아요. 침대를 올리면 나오는 여러 총기나 칼날 같은 것들…. (탄환은 없지만)</div></div>
@@ -344,6 +349,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">준비를 마친 두 사람은 AOC를 향해 나섭니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/05.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">걱정하지 마십시오, 시민 여러분. 안전지대의 치안은 AOC가 담당합니다.</div></div>
@@ -552,6 +558,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">그 안을 본다면….</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/07.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">소강당 안에는, AOC의 전투복을 입은 사람들이 빽빽하게 열을 맞춰 정면을 보고 있습니다.</div></div>
@@ -732,6 +739,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">당신은 디트리히와 함께 당당하게 AOC의 엘리베이터를 이용하기로 합니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/06.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">[1d36 판정]</div></div>
@@ -748,6 +756,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">손끝이 향한 곳은 18층.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/08.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">문이 열리자 다소 어수선한 광경이 펼쳐집니다.</div></div>
@@ -1060,6 +1069,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">이번에 두 사람이 향할 곳은 6층.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/09.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">엘리베이터의 문이 열리자 AOC 곳곳에서 발포 소리가 울려 퍼집니다.</div></div>
@@ -1292,6 +1302,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">이번에 도착한 곳은  23층.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/10.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">이번 층은 비교적 고요합니다만, 적이 없는 대신 복도에 그려진 해괴한 문양과 그림을 발견합니다.</div></div>
@@ -1508,6 +1519,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">마지막으로 두 사람이 향한 곳은 17층.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/11.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">문이 열리자 들리는 것은..</div></div>
@@ -1764,6 +1776,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">짧은 기계음이 들리고, 1704호실의 문이 열립니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/12.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">사무실 안은 다른 곳보다 온도가 낮으며, 안에 있던 데스크 및 설비들이 전부 비워진 상태입니다.</div></div>
@@ -2664,6 +2677,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">마침내 23층에 도달하면,</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/10.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">카디아 [관찰 판정]</div></div>
@@ -2736,6 +2750,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">다만, 평범한 입장은 아닙니다. 카디아와 디트리히는 불청객이며, 마력을 사용해 공간을 찢고 침입하는 것뿐이니까요.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/13.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">간신히 침입한 공간은 거대한 도서관과도 같습니다.</div></div>
@@ -2787,6 +2802,10 @@ accent: "#8ca7d8"
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">■ HANDOUT: 어느 학자의 수기</div></div>
+</article>
+<article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
+  <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">『어느 학자의 수기』<br><br>무언가에 몰두하여 연구하는 행위는 기도와 크게 다르지 않다. 그 대상이 신의 영역에 근접한 것이라면 더욱 비슷하다. 신앙과 탐구욕은 대상을 향한 욕심이며, 열망이다. 우리가 연구하는 크리쳐는 우주 신의 영역이라 할 수 있다. 이 연구를 중단하지 않으면 언젠가 큰 화를 부를 것이다. 부름에 응답하는 것이야말로 신의 성질이므로.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="카디아 펠트루프" style="--speaker-color:rgb(156, 39, 176)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/katia.png" alt=""></span>
@@ -3004,6 +3023,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">그 말이 끝나자, 카디아와 디트리히의 주위로 청색 스파크가 일며 수백 개의 화면이 나타납니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/14.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">[LOADING]</div></div>
@@ -3108,6 +3128,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">마지막으로 모든 메시지의 앞에 팝업 메시지가 발생합니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/pannel/23.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">《현재 시각 오후 11시 40분, 카디아, 최후의 지령 획득.》</div></div>
@@ -3164,6 +3185,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">대답을 듣고 고민하던 관리자는 결국 고개를 끄덕이곤 문을 만들어줍니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/15.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">방주에서 빠져나온 두 사람은 발걸음을 재촉합니다.</div></div>
@@ -3284,6 +3306,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">카디아와 디트리히는 맨몸으로 전장에 뛰어듭니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/16.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">때는 자정, 장소는 옥상, 하늘 가득히 차지한 무지성의 신은 안전 지대를 집어삼키기 위해 악몽 같은 몸체를 부풀립니다.</div></div>
@@ -3308,6 +3331,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">A̸̻̯͖̐̄́͂̃̽̒̑͆͗̊̉̚ͅz̷̢̡̙͕͍̝̜̺̟̮̯̰͌̌ȁ̷̡̧̠̩͋̅͐̇̀̈́͑́̚͠ţ̴̖̯̰̳͔̺͈̲̩͉̠̺̂͊̀́̀͘̕͜͝h̷̨̳͓͍͓̱͕̪̾̂̎̐̏̾̂͒̑̃͐̕͠ờ̵̘̻̞̫͙̠̬͐͑͆͑̏̋̊͂͋́̄̍͜͠t̸̹̙͖͖̰̥͓͖͔̻̫̱̺̠̓h̸̢͔̰̼͙̲̰͍͖͕̭̪͂̇̅̓́̚͜ͅͅ</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/pannel/24.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>info</small></header><div class="trpg-entry-text">숭배자들에게 상을 내리는 일이 없기 때문에 별로 숭배되지 않습니다. 인간들이 A̸̻̯͖̐̄́͂̃̽̒̑͆͗̊̉̚ͅz̷̢̡̙͕͍̝̜̺̟̮̯̰͌̌ȁ̷̡̧̠̩͋̅͐̇̀̈́͑́̚͠ţ̴̖̯̰̳͔̺͈̲̩͉̠̺̂͊̀́̀͘̕͜͝h̷̨̳͓͍͓̱͕̪̾̂̎̐̏̾̂͒̑̃͐̕͠ờ̵̘̻̞̫͙̠̬͐͑͆͑̏̋̊͂͋́̄̍͜͠t̸̹̙͖͖̰̥͓͖͔̻̫̱̺̠̓h̸̢͔̰̼͙̲̰͍͖͕̭̪͂̇̅̓́̚͜ͅͅ를 부르는 것은 보통 실수로 일어나는 일이고, 그런 경우에는 무방비 상태에서 재앙과 공포가 찾아옵니다.</div></div>
@@ -4244,6 +4268,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">당신의 목소리에 반응하듯, 목걸이 끝에 매달린 수정이 뜨거워집니다. 주변의 시간이 멈춘 것처럼 느리게 흘러갑니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/17.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">계속해서 맞서 싸우겠습니까?</div></div>
@@ -4344,6 +4369,8 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">[SYSTEM: 최강의 크리쳐, 도핑을 시작합니다.]</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/18.png" alt=""></figure>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/pannel/25.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">바늘이 몸에 주입된 순간 피가 뜨겁게 끓어오릅니다.</div></div>
@@ -4384,6 +4411,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">소중한 사람을 지키고, 영웅이 될 시간입니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/pannel/26.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">또다시 찾아온 데우스 엑스 마키나, 혈관을 타고 흘러온 기계 장치의 신이 당신을 장악합니다.</div></div>
@@ -4392,6 +4420,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">바늘이 꽂힌 자리 주변으로 수백 개의 새파란 인터페이스 창이 발생합니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/pannel/27.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">근력, 정신력…? 이게 다 무슨 소리죠?</div></div>
@@ -4432,6 +4461,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">마지막 타격의 충격으로 AOC 본부가 붕괴합니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/19.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">신의 절명과 함께, 하늘을 차지하던 악몽은 산산조각 납니다.</div></div>
@@ -4558,8 +4588,13 @@ accent: "#8ca7d8"
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
+  <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">-----</div></div>
+</article>
+<article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">[EPILOGUE]</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/20.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">폐부에서부터 강한 압력이 치솟고, 이내 거센 기침 소리와 함께 당신은 핏덩어리를 토해냅니다.</div></div>
@@ -4592,6 +4627,7 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">당신은 눈밭이 아닌 번화가 한복판에 누워 있었습니다.</div></div>
 </article>
+<figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/02/bg/21.png" alt=""></figure>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">머리가 깨질 것처럼 아프고, 구토감이 밀려옵니다.</div></div>
@@ -4628,12 +4664,12 @@ accent: "#8ca7d8"
   <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/gm.png" alt=""></span>
   <div><header><strong>SYSTEM</strong><small>main</small></header><div class="trpg-entry-text">그는 오른쪽 눈에 안대를 차고, 달라붙는 검은 코트를 입은 채 느슨하게 웃으며 말합니다.</div></div>
 </article>
-<article class="trpg-entry" data-trpg-speaker="디트리히" style="--speaker-color:rgb(250, 234, 185)">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/dietrich.png" alt=""></span>
+<article class="trpg-entry" data-trpg-speaker="디트리히" style="--speaker-color:#faeab9">
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/blindfold.png" alt=""></span>
   <div><header><strong>디트리히</strong><small>main</small></header><div class="trpg-entry-text">크리쳐 사태 종식 이후 100년의 시간이 흐른 오늘, 마침내 선포합니다.</div></div>
 </article>
-<article class="trpg-entry" data-trpg-speaker="디트리히" style="--speaker-color:rgb(250, 234, 185)">
-  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/dietrich.png" alt=""></span>
+<article class="trpg-entry" data-trpg-speaker="디트리히" style="--speaker-color:#faeab9">
+  <span class="trpg-entry-avatar"><img src="/dekade-archive/assets/trpg/grea-grrr/02/profile/blindfold.png" alt=""></span>
   <div><header><strong>디트리히</strong><small>main</small></header><div class="trpg-entry-text">안심하십시오, 시민 여러분. 세계는 영원히 &#39;안전&#39;할 것입니다.</div></div>
 </article>
 <article class="trpg-entry" data-trpg-speaker="SYSTEM" style="--speaker-color:rgb(136, 136, 136)">
