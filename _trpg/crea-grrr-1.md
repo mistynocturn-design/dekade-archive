@@ -9,7 +9,7 @@ summary: ""
 players: ["카디아","디트리히"]
 tags: ["크툴루","타이만"]
 source_url: "https://ccfolia.com/rooms/y4aVAceNA"
-cover: "/dekade-archive/assets/trpg/grea-grrr/01/cover.png"
+cover: "/dekade-archive/assets/trpg/grea-grrr/01/card.png"
 page_bg: "#17161a"
 log_bg: "#211f24"
 text_color: "#f2eff2"
