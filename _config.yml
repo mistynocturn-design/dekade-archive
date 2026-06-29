@@ -7,8 +7,8 @@ permalink:        pretty
 
 # Setup
 title:            DKade
-tagline:          'A Jekyll theme'
-description:      'Dietrich Schwartz<br>♡<br>Katia Feltroof'
+tagline:          ''
+description:      'Dietrich Schwartz<br>??br>Katia Feltroof'
 baseurl: "/dekade-archive"
 url: https://mistynocturn-design.github.io
 timezone: Asia/Seoul
