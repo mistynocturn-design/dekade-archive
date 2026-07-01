@@ -45,7 +45,7 @@
   <section class="panel">
     <h2>Load from spreadsheet</h2>
     <div class="grid">
-      <div><label for="sourceUrl">Apps Script URL</label><input id="sourceUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div><label for="sourceUrl">Apps Script URL</label><input id="sourceUrl" value="https://script.google.com/macros/s/AKfycbwT3diYT7ED3WtoCzZO8eBTkG_vrJxCYkn3WGtVTTrmzOVOvPUETIJiibHhzZ_LR4G9gQ/exec" placeholder="https://script.google.com/macros/s/.../exec"></div>
       <div><label for="readKey">Read key</label><input id="readKey" type="password"></div>
       <div><label for="sourceMonth">Original thread month</label><input id="sourceMonth" type="month" value="2026-06"></div>
     </div>
@@ -82,7 +82,7 @@
 </main>
 
 <script>
-var BACKUP_API_VERSION = '2026-06-21.1';
+var BACKUP_API_VERSION = '2026-06-25.2';
 var BACKUP_SOURCE_STORAGE = 'dekade-twitter-sheet-source';
 function loadSourceSettings() {
   try {
