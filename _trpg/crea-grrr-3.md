@@ -8,8 +8,8 @@ duration: "4시간 40분"
 summary: ""
 players: ["카디아","디트리히"]
 tags: ["크툴루","타이만"]
-source_url: "https://ccfolia.com/rooms/E4ZfIkFnV"
-cover: "/dekade-archive/assets/trpg/grea-grrr/02/card.jpg"
+source_url: "https://ccfolia.com/rooms/ylXFNEDeR"
+cover: "/dekade-archive/assets/trpg/grea-grrr/03/card.png"
 page_bg: "#17161a"
 log_bg: "#211f24"
 text_color: "#f2eff2"
