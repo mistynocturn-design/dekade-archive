@@ -1,6 +1,6 @@
 ---
 layout: trpg_log
-title: "CREA-GRRR 2"
+title: "CREA-GRRR 3"
 system: "Call of Cthulhu"
 session_date: "2026-07-11"
 end_date: "2026-07-11"
