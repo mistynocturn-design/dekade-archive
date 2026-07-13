@@ -4,7 +4,7 @@ layout: default
 
 {% assign standalone_aus = site.character_aus | where: "character_id", page.slug | sort: "order" %}
 <article class="character-page" style="--character-accent: {{ page.accent | default: '#4e4a65' }}; --character-soft: {{ page.soft | default: '#e7e3d8' }}; --character-ink: {{ page.ink | default: '#161732' }}; --character-tab-color: {{ page.tab_color | default: page.accent | default: '#4e4a65' }}; --character-section-text: {{ page.section_text | default: page.soft | default: '#e7e3d8' }}; --character-keyword-bg: {{ page.keyword_bg | default: page.soft | default: '#e7e3d8' }};">
-  <a class="detail-back-link" href="{{ site.baseurl }}/characters/">??Characters</a>
+  <a class="detail-back-link" href="{{ site.baseurl }}/characters/">← Characters</a>
   <div class="character-detail-tools">
     <a class="character-tool-button" href="{{ site.baseurl }}/tools/character-manager.html" target="_blank" rel="noopener" aria-label="Open character manager" title="Open character manager">+</a>
   </div>
