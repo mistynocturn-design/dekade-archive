@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var KEY = 'dekade-trpg-playlist-v1', tracks = [];
+  var KEY = 'dekade-trpg-playlist-v1', THEME_KEY = 'dekade-trpg-player-theme-v1', tracks = [], theme = {bg:'#f7f8fc',accent:'#8ca7d8',text:'#242735'};
   var selectedPanel = Array.prototype.find.call(document.querySelectorAll('.panel'), function (panel) { return panel.querySelector('h2') && panel.querySelector('h2').textContent.trim() === 'Selected item'; });
   if (!selectedPanel) return;
   var style = document.createElement('style');
@@ -9,6 +9,9 @@
   var panel = document.createElement('section'); panel.className = 'panel';
   panel.innerHTML = '<h2>Playlist · 로컬 MP3</h2><p class="small">MP3를 세션의 <code>assets/trpg/.../audio/</code> 폴더에 넣고 repo 경로를 등록하세요. 위아래 버튼으로 재생 순서를 정할 수 있습니다.</p><div class="playlist-editor" id="playlistEditor"></div><div class="actions"><button id="addTrack" class="secondary" type="button">+ 곡 추가</button></div>';
   selectedPanel.parentNode.insertBefore(panel, selectedPanel.nextSibling);
+  var themeEditor = document.createElement('div'); themeEditor.style.cssText = 'border-bottom:1px solid #ebe7ec;display:grid;gap:7px;grid-template-columns:repeat(3,1fr);margin-bottom:10px;padding-bottom:10px';
+  themeEditor.innerHTML = '<label>리모컨 배경색<input type="color" data-theme="bg" style="height:33px;padding:2px"></label><label>하이라이트색<input type="color" data-theme="accent" style="height:33px;padding:2px"></label><label>텍스트색<input type="color" data-theme="text" style="height:33px;padding:2px"></label>';
+  panel.insertBefore(themeEditor, panel.querySelector('#playlistEditor'));
   var editor = panel.querySelector('#playlistEditor');
   function escapeHtml(value) { return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function normalizePath(value) {
@@ -25,7 +28,8 @@
   function inject(markdown) {
     var text = String(markdown || ''), block = playlistYaml();
     text = text.replace(/\nplaylist:\s*(?:\[\]|\n(?:[ \t]+.*\n?)*)?(?=---)/, '\n');
-    return text.replace(/\n---\n/, '\n' + block + '\n---\n');
+    text = text.replace(/\nplayer_(?:bg|accent|text):.*(?=\n)/g, '');
+    return text.replace(/\n---\n/, '\nplayer_bg: ' + yaml(theme.bg) + '\nplayer_accent: ' + yaml(theme.accent) + '\nplayer_text: ' + yaml(theme.text) + '\n' + block + '\n---\n');
   }
   function save() { localStorage.setItem(KEY, JSON.stringify(tracks)); refreshOutput(); }
   function render() {
@@ -36,6 +40,7 @@
   function refreshOutput() { var output = document.getElementById('output'); if (output && output.value) nativeSet.call(output, inject(nativeGet.call(output))); }
   editor.addEventListener('input', function (event) { var row = event.target.closest('[data-track]'); if (!row || !event.target.dataset.field) return; tracks[Number(row.dataset.track)][event.target.dataset.field] = event.target.value; localStorage.setItem(KEY, JSON.stringify(tracks)); });
   editor.addEventListener('change', save);
+  themeEditor.addEventListener('input', function (event) { if (!event.target.dataset.theme) return; theme[event.target.dataset.theme] = event.target.value; localStorage.setItem(THEME_KEY, JSON.stringify(theme)); refreshOutput(); });
   editor.addEventListener('click', function (event) {
     var row = event.target.closest('[data-track]'); if (!row) return; var index = Number(row.dataset.track);
     if (event.target.closest('[data-remove]')) tracks.splice(index, 1);
@@ -49,6 +54,7 @@
   var completed = document.getElementById('completedMdFile');
   if (completed) completed.addEventListener('change', function () {
     var file = this.files[0]; if (!file) return; var reader = new FileReader(); reader.onload = function () {
+      ['bg','accent','text'].forEach(function (key) { var found = String(reader.result).match(new RegExp('\\nplayer_' + key + ':\\s*["\\\']?([^"\\\'\\n]+)')); if (found) theme[key] = found[1].trim(); }); localStorage.setItem(THEME_KEY, JSON.stringify(theme)); renderTheme();
       var block = String(reader.result).match(/\nplaylist:\s*\n((?:[ \t]+.*\n?)*)---/); if (!block) { tracks = []; render(); save(); return; }
       var current = null, parsed = []; block[1].split(/\r?\n/).forEach(function (line) {
         var match = line.match(/^\s*-\s+title:\s*(.*)$/); if (match) { current = {title: parseValue(match[1]), scene: '', file: ''}; parsed.push(current); return; }
@@ -57,6 +63,8 @@
     }; reader.readAsText(file);
   });
   function parseValue(value) { try { return JSON.parse(value); } catch (error) { return value.replace(/^['"]|['"]$/g, ''); } }
+  function renderTheme() { themeEditor.querySelectorAll('[data-theme]').forEach(function (input) { input.value = theme[input.dataset.theme]; }); }
+  try { var savedTheme = JSON.parse(localStorage.getItem(THEME_KEY) || 'null'); if (savedTheme) theme = Object.assign(theme, savedTheme); } catch (error) {}
   try { tracks = JSON.parse(localStorage.getItem(KEY) || '[]'); if (!Array.isArray(tracks)) tracks = []; } catch (error) { tracks = []; }
-  render(); refreshOutput();
+  renderTheme(); render(); refreshOutput();
 })();

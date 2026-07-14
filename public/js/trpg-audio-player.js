@@ -3,7 +3,7 @@
   document.querySelectorAll('[data-trpg-player]').forEach(function (root) {
     var audio = root.querySelector('[data-audio]');
     var tracks = JSON.parse(root.querySelector('[data-playlist-data]').textContent || '[]');
-    var index = 0, repeatAll = false;
+    var index = 0, repeatMode = 0;
     var title = root.querySelector('[data-track-title]'), scene = root.querySelector('[data-scene-name]');
     var number = root.querySelector('[data-track-number]'), icon = root.querySelector('[data-play-icon]');
     var current = root.querySelector('[data-current-time]'), duration = root.querySelector('[data-duration]');
@@ -33,8 +33,11 @@
       if (action === 'stop') { audio.pause(); audio.currentTime = 0; }
       if (action === 'prev') select(index - 1, true);
       if (action === 'next') select(index + 1, true);
-      if (action === 'repeat-one') { audio.loop = !audio.loop; button.setAttribute('aria-pressed', String(audio.loop)); }
-      if (action === 'repeat-all') { repeatAll = !repeatAll; button.setAttribute('aria-pressed', String(repeatAll)); }
+      if (action === 'repeat-cycle') {
+        repeatMode = (repeatMode + 1) % 3; audio.loop = repeatMode === 1;
+        var modes = ['none', 'one', 'all'], labels = ['반복 없음', '현재곡 반복', '전체 곡 반복'], marks = ['×', '1', 'A'];
+        button.dataset.repeatMode = modes[repeatMode]; button.setAttribute('aria-label', labels[repeatMode]); button.title = labels[repeatMode]; button.querySelector('[data-repeat-mark]').textContent = marks[repeatMode];
+      }
       if (action === 'more') { var open = panel.hidden; panel.hidden = !open; root.classList.toggle('is-open', open); button.textContent = open ? '×' : '＋'; button.setAttribute('aria-expanded', String(open)); button.setAttribute('aria-label', open ? '상세 기능 접기' : '상세 기능 펼치기'); }
     });
     root.querySelector('[data-volume]').addEventListener('input', function (event) { audio.volume = event.target.value; root.querySelector('[data-volume-value]').textContent = Math.round(event.target.value * 100) + '%'; });
@@ -43,7 +46,7 @@
     audio.addEventListener('pause', function () { root.classList.remove('is-playing'); icon.textContent = '▶'; root.querySelector('[data-action="toggle"]').setAttribute('aria-label', '재생'); });
     audio.addEventListener('loadedmetadata', function () { duration.textContent = time(audio.duration); });
     audio.addEventListener('timeupdate', function () { current.textContent = time(audio.currentTime); progress.style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + '%'; });
-    audio.addEventListener('ended', function () { if (!audio.loop && (index < tracks.length - 1 || repeatAll)) select(index + 1, true); });
+    audio.addEventListener('ended', function () { if (!audio.loop && (index < tracks.length - 1 || repeatMode === 2)) select(index + 1, true); });
     if (tracks.length) select(0, false);
   });
 })();

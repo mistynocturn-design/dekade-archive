@@ -1,4 +1,4 @@
-<section class="trpg-music-player" data-trpg-player aria-label="{{ page.title }} 배경음악 플레이어">
+<section class="trpg-music-player" data-trpg-player aria-label="{{ page.title }} 배경음악 플레이어" style="--player-bg:{{ page.player_bg | default: '#f7f8fc' }};--player-accent:{{ page.player_accent | default: page.accent | default: '#8ca7d8' }};--player-text:{{ page.player_text | default: '#242735' }};">
   <audio data-audio preload="metadata"></audio>
 
   <div class="trpg-player-head">
@@ -16,14 +16,13 @@
   </div>
 
   <div class="trpg-player-controls">
+    <button type="button" class="trpg-player-repeat" data-action="repeat-cycle" data-repeat-mode="none" aria-label="반복 없음" title="반복 없음">↻<sup data-repeat-mark>×</sup></button>
     <button type="button" data-action="prev" aria-label="이전곡">◀◀</button>
     <button type="button" class="trpg-player-play" data-action="toggle" aria-label="재생"><span data-play-icon>▶</span></button>
     <button type="button" data-action="next" aria-label="다음곡">▶▶</button>
     <button type="button" data-action="stop" aria-label="정지">■</button>
-    <button type="button" class="trpg-player-repeat" data-action="repeat-one" aria-pressed="false" aria-label="현재곡 반복">↻<sup>1</sup></button>
-    <button type="button" class="trpg-player-repeat" data-action="repeat-all" aria-pressed="false" aria-label="전체 곡 반복">↻<sup>A</sup></button>
-    <label class="trpg-player-volume" aria-label="볼륨"><span>♬</span><input type="range" min="0" max="1" step="0.01" value="0.7" data-volume><output data-volume-value>70%</output></label>
   </div>
+  <label class="trpg-player-volume" aria-label="볼륨"><span>♬</span><input type="range" min="0" max="1" step="0.01" value="0.7" data-volume><output data-volume-value>70%</output></label>
 
   <div class="trpg-player-popover" data-panel hidden>
     <header><strong>PLAYLIST</strong><span>전체 재생목록</span></header>
