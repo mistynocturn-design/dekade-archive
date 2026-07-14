@@ -3499,6 +3499,11 @@ body.trpg-log-shell:has(.trpg-music-player){padding-bottom:190px}
 .trpg-player-volume-popover{background:color-mix(in srgb,var(--player-bg) 97%,transparent);border:1px solid var(--player-line);border-radius:999px;bottom:8px;box-shadow:0 8px 22px rgba(0,0,0,.18);padding:.45rem .6rem;position:absolute;right:8px;width:155px;z-index:2}.trpg-player-volume-popover[hidden]{display:none}.trpg-player-volume-popover label{align-items:center;color:var(--player-muted);display:grid;font-size:.46rem;gap:.35rem;grid-template-columns:11px 1fr 24px;margin:0}.trpg-player-volume-popover input{accent-color:var(--player-accent);height:3px;margin:0;padding:0;width:100%}.trpg-player-volume-popover output{font-size:.4rem;text-align:right}.trpg-player-volume-button[aria-expanded=true]{background:color-mix(in srgb,var(--player-accent) 16%,var(--player-bg))!important;color:var(--player-accent)!important}
 .trpg-player-volume-popover{bottom:calc(100% + 7px)}
 
+/* Playlist text and themed scrollbar */
+.trpg-player-popover li strong,.trpg-player-popover li button.is-current strong{color:var(--player-text)!important}
+.trpg-player-popover{scrollbar-color:color-mix(in srgb,var(--player-accent) 55%,var(--player-bg)) transparent;scrollbar-width:thin}
+.trpg-player-popover::-webkit-scrollbar{width:7px}.trpg-player-popover::-webkit-scrollbar-track{background:transparent;margin:9px 0}.trpg-player-popover::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--player-accent) 48%,var(--player-bg));border:2px solid transparent;border-radius:999px;background-clip:padding-box}.trpg-player-popover::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--player-accent) 72%,var(--player-bg));background-clip:padding-box}
+
 /* World archive */
 .world-index,.world-document,.world-alternates,.world-au-detail{--world-accent:#685867;--world-soft:#eee8e5;--world-ink:#29272e;color:var(--world-ink);margin:0 auto;max-width:1180px;padding:1rem 0 5rem}
 .world-index,.world-document,.world-alternates,.world-au-detail{position:relative}.world-editor-link{align-items:center;background:var(--world-ink);border-radius:50%;color:#fff!important;display:flex;font-size:.85rem;font-weight:500;height:31px;justify-content:center;position:absolute;right:0;top:-1.7rem;transition:.2s;width:31px;z-index:5}.world-editor-link:hover{background:var(--world-accent);transform:rotate(90deg)}
