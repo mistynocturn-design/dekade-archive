@@ -1,34 +1,35 @@
-{% if page.playlist %}
-<section class="trpg-audio-player is-folded" data-trpg-player aria-label="{{ page.title }} 배경음악 플레이어">
+<section class="trpg-music-player" data-trpg-player aria-label="{{ page.title }} 배경음악 플레이어">
   <audio data-audio preload="metadata"></audio>
-  <div class="trpg-audio-card">
-    <div class="trpg-audio-disc"{% if page.cover %} style="--audio-cover:url('{{ page.cover }}')"{% endif %} aria-hidden="true"><i></i></div>
-    <div class="trpg-audio-body">
-      <div class="trpg-audio-heading">
-        <span class="trpg-audio-label">BGM · <span data-track-number>01</span></span>
-        <button type="button" class="trpg-audio-fold" data-action="fold" aria-expanded="false" aria-label="리모컨 펼치기">＋</button>
-      </div>
-      <div class="trpg-audio-now">
-        <strong data-track-title>재생할 곡을 선택해 주세요</strong>
-        <small data-scene-name>장면 미지정</small>
-      </div>
-      <div class="trpg-audio-time"><span data-current-time>0:00</span><i><b data-progress></b></i><span data-duration>0:00</span></div>
-      <div class="trpg-audio-transport">
-        <button type="button" data-action="prev" aria-label="이전곡">◀◀</button>
-        <button type="button" class="trpg-audio-main" data-action="toggle" aria-label="재생"><span data-play-icon>▶</span></button>
-        <button type="button" data-action="next" aria-label="다음곡">▶▶</button>
-      </div>
+
+  <div class="trpg-player-head">
+    <div class="trpg-player-copy">
+      <span class="trpg-player-kicker">BGM · <span data-track-number>00</span></span>
+      <strong data-track-title>재생목록이 비어 있습니다</strong>
+      <small data-scene-name>장면 미지정</small>
     </div>
+    <div class="trpg-player-eq" data-equalizer aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <button type="button" class="trpg-player-more" data-action="more" aria-expanded="false" aria-label="상세 기능 펼치기">＋</button>
   </div>
-  <div class="trpg-audio-panel" data-panel>
-    <div class="trpg-audio-buttons">
-      <button type="button" data-action="stop">■ <span>정지</span></button>
-      <button type="button" data-action="repeat-one" aria-pressed="false">↻ <span>현재곡 반복</span></button>
-      <button type="button" data-action="repeat-all" aria-pressed="false">↺ <span>전체 곡 반복</span></button>
-    </div>
-    <label class="trpg-audio-volume"><span>VOL</span><input type="range" min="0" max="1" step="0.01" value="0.7" data-volume><output data-volume-value>70%</output></label>
-    <details class="trpg-audio-list"><summary>전체 목록 <span data-track-count></span></summary><ol data-playlist></ol></details>
+
+  <div class="trpg-player-progress">
+    <span data-current-time>0:00</span><i><b data-progress></b></i><span data-duration>0:00</span>
   </div>
+
+  <div class="trpg-player-controls">
+    <button type="button" data-action="prev" aria-label="이전곡">◀◀</button>
+    <button type="button" class="trpg-player-play" data-action="toggle" aria-label="재생"><span data-play-icon>▶</span></button>
+    <button type="button" data-action="next" aria-label="다음곡">▶▶</button>
+    <button type="button" data-action="stop" aria-label="정지">■</button>
+    <button type="button" class="trpg-player-repeat" data-action="repeat-one" aria-pressed="false" aria-label="현재곡 반복">↻<sup>1</sup></button>
+    <button type="button" class="trpg-player-repeat" data-action="repeat-all" aria-pressed="false" aria-label="전체 곡 반복">↻<sup>A</sup></button>
+    <label class="trpg-player-volume" aria-label="볼륨"><span>♬</span><input type="range" min="0" max="1" step="0.01" value="0.7" data-volume><output data-volume-value>70%</output></label>
+  </div>
+
+  <div class="trpg-player-popover" data-panel hidden>
+    <header><strong>PLAYLIST</strong><span>전체 재생목록</span></header>
+    <ol data-playlist></ol>
+    <p class="trpg-player-empty" data-empty>등록된 곡이 없습니다.<br>TRPG 에디터에서 MP3 경로를 추가해 주세요.</p>
+  </div>
+
   <script type="application/json" data-playlist-data>[{% for track in page.playlist %}{"title":{{ track.title | jsonify }},"scene":{{ track.scene | default: "장면 미지정" | jsonify }},"src":{{ track.file | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
 </section>
-{% endif %}
