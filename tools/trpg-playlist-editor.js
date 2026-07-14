@@ -43,8 +43,10 @@
   themeEditor.addEventListener('input', function (event) { if (!event.target.dataset.theme) return; theme[event.target.dataset.theme] = event.target.value; localStorage.setItem(THEME_KEY, JSON.stringify(theme)); refreshOutput(); });
   editor.addEventListener('click', function (event) {
     var row = event.target.closest('[data-track]'); if (!row) return; var index = Number(row.dataset.track);
-    if (event.target.closest('[data-remove]')) tracks.splice(index, 1);
-    if (event.target.closest('[data-move="up"]') && index > 0) { var item = tracks.splice(index, 1)[0]; tracks.splice(index - 1, 0, item); }
+    var removeButton = event.target.closest('[data-remove]'), moveButton = event.target.closest('[data-move="up"]');
+    if (!removeButton && !moveButton) return;
+    if (removeButton) tracks.splice(index, 1);
+    if (moveButton && index > 0) { var item = tracks.splice(index, 1)[0]; tracks.splice(index - 1, 0, item); }
     render(); save();
   });
   panel.querySelector('#addTrack').addEventListener('click', function () { tracks.push({title: '', scene: '', file: ''}); render(); save(); var inputs = editor.querySelectorAll('input'); if (inputs.length) inputs[inputs.length - 3].focus(); });
