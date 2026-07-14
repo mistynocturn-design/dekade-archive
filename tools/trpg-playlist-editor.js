@@ -34,7 +34,8 @@
     }).join('') : '<p class="playlist-empty">등록된 곡이 없습니다. 곡 추가 버튼으로 시작하세요.</p>';
   }
   function refreshOutput() { var output = document.getElementById('output'); if (output && output.value) nativeSet.call(output, inject(nativeGet.call(output))); }
-  editor.addEventListener('input', function (event) { var row = event.target.closest('[data-track]'); if (!row || !event.target.dataset.field) return; tracks[Number(row.dataset.track)][event.target.dataset.field] = event.target.value; save(); });
+  editor.addEventListener('input', function (event) { var row = event.target.closest('[data-track]'); if (!row || !event.target.dataset.field) return; tracks[Number(row.dataset.track)][event.target.dataset.field] = event.target.value; localStorage.setItem(KEY, JSON.stringify(tracks)); });
+  editor.addEventListener('change', save);
   editor.addEventListener('click', function (event) {
     var row = event.target.closest('[data-track]'); if (!row) return; var index = Number(row.dataset.track);
     if (event.target.closest('[data-remove]')) tracks.splice(index, 1);

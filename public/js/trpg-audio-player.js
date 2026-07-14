@@ -33,12 +33,12 @@
       if (action === 'next') select(index + 1, true);
       if (action === 'repeat-one') { audio.loop = !audio.loop; button.setAttribute('aria-pressed', audio.loop); }
       if (action === 'repeat-all') { repeatAll = !repeatAll; button.setAttribute('aria-pressed', repeatAll); }
-      if (action === 'fold') { var folded = root.classList.toggle('is-folded'); button.textContent = folded ? '⌄' : '⌃'; button.setAttribute('aria-expanded', !folded); button.setAttribute('aria-label', folded ? '리모컨 펼치기' : '리모컨 접기'); }
+      if (action === 'fold') { var folded = root.classList.toggle('is-folded'); button.textContent = folded ? '＋' : '−'; button.setAttribute('aria-expanded', !folded); button.setAttribute('aria-label', folded ? '리모컨 펼치기' : '리모컨 접기'); }
     });
     root.querySelector('[data-volume]').addEventListener('input', function (event) { audio.volume = event.target.value; root.querySelector('[data-volume-value]').textContent = Math.round(event.target.value * 100) + '%'; });
     audio.volume = .7;
-    audio.addEventListener('play', function () { icon.textContent = '❚❚'; root.querySelector('[data-action="toggle"]').setAttribute('aria-label', '일시정지'); });
-    audio.addEventListener('pause', function () { icon.textContent = '▶'; root.querySelector('[data-action="toggle"]').setAttribute('aria-label', '재생'); });
+    audio.addEventListener('play', function () { icon.textContent = '❚❚'; root.classList.add('is-playing'); root.querySelector('[data-action="toggle"]').setAttribute('aria-label', '일시정지'); });
+    audio.addEventListener('pause', function () { icon.textContent = '▶'; root.classList.remove('is-playing'); root.querySelector('[data-action="toggle"]').setAttribute('aria-label', '재생'); });
     audio.addEventListener('loadedmetadata', function () { duration.textContent = time(audio.duration); });
     audio.addEventListener('timeupdate', function () { current.textContent = time(audio.currentTime); progress.style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + '%'; });
     audio.addEventListener('ended', function () { if (!audio.loop && (index < tracks.length - 1 || repeatAll)) select(index + 1, true); });
