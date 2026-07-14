@@ -3,7 +3,6 @@
 
   <div class="trpg-player-head">
     <div class="trpg-player-copy">
-      <span class="trpg-player-kicker">BGM · <span data-track-number>00</span></span>
       <strong data-track-title>재생목록이 비어 있습니다</strong>
       <small data-scene-name>장면 미지정</small>
     </div>
@@ -20,9 +19,9 @@
     <button type="button" data-action="prev" aria-label="이전곡">◀◀</button>
     <button type="button" class="trpg-player-play" data-action="toggle" aria-label="재생"><span data-play-icon>▶</span></button>
     <button type="button" data-action="next" aria-label="다음곡">▶▶</button>
-    <button type="button" data-action="stop" aria-label="정지">■</button>
+    <button type="button" class="trpg-player-volume-button" data-action="volume" aria-expanded="false" aria-label="볼륨 조절">♪</button>
   </div>
-  <label class="trpg-player-volume" aria-label="볼륨"><span>♬</span><input type="range" min="0" max="1" step="0.01" value="0.7" data-volume><output data-volume-value>70%</output></label>
+  <div class="trpg-player-volume-popover" data-volume-panel hidden><label aria-label="볼륨"><span>♪</span><input type="range" min="0" max="1" step="0.01" value="0.7" data-volume><output data-volume-value>70%</output></label></div>
 
   <div class="trpg-player-popover" data-panel hidden>
     <header><strong>PLAYLIST</strong><span>전체 재생목록</span></header>
