@@ -1,4 +1,6 @@
-{% assign current_path = page.url | default: '/' %}
+﻿{% assign current_path = page.url | default: '/' %}
+{% assign current_path_parts = current_path | split: '/' %}
+{% assign current_section = current_path_parts[1] %}
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
@@ -11,15 +13,16 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a class="sidebar-nav-item{% if current_path contains '/world/' %} active{% endif %}" href="{{ site.baseurl }}/world/">World</a>
-      <a class="sidebar-nav-item{% if current_path contains '/characters/' or current_path contains '/character-au/' %} active{% endif %}" href="{{ site.baseurl }}/characters/">Characters</a>
-      <a class="sidebar-nav-item{% if current_path contains '/archive/' %} active{% endif %}" href="{{ site.baseurl }}/archive/">Archive</a>
-      <a class="sidebar-nav-item{% if current_path contains '/roleplay/' %} active{% endif %}" href="{{ site.baseurl }}/roleplay/">Roleplay</a>
-      <a class="sidebar-nav-item{% if current_path contains '/gallery/' %} active{% endif %}" href="{{ site.baseurl }}/gallery/">Gallery</a>
-      <a class="sidebar-nav-item{% if current_path contains '/writings/' %} active{% endif %}" href="{{ site.baseurl }}/writings/">Writings</a>
-      <a class="sidebar-nav-item{% if current_path contains '/checklist/' %} active{% endif %}" href="{{ site.baseurl }}/checklist/">Pair/Check</a>
-      <a class="sidebar-nav-item{% if current_path contains '/twitter/' %} active{% endif %}" href="{{ site.baseurl }}/twitter/">Twitter</a>
-      <a class="sidebar-nav-item{% if current_path contains '/trpg/' %} active{% endif %}" href="{{ site.baseurl }}/trpg/">TRPG</a>
+      <a class="sidebar-nav-item{% if current_section == 'world' %} active{% endif %}" href="{{ site.baseurl }}/world/">World</a>
+      <a class="sidebar-nav-item{% if current_section == 'characters' or current_section == 'character-au' %} active{% endif %}" href="{{ site.baseurl }}/characters/">Characters</a>
+      <a class="sidebar-nav-item{% if current_section == 'archive' %} active{% endif %}" href="{{ site.baseurl }}/archive/">Archive</a>
+      <a class="sidebar-nav-item{% if current_section == 'roleplay' %} active{% endif %}" href="{{ site.baseurl }}/roleplay/">Roleplay</a>
+      <a class="sidebar-nav-item{% if current_section == 'gallery' %} active{% endif %}" href="{{ site.baseurl }}/gallery/">Gallery</a>
+      <a class="sidebar-nav-item{% if current_section == 'writings' %} active{% endif %}" href="{{ site.baseurl }}/writings/">Writings</a>
+      <a class="sidebar-nav-item{% if current_section == 'checklist' %} active{% endif %}" href="{{ site.baseurl }}/checklist/">Pair/Check</a>
+      <a class="sidebar-nav-item{% if current_section == 'twitter' %} active{% endif %}" href="{{ site.baseurl }}/twitter/">Twitter</a>
+      <a class="sidebar-nav-item{% if current_section == 'trpg' %} active{% endif %}" href="{{ site.baseurl }}/trpg/">TRPG</a>
     </nav>
   </div>
 </div>
+
