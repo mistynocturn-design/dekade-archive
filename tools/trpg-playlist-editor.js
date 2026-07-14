@@ -1,14 +1,14 @@
 (function () {
   'use strict';
   var KEY = 'dekade-trpg-playlist-v1', tracks = [];
-  var characterPanel = Array.prototype.find.call(document.querySelectorAll('.panel'), function (panel) { return panel.querySelector('h2') && panel.querySelector('h2').textContent.trim() === 'Characters'; });
-  if (!characterPanel) return;
+  var selectedPanel = Array.prototype.find.call(document.querySelectorAll('.panel'), function (panel) { return panel.querySelector('h2') && panel.querySelector('h2').textContent.trim() === 'Selected item'; });
+  if (!selectedPanel) return;
   var style = document.createElement('style');
   style.textContent = '.playlist-editor{display:grid;gap:7px}.playlist-row{align-items:end;border:1px solid #e5e1e6;border-radius:5px;display:grid;gap:6px;grid-template-columns:1fr 1fr 1.35fr auto auto;padding:7px}.playlist-row button{height:31px;padding:5px 8px}.playlist-empty{color:#7f7a82;font-size:.62rem;margin:0}@media(max-width:720px){.playlist-row{grid-template-columns:1fr}.playlist-row button{width:100%}}';
   document.head.appendChild(style);
   var panel = document.createElement('section'); panel.className = 'panel';
   panel.innerHTML = '<h2>Playlist · 로컬 MP3</h2><p class="small">MP3를 세션의 <code>assets/trpg/.../audio/</code> 폴더에 넣고 repo 경로를 등록하세요. 위아래 버튼으로 재생 순서를 정할 수 있습니다.</p><div class="playlist-editor" id="playlistEditor"></div><div class="actions"><button id="addTrack" class="secondary" type="button">+ 곡 추가</button></div>';
-  characterPanel.parentNode.insertBefore(panel, characterPanel);
+  selectedPanel.parentNode.insertBefore(panel, selectedPanel.nextSibling);
   var editor = panel.querySelector('#playlistEditor');
   function escapeHtml(value) { return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function normalizePath(value) {
