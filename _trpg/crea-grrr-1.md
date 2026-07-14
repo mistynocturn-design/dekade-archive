@@ -14,6 +14,7 @@ page_bg: "#17161a"
 log_bg: "#211f24"
 text_color: "#f2eff2"
 accent: "#8ca7d8"
+playlist: [] # assets/trpg/grea-grrr/01/audio의 MP3를 등록하세요.
 ---
 
 <figure class="trpg-scene"><img src="/dekade-archive/assets/trpg/grea-grrr/01/bg/01.png" alt=""></figure>
