@@ -9,4 +9,5 @@ description: ""
 images:
   - "/dekade-archive/assets/gallery/cms/2.png"
   - "/dekade-archive/assets/gallery/cms/2(2).png"
+  - "/dekade-archive/assets/gallery/cms/2(3).png"
 ---
