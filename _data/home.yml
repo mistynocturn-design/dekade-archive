@@ -1,13 +1,13 @@
-hero_image: "/dekade-archive/assets/gallery/Noctea/03.png"
-hero_position: "50% 9.99466346474551%"
+hero_image: "/dekade-archive/assets/gallery/cms/5.jpg"
+hero_position: "50% 34.220139389569816%"
 hero_crop_x: 50
-hero_crop_y: 9.99466346474551
+hero_crop_y: 34.220139389569816
 hero_crop_zoom: 1
 hero_gradient: true
-hero_gradient_color: "#575757"
-hero_gradient_opacity: 23
-hero_copy_scale: 95
-hero_text_position: "top-left"
+hero_gradient_color: "#121115"
+hero_gradient_opacity: 19
+hero_copy_scale: 100
+hero_text_position: "bottom-right"
 kicker_color: "#ffffff"
 title_color: "#ffffff"
 subtitle_color: "#ffffff"
@@ -49,7 +49,7 @@ archive_index:
   - title: "TRPG"
     url: "/trpg/"
     description: "세션 로그 아카이브"
-  - title: "Pair/Check"
+  - title: "CHECKLIST"
     url: "/checklist/"
-    description: "페어틀 & 체크리스트"
+    description: "함께 채워갈 목록"
 
